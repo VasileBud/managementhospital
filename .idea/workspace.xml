@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ed2597e1-c7e7-4f1a-9661-37026adb6f26" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/EchoServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/network/EchoServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/ServerConsole.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/network/ServerConsole.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +78,7 @@
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -94,6 +96,7 @@
       <updated>1767519395483</updated>
       <workItem from="1767519396619" duration="22000" />
       <workItem from="1767519575013" duration="3592000" />
+      <workItem from="1767526699896" duration="299000" />
     </task>
     <servers />
   </component>
