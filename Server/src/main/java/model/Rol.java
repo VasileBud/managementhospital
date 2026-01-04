@@ -6,6 +6,9 @@ public class Rol {
 
     public Rol() {
     }
+    public Rol(int idRol) {
+        this.idRol = idRol;
+    }
 
     public Rol(int idRol, String numeRol) {
         this.idRol = idRol;

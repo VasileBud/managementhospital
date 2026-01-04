@@ -4,103 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed2597e1-c7e7-4f1a-9661-37026adb6f26" name="Changes" comment="">
+    <list default="true" id="22801927-82a4-4558-828d-7004ef1d5a62" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/EchoServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/network/EchoServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/ServerConsole.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/network/ServerConsole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/DbConnectionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/DbConnectionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/model/Rol.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/model/Rol.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/service/AuthService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;VasileBud&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/VasileBud/managementhospital.git&quot;,
-    &quot;accountId&quot;: &quot;5b3c1c9e-b8e7-49fa-8120-5ecddc2b7849&quot;
-  }
-}</component>
-  <component name="MacroExpansionManager">
-    <option name="directoryName" value="2wzoqhmD" />
-  </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 3
-}</component>
-  <component name="ProjectId" id="37ms5EVU70GmQOdveu5O6sVmotD" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
-  <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showLibraryContents" value="true" />
-  </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.ClientConsole.executor": "Run",
-    "Application.ServerConsole.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "vasi",
-    "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/User/Desktop/ProiectIS/managementhospital",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "show.migrate.to.gradle.popup": "false",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+    "node.js.selected.package.tslint": "(autodetect)"
   }
-}</component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138" />
-      </set>
-    </attachedChunks>
-  </component>
+}]]></component>
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="ed2597e1-c7e7-4f1a-9661-37026adb6f26" name="Changes" comment="" />
-      <created>1767519395483</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1767519395483</updated>
-      <workItem from="1767519396619" duration="22000" />
-      <workItem from="1767519575013" duration="3592000" />
-      <workItem from="1767526699896" duration="299000" />
-    </task>
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
   </component>
 </project>
