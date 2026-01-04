@@ -5,7 +5,7 @@
 package client;
 
 import ocsf.client.*;
-import common.*;
+import com.hospital_management.shared.common.ChatIF;
 
 import java.io.*;
 

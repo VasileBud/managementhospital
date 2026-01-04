@@ -1,0 +1,241 @@
+Index: Client/src/main/java/com/hospital_management/client/Launcher.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/src/main/java/com/hospital_management/client/Launcher.java b/Client/src/main/java/launcher/Launcher.java
+rename from Client/src/main/java/com/hospital_management/client/Launcher.java
+rename to Client/src/main/java/launcher/Launcher.java
+--- a/Client/src/main/java/com/hospital_management/client/Launcher.java	(revision 019fb4cfba49980ef32b8b00efa137af88595bc8)
++++ b/Client/src/main/java/launcher/Launcher.java	(date 1767528636766)
+@@ -1,8 +1,9 @@
+-package com.hospital_management.client;
++package launcher;
+ 
++import com.hospital_management.HelloApplication;
+ import javafx.application.Application;
+ 
+-public class Launcher {
++public class ClientMain {
+     public static void main(String[] args) {
+         Application.launch(HelloApplication.class, args);
+     }
+Index: Client/src/main/java/com/hospital_management/client/ClientConsole.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/src/main/java/com/hospital_management/client/ClientConsole.java b/Client/src/main/java/com/hospital_management/ClientConsole.java
+rename from Client/src/main/java/com/hospital_management/client/ClientConsole.java
+rename to Client/src/main/java/com/hospital_management/ClientConsole.java
+--- a/Client/src/main/java/com/hospital_management/client/ClientConsole.java	(revision 019fb4cfba49980ef32b8b00efa137af88595bc8)
++++ b/Client/src/main/java/com/hospital_management/ClientConsole.java	(date 1767528636514)
+@@ -1,10 +1,10 @@
+ // This file contains material supporting section 3.7 of the textbook:
+ // "Object Oriented Software Engineering" and is issued under the open-source
+ // license found at www.lloseng.com 
+-package com.hospital_management.client;
++package com.hospital_management;
+ import java.io.*;
+ import client.*;
+-import common.*;
++import com.hospital_management.shared.common.ChatIF;
+ 
+ /**
+  * This class constructs the UI for a chat client.  It implements the
+Index: Client/src/main/java/client/ChatClient.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// This file contains material supporting section 3.7 of the textbook:\r\n// \"Object Oriented Software Engineering\" and is issued under the open-source\r\n// license found at www.lloseng.com \r\n\r\npackage client;\r\n\r\nimport ocsf.client.*;\r\nimport common.*;\r\n\r\nimport java.io.*;\r\n\r\n/**\r\n * This class overrides some of the methods defined in the abstract\r\n * superclass in order to give more functionality to the client.\r\n *\r\n * @author Dr Timothy C. Lethbridge\r\n * @author Dr Robert Lagani&egrave;\r\n * @author Fran&ccedil;ois B&eacute;langer\r\n * @version July 2000\r\n */\r\npublic class ChatClient extends AbstractClient {\r\n    //Instance variables **********************************************\r\n\r\n    /**\r\n     * The interface type variable.  It allows the implementation of\r\n     * the display method in the client.\r\n     */\r\n    ChatIF clientUI;\r\n\r\n\r\n    //Constructors ****************************************************\r\n\r\n    /**\r\n     * Constructs an instance of the chat client.\r\n     *\r\n     * @param host     The server to connect to.\r\n     * @param port     The port number to connect on.\r\n     * @param clientUI The interface type variable.\r\n     */\r\n\r\n    public ChatClient(String host, int port, ChatIF clientUI)\r\n            throws IOException {\r\n        super(host, port); //Call the superclass constructor\r\n        this.clientUI = clientUI;\r\n        openConnection();\r\n    }\r\n\r\n\r\n    //Instance methods ************************************************\r\n\r\n    /**\r\n     * This method handles all data that comes in from the server.\r\n     *\r\n     * @param msg The message from the server.\r\n     */\r\n    public void handleMessageFromServer(Object msg) {\r\n        clientUI.display(msg.toString());\r\n    }\r\n\r\n    /**\r\n     * This method handles all data coming from the UI\r\n     *\r\n     * @param message The message from the UI.\r\n     */\r\n    public void handleMessageFromClientUI(String message) {\r\n        if (message.startsWith(\"#\")) {\r\n            String[] command = message.split(\" \");\r\n\r\n            switch (command[0]) {\r\n                case \"#quit\":\r\n                    quit();\r\n                    break;\r\n\r\n                case \"#logoff\":\r\n                    try {\r\n                        closeConnection();\r\n                    } catch (IOException e) {\r\n                    }\r\n                    break;\r\n\r\n                case \"#login\":\r\n                    if (!isConnected()) {\r\n                        try {\r\n                            openConnection();\r\n                            clientUI.display(\"You are now logged in.\");\r\n                        } catch (IOException e) {\r\n                            clientUI.display(\"Login failed: \" + e.getMessage());\r\n                        }\r\n                    } else {\r\n                        clientUI.display(\"Already connected.\");\r\n                    }\r\n                    break;\r\n\r\n                case \"#sethost\":\r\n                    if (isConnected()) {\r\n                        clientUI.display(\"Cannot change host while connected.\");\r\n                    } else {\r\n                        setHost(command[1]);\r\n                        clientUI.display(\"Host set to: \" + getHost());\r\n                    }\r\n                    break;\r\n\r\n                case \"#setport\":\r\n                    if (isConnected()) {\r\n                        clientUI.display(\"Cannot change port while connected.\");\r\n                    } else {\r\n                        try {\r\n                            int port = Integer.parseInt(command[1]);\r\n                            setPort(port);\r\n                            clientUI.display(\"Port set to: \" + getPort());\r\n                        } catch (Exception e) {\r\n                            clientUI.display(\"Port must be an integer.\");\r\n                        }\r\n                    }\r\n                    break;\r\n\r\n                case \"#gethost\":\r\n                    clientUI.display(\"Current host: \" + getHost());\r\n                    break;\r\n\r\n                case \"#getport\":\r\n                    clientUI.display(\"Current port: \" + getPort());\r\n                    break;\r\n\r\n                default:\r\n                    clientUI.display(\"Unknown command: \" + command);\r\n            }\r\n        } else {\r\n            try {\r\n                sendToServer(message);\r\n            } catch (IOException e) {\r\n                clientUI.display(\"Could not send message to server. Terminating client.\");\r\n                quit();\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n    /**\r\n     * This method terminates the client.\r\n     */\r\n    public void quit() {\r\n        try {\r\n            closeConnection();\r\n        } catch (IOException e) {\r\n        }\r\n        System.exit(0);\r\n    }\r\n\r\n\r\n    protected void connectionClosed() {\r\n        clientUI.display(\"Connection closed.\");\r\n    }\r\n\r\n    protected void connectionException(Exception exception) {\r\n        clientUI.display(\"Server has shut down. Terminating client.\");\r\n        quit();\r\n    }\r\n}\r\n//End of ChatClient class
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/src/main/java/client/ChatClient.java b/Client/src/main/java/client/ChatClient.java
+--- a/Client/src/main/java/client/ChatClient.java	(revision 019fb4cfba49980ef32b8b00efa137af88595bc8)
++++ b/Client/src/main/java/client/ChatClient.java	(date 1767528636620)
+@@ -5,7 +5,7 @@
+ package client;
+ 
+ import ocsf.client.*;
+-import common.*;
++import com.hospital_management.shared.common.ChatIF;
+ 
+ import java.io.*;
+ 
+Index: Client/src/main/resources/com/hospital_management/client/hello-view.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/src/main/resources/com/hospital_management/client/hello-view.fxml b/Client/src/main/resources/com/hospital_management/hello-view.fxml
+rename from Client/src/main/resources/com/hospital_management/client/hello-view.fxml
+rename to Client/src/main/resources/com/hospital_management/hello-view.fxml
+--- a/Client/src/main/resources/com/hospital_management/client/hello-view.fxml	(revision 019fb4cfba49980ef32b8b00efa137af88595bc8)
++++ b/Client/src/main/resources/com/hospital_management/hello-view.fxml	(date 1767528636629)
+@@ -6,7 +6,7 @@
+ 
+ <?import javafx.scene.control.Button?>
+ <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+-      fx:controller="com.hospital_management.client.HelloController">
++      fx:controller="com.hospital_management.HelloController">
+   <padding>
+     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+   </padding>
+Index: Client/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n  <modelVersion>4.0.0</modelVersion>\r\n\r\n  <groupId>com.hospital_management</groupId>\r\n  <artifactId>Client</artifactId>\r\n  <version>1.0-SNAPSHOT</version>\r\n  <name>Client</name>\r\n\r\n  <properties>\r\n    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n<junit.version>5.12.1</junit.version>  </properties>\r\n\r\n  <dependencies>\r\n    <dependency>\r\n      <groupId>org.openjfx</groupId>\r\n      <artifactId>javafx-controls</artifactId>\r\n      <version>21.0.6</version>\r\n    </dependency>\r\n    <dependency>\r\n      <groupId>org.openjfx</groupId>\r\n      <artifactId>javafx-fxml</artifactId>\r\n      <version>21.0.6</version>\r\n    </dependency>\r\n<dependency>\r\n      <groupId>org.openjfx</groupId>\r\n      <artifactId>javafx-web</artifactId>\r\n      <version>21.0.6</version>\r\n    </dependency>\r\n      <dependency>\r\n        <groupId>org.openjfx</groupId>\r\n        <artifactId>javafx-swing</artifactId>\r\n        <version>21.0.6</version>\r\n      </dependency>\r\n<dependency>\r\n      <groupId>org.openjfx</groupId>\r\n      <artifactId>javafx-media</artifactId>\r\n      <version>21.0.6</version>\r\n    </dependency><dependency>\r\n      <groupId>org.controlsfx</groupId>\r\n      <artifactId>controlsfx</artifactId>\r\n      <version>11.2.1</version>\r\n    </dependency><dependency>\r\n      <groupId>com.dlsc.formsfx</groupId>\r\n      <artifactId>formsfx-core</artifactId>\r\n      <version>11.6.0</version>\r\n      <exclusions>\r\n        <exclusion>\r\n          <groupId>org.openjfx</groupId>\r\n          <artifactId>*</artifactId>\r\n        </exclusion>\r\n      </exclusions>\r\n    </dependency><dependency>\r\n      <groupId>net.synedra</groupId>\r\n      <artifactId>validatorfx</artifactId>\r\n      <version>0.6.1</version>\r\n      <exclusions>\r\n        <exclusion>\r\n          <groupId>org.openjfx</groupId>\r\n          <artifactId>*</artifactId>\r\n        </exclusion>\r\n      </exclusions>\r\n    </dependency><dependency>\r\n      <groupId>org.kordamp.ikonli</groupId>\r\n      <artifactId>ikonli-javafx</artifactId>\r\n      <version>12.3.1</version>\r\n    </dependency><dependency>\r\n      <groupId>org.kordamp.bootstrapfx</groupId>\r\n      <artifactId>bootstrapfx-core</artifactId>\r\n      <version>0.4.0</version>\r\n    </dependency><dependency>\r\n      <groupId>eu.hansolo</groupId>\r\n      <artifactId>tilesfx</artifactId>\r\n      <version>21.0.9</version>\r\n      <exclusions>\r\n        <exclusion>\r\n          <groupId>org.openjfx</groupId>\r\n          <artifactId>*</artifactId>\r\n        </exclusion>\r\n      </exclusions>\r\n    </dependency><dependency>\r\n      <groupId>com.github.almasb</groupId>\r\n      <artifactId>fxgl</artifactId>\r\n      <version>17.3</version>\r\n      <exclusions>\r\n        <exclusion>\r\n          <groupId>org.openjfx</groupId>\r\n          <artifactId>*</artifactId>\r\n        </exclusion>\r\n      </exclusions>\r\n    </dependency>\r\n<dependency>\r\n      <groupId>org.junit.jupiter</groupId>\r\n      <artifactId>junit-jupiter-api</artifactId>\r\n      <version>${junit.version}</version>\r\n      <scope>test</scope>\r\n    </dependency>\r\n    <dependency>\r\n      <groupId>org.junit.jupiter</groupId>\r\n      <artifactId>junit-jupiter-engine</artifactId>\r\n      <version>${junit.version}</version>\r\n      <scope>test</scope>\r\n    </dependency>  </dependencies>\r\n\r\n  <build>\r\n    <plugins>\r\n      <plugin>\r\n        <groupId>org.apache.maven.plugins</groupId>\r\n        <artifactId>maven-compiler-plugin</artifactId>\r\n        <version>3.13.0</version>\r\n        <configuration>\r\n          <source>25</source>\r\n          <target>25</target>\r\n        </configuration>\r\n      </plugin>\r\n      <plugin>\r\n        <groupId>org.openjfx</groupId>\r\n        <artifactId>javafx-maven-plugin</artifactId>\r\n        <version>0.0.8</version>\r\n        <executions>\r\n          <execution>\r\n            <!-- Default configuration for running with: mvn clean javafx:run -->\r\n            <id>default-cli</id>\r\n            <configuration>\r\n              <mainClass>com.hospital_management.client/com.hospital_management.client.HelloApplication</mainClass>\r\n              <launcher>app</launcher>\r\n              <jlinkZipName>app</jlinkZipName>\r\n              <jlinkImageName>app</jlinkImageName>\r\n              <noManPages>true</noManPages>\r\n              <stripDebug>true</stripDebug>\r\n              <noHeaderFiles>true</noHeaderFiles>\r\n            </configuration>\r\n          </execution>\r\n        </executions>\r\n      </plugin>\r\n    </plugins>\r\n  </build>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/pom.xml b/Client/pom.xml
+--- a/Client/pom.xml	(revision 019fb4cfba49980ef32b8b00efa137af88595bc8)
++++ b/Client/pom.xml	(date 1767528636761)
+@@ -124,7 +124,7 @@
+             <!-- Default configuration for running with: mvn clean javafx:run -->
+             <id>default-cli</id>
+             <configuration>
+-              <mainClass>com.hospital_management.client/com.hospital_management.client.HelloApplication</mainClass>
++              <mainClass>com.hospital_management.client/com.hospital_management.HelloApplication</mainClass>
+               <launcher>app</launcher>
+               <jlinkZipName>app</jlinkZipName>
+               <jlinkImageName>app</jlinkImageName>
+Index: Client/src/main/java/com/hospital_management/client/HelloController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/src/main/java/com/hospital_management/client/HelloController.java b/Client/src/main/java/com/hospital_management/HelloController.java
+rename from Client/src/main/java/com/hospital_management/client/HelloController.java
+rename to Client/src/main/java/com/hospital_management/HelloController.java
+--- a/Client/src/main/java/com/hospital_management/client/HelloController.java	(revision 019fb4cfba49980ef32b8b00efa137af88595bc8)
++++ b/Client/src/main/java/com/hospital_management/HelloController.java	(date 1767528636754)
+@@ -1,4 +1,4 @@
+-package com.hospital_management.client;
++package com.hospital_management;
+ 
+ import javafx.fxml.FXML;
+ import javafx.scene.control.Label;
+Index: Client/src/main/java/com/hospital_management/client/HelloApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/src/main/java/com/hospital_management/client/HelloApplication.java b/Client/src/main/java/com/hospital_management/HelloApplication.java
+rename from Client/src/main/java/com/hospital_management/client/HelloApplication.java
+rename to Client/src/main/java/com/hospital_management/HelloApplication.java
+--- a/Client/src/main/java/com/hospital_management/client/HelloApplication.java	(revision 019fb4cfba49980ef32b8b00efa137af88595bc8)
++++ b/Client/src/main/java/com/hospital_management/HelloApplication.java	(date 1767528636733)
+@@ -1,4 +1,4 @@
+-package com.hospital_management.client;
++package com.hospital_management;
+ 
+ import javafx.application.Application;
+ import javafx.fxml.FXMLLoader;
+Index: Client/src/main/java/common/ChatIF.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/src/main/java/common/ChatIF.java b/Client/src/main/java/com/hospital_management/shared/common/ChatIF.java
+rename from Client/src/main/java/common/ChatIF.java
+rename to Client/src/main/java/com/hospital_management/shared/common/ChatIF.java
+--- a/Client/src/main/java/common/ChatIF.java	(revision 019fb4cfba49980ef32b8b00efa137af88595bc8)
++++ b/Client/src/main/java/com/hospital_management/shared/common/ChatIF.java	(date 1767528636559)
+@@ -2,7 +2,7 @@
+ // "Object Oriented Software Engineering" and is issued under the open-source
+ // license found at www.lloseng.com 
+ 
+-package common;
++package com.hospital_management.shared.common;
+ 
+ /**
+  * This interface implements the abstract method used to display
+Index: Client/src/main/java/module-info.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>module com.hospital_management.client {\r\n    requires javafx.controls;\r\n    requires javafx.fxml;\r\n    requires javafx.web;\r\n\r\n    requires org.controlsfx.controls;\r\n    requires com.dlsc.formsfx;\r\n    requires net.synedra.validatorfx;\r\n    requires org.kordamp.ikonli.javafx;\r\n    requires org.kordamp.bootstrapfx.core;\r\n    requires eu.hansolo.tilesfx;\r\n    requires com.almasb.fxgl.all;\r\n\r\n    opens com.hospital_management.client to javafx.fxml;\r\n    exports com.hospital_management.client;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Client/src/main/java/module-info.java b/Client/src/main/java/module-info.java
+--- a/Client/src/main/java/module-info.java	(revision 019fb4cfba49980ef32b8b00efa137af88595bc8)
++++ b/Client/src/main/java/module-info.java	(date 1767528636602)
+@@ -11,6 +11,8 @@
+     requires eu.hansolo.tilesfx;
+     requires com.almasb.fxgl.all;
+ 
+-    opens com.hospital_management.client to javafx.fxml;
+-    exports com.hospital_management.client;
++    opens com.hospital_management to javafx.fxml;
++    exports com.hospital_management;
++    exports launcher;
++    opens launcher to javafx.fxml;
+ }
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"ed2597e1-c7e7-4f1a-9661-37026adb6f26\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/pom.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/pom.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;VasileBud&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/VasileBud/managementhospital.git&quot;,\r\n    &quot;accountId&quot;: &quot;5b3c1c9e-b8e7-49fa-8120-5ecddc2b7849&quot;\r\n  }\r\n}</component>\r\n  <component name=\"MacroExpansionManager\">\r\n    <option name=\"directoryName\" value=\"2wzoqhmD\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 3\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"37ms5EVU70GmQOdveu5O6sVmotD\" />\r\n  <component name=\"ProjectLevelVcsManager\">\r\n    <ConfirmationsSetting value=\"1\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Application.ClientConsole.executor\": \"Run\",\r\n    \"Application.ServerConsole.executor\": \"Run\",\r\n    \"ModuleVcsDetector.initialDetectionPerformed\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"RunOnceActivity.typescript.service.memoryLimit.init\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1\": \"true\",\r\n    \"git-widget-placeholder\": \"vasi\",\r\n    \"dart.analysis.tool.window.visible\": \"false\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"ignore.virus.scanning.warn.message\": \"true\",\r\n    \"junie.onboarding.icon.badge.shown\": \"true\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/User/Desktop/ProiectIS/managementhospital\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"show.migrate.to.gradle.popup\": \"false\",\r\n    \"to.speed.mode.migration.done\": \"true\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"ed2597e1-c7e7-4f1a-9661-37026adb6f26\" name=\"Changes\" comment=\"\" />\r\n      <created>1767519395483</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1767519395483</updated>\r\n      <workItem from=\"1767519396619\" duration=\"22000\" />\r\n      <workItem from=\"1767519575013\" duration=\"3592000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 019fb4cfba49980ef32b8b00efa137af88595bc8)
++++ b/.idea/workspace.xml	(date 1767529076027)
+@@ -6,7 +6,16 @@
+   <component name="ChangeListManager">
+     <list default="true" id="ed2597e1-c7e7-4f1a-9661-37026adb6f26" name="Changes" comment="">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pom.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/pom.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/main/java/client/ChatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/client/ChatClient.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/ClientConsole.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/ClientConsole.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/HelloApplication.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/HelloController.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/Launcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/launcher/Launcher.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/main/java/common/ChatIF.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/shared/common/ChatIF.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/module-info.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/com/hospital_management/client/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/com/hospital_management/hello-view.fxml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Server/src/main/java/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/DatabaseManager.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -16,6 +25,7 @@
+   <component name="FileTemplateManagerImpl">
+     <option name="RECENT_TEMPLATES">
+       <list>
++        <option value="FxmlFile" />
+         <option value="Class" />
+       </list>
+     </option>
+@@ -52,6 +62,8 @@
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
+     "Application.ClientConsole.executor": "Run",
++    "Application.DbConnectionTest.executor": "Run",
++    "Application.Launcher.executor": "Run",
+     "Application.ServerConsole.executor": "Run",
+     "ModuleVcsDetector.initialDetectionPerformed": "true",
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+@@ -60,7 +72,6 @@
+     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+-    "git-widget-placeholder": "vasi",
+     "dart.analysis.tool.window.visible": "false",
+     "git-widget-placeholder": "main",
+     "ignore.virus.scanning.warn.message": "true",
+@@ -77,6 +88,12 @@
+     "vue.rearranger.settings.migration": "true"
+   }
+ }]]></component>
++  <component name="RecentsManager">
++    <key name="MoveFile.RECENT_KEYS">
++      <recent name="D:\Facultate\AN3\Sem1\IS\managementhospital\Client\src\main\resources\fxml\auth" />
++      <recent name="D:\Facultate\AN3\Sem1\IS\managementhospital\Client\src\main\resources\fxml\auth\auth" />
++    </key>
++  </component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>

@@ -11,6 +11,8 @@ module com.hospital_management.client {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
-    opens com.hospital_management.client to javafx.fxml;
-    exports com.hospital_management.client;
+    opens com.hospital_management to javafx.fxml;
+    exports com.hospital_management;
+    exports launcher;
+    opens launcher to javafx.fxml;
 }
