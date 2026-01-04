@@ -1,3 +1,4 @@
+package network;
 
 import common.ChatIF;
 
@@ -14,7 +15,7 @@ public class ServerConsole implements ChatIF
     {
         try
         {
-            server = new EchoServer(port, this);    
+            server = new EchoServer(port, this);
             server.listen();
         }
         catch(Exception exception)

@@ -1,10 +1,10 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+package repository;
+
+import java.sql.*;
 
 public class DatabaseManager {
-    private static final String URL = "jdbc:postgresql://db.kpvooltkaebzdkinypzh.supabase.co:6543/postgres";
-    private static final String USER = "postgres.db.kpvooltkaebzdkinypzh";
+    private static final String URL = "jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:6543/postgres";
+    private static final String USER = "postgres.kpvooltkaebzdkinypzh";
     private static final String PASSWORD = "RazvanSiVasi";
 
     public static Connection getConnection() throws SQLException {

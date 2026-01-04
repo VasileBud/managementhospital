@@ -1,4 +1,4 @@
-// This file contains material supporting section 3.7 of the textbook:
+package network;// This file contains material supporting section 3.7 of the textbook:
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
 
@@ -227,4 +227,4 @@ public class EchoServer extends AbstractServer {
         System.out.println("Client disconected: " + client);
     }
 }
-//End of EchoServer class
+//End of network.EchoServer class
