@@ -1,4 +1,19 @@
 package common;
 
-public class Request {
+import java.io.Serializable;
+
+public class Request implements Serializable {
+    private RequestType type;
+    private Object payload;
+
+    public Request( Object payload) {
+        this.type = type;
+        this.payload = payload;
+    }
+
+    public RequestType getType() { return type; }
+    public Object getPayload() { return payload; }
+
+    public void setType(RequestType type) { this.type = type; }
+    public void setPayload(Object payload) { this.payload = payload; }
 }

@@ -1,4 +1,7 @@
 package common;
 
-public class RequestType {
+import java.io.Serializable;
+
+public enum RequestType implements Serializable {
+    COMMAND
 }

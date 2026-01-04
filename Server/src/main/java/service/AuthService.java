@@ -1,14 +1,14 @@
 package service;
 
 import jdk.jshell.execution.Util;
-import model.Utilizator;
+import model.User;
 import repository.UserRepository;
 
 import java.sql.SQLException;
 
 public class AuthService {
     private UserRepository userRepository = new UserRepository();
-    public String register(Utilizator user) {
+    public String register(User user) {
         try {
             if(userRepository.findByEmail(user.getEmail()) != null) {
                 return "ERR_EMAIL_EXISTS";

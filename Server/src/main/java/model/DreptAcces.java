@@ -2,13 +2,13 @@ package model;
 
 public class DreptAcces {
     private int idDrept;
-    private Rol rol;
+    private Role rol;
     private String numeDrept;
 
     public DreptAcces() {
     }
 
-    public DreptAcces(int idDrept, Rol rol, String numeDrept) {
+    public DreptAcces(int idDrept, Role rol, String numeDrept) {
         this.idDrept = idDrept;
         this.rol = rol;
         this.numeDrept = numeDrept;
@@ -22,11 +22,11 @@ public class DreptAcces {
         this.idDrept = idDrept;
     }
 
-    public Rol getRol() {
+    public Role getRol() {
         return rol;
     }
 
-    public void setRol(Rol rol) {
+    public void setRol(Role rol) {
         this.rol = rol;
     }
 

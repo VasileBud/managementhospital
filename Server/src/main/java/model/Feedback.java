@@ -1,62 +1,37 @@
 package model;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 public class Feedback {
-    private int idFeedback;
-    private Programare programare;
-    private int rating;
-    private String comentariu;
-    private LocalDate dataFeedback;
+    private long feedbackId;
+    private long appointmentId;
+    private int rating; // 1..5
+    private String comment;
+    private OffsetDateTime createdAt;
 
-    public Feedback() {
-    }
+    public Feedback() {}
 
-    public Feedback(int idFeedback, Programare programare, int rating, String comentariu, LocalDate dataFeedback) {
-        this.idFeedback = idFeedback;
-        this.programare = programare;
+    public Feedback(long feedbackId, long appointmentId, int rating,
+                    String comment, OffsetDateTime createdAt) {
+        this.feedbackId = feedbackId;
+        this.appointmentId = appointmentId;
         this.rating = rating;
-        this.comentariu = comentariu;
-        this.dataFeedback = dataFeedback;
+        this.comment = comment;
+        this.createdAt = createdAt;
     }
 
-    public int getIdFeedback() {
-        return idFeedback;
-    }
+    public long getFeedbackId() { return feedbackId; }
+    public void setFeedbackId(long feedbackId) { this.feedbackId = feedbackId; }
 
-    public void setIdFeedback(int idFeedback) {
-        this.idFeedback = idFeedback;
-    }
+    public long getAppointmentId() { return appointmentId; }
+    public void setAppointmentId(long appointmentId) { this.appointmentId = appointmentId; }
 
-    public Programare getProgramare() {
-        return programare;
-    }
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
 
-    public void setProgramare(Programare programare) {
-        this.programare = programare;
-    }
+    public String getComment() { return comment; }
+    public void setComment(String comment) { this.comment = comment; }
 
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public String getComentariu() {
-        return comentariu;
-    }
-
-    public void setComentariu(String comentariu) {
-        this.comentariu = comentariu;
-    }
-
-    public LocalDate getDataFeedback() {
-        return dataFeedback;
-    }
-
-    public void setDataFeedback(LocalDate dataFeedback) {
-        this.dataFeedback = dataFeedback;
-    }
+    public OffsetDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
 }
