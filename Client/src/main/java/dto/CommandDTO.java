@@ -1,10 +1,13 @@
 package dto;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public enum Action {
         // AUTH
@@ -81,6 +84,7 @@ public class CommandDTO implements Serializable {
 
     // Typed getters (optional but helpful)
     public String getString(String key) { return (String) data.get(key); }
+    public LocalDate getDate(String key) { return (LocalDate) data.get(key); }
     public Long getLong(String key) { return (Long) data.get(key); }
     public Integer getInt(String key) { return (Integer) data.get(key); }
     public Boolean getBool(String key) { return (Boolean) data.get(key); }

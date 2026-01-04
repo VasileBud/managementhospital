@@ -6,25 +6,28 @@
   <component name="ChangeListManager">
     <list default="true" id="22801927-82a4-4558-828d-7004ef1d5a62" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/DbConnectionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/DbConnectionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/controller/HospitalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/controller/HospitalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/HelloApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/controller/auth/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/controller/auth/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/ClientSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/ClientSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/HospitalClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/HospitalClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/shared/common/Respons.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/shared/common/Response.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/common/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/common/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/common/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/common/Response.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/dto/CommandDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/dto/CommandDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/enums/AppointmentStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/enums/AppointmentStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/enums/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/enums/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/launcher/Launcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/launcher/Launcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/auth/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/auth/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/common/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/common/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/common/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/common/Response.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/dto/CommandDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/dto/CommandDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/dto/LoginResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/dto/LoginResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/network/EchoServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/network/HospitalServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/network/MessageRouter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/network/ServerConsole.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/network/ServerConsole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/network/ServerMain.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/Repository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/DoctorRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/DoctorRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/AppointmentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/AppointmentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/ConsultationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/ConsultationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/FeedbackRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/FeedbackRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/ScheduleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/ScheduleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/SpecializationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/SpecializationRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/AdminService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/AppointmentService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/AuthService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/ConsultationService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/DoctorService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/FeedbackService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/StatsService.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,17 +44,62 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="yjenEf8D" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="37o7xyMUhAxMCg0RCHdTQLBi44b" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.DbConnectionTest.executor": "Run",
+    "Application.HelloApplication.executor": "Run",
+    "Application.ServerConsole.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "main",
-    "node.js.selected.package.tslint": "(autodetect)"
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/User/Desktop/ProiectIS_Floria_Bud/managementhospital",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "show.migrate.to.gradle.popup": "false",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="22801927-82a4-4558-828d-7004ef1d5a62" name="Changes" comment="" />
+      <created>1767557820472</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1767557820472</updated>
+      <workItem from="1767557821912" duration="10336000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

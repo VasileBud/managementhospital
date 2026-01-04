@@ -1,9 +1,12 @@
 package repository;
 
+import dto.UserDTO;
 import model.User;
 
 import java.sql.*;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepository {
 
@@ -97,5 +100,42 @@ public class UserRepository {
             }
         }
         return null;
+    }
+
+    public List<UserDTO> findAllUsers() throws SQLException {
+        String sql = """
+                SELECT u.user_id, u.first_name, u.last_name, u.email, r.role_name
+                FROM "user" u
+                JOIN role r ON u.role_id = r.role_id
+                ORDER BY u.user_id
+                """;
+
+        List<UserDTO> users = new ArrayList<>();
+
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                users.add(new UserDTO(
+                        rs.getLong("user_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email"),
+                        rs.getString("role_name"),
+                        null, null // nu incarcam profilele specifice in lista simpla ;)
+                ));
+            }
+        }
+        return users;
+    }
+
+    public boolean deleteUser(long userId) throws SQLException {
+        String sql = "DELETE FROM \"user\" WHERE user_id = ?";
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, userId);
+            return ps.executeUpdate() > 0;
+        }
     }
 }

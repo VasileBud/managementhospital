@@ -1,4 +1,11 @@
 package enums;
 
-public class AppointmentStatus {
+public enum AppointmentStatus {
+    PENDING,
+
+    CONFIRMED,
+
+    CANCELED,
+
+    DONE
 }

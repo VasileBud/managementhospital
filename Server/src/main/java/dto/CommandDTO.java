@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class CommandDTO implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     public enum Action {
         // AUTH
         REGISTER_PATIENT,
