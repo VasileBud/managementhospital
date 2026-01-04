@@ -23,6 +23,15 @@ public class User {
         this.createdAt = createdAt;
         this.roleId = roleId;
     }
+    public User(String firstName, String lastName, String email,
+                String passwordHash, OffsetDateTime createdAt, long roleId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.createdAt = createdAt;
+        this.roleId = roleId;
+    }
 
     public long getUserId() { return userId; }
     public void setUserId(long userId) { this.userId = userId; }

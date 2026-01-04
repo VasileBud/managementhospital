@@ -1,4 +1,4 @@
-import repository.DatabaseManager;
+import repository.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +9,7 @@ public class DbConnectionTest {
 
     public static void main(String[] args) {
         System.out.println("Pornesc testul de conexiune la baza de date...");
-        try (Connection connection = DatabaseManager.getConnection()) {
+        try (Connection connection = Repository.getConnection()) {
             System.out.println("Conexiune reusita: autoCommit=" + connection.getAutoCommit());
             try (PreparedStatement ps = connection.prepareStatement("SELECT 1");
                  ResultSet rs = ps.executeQuery()) {

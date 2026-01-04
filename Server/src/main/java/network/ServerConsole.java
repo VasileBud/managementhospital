@@ -9,13 +9,13 @@ public class ServerConsole implements ChatIF
 {
 
     final public static int DEFAULT_PORT = 5555;
-    EchoServer server;
+    HospitalServer server;
 
     public ServerConsole(int port)
     {
         try
         {
-            server = new EchoServer(port, this);
+            server = new HospitalServer(port, this);
             server.listen();
         }
         catch(Exception exception)

@@ -2,11 +2,17 @@ package network;// This file contains material supporting section 3.7 of the tex
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-
 import common.ChatIF;
-import ocsf.server.*;
+import common.Request;
+import common.RequestType;
+import common.Response;
+
+import controller.HospitalController;
+import dto.CommandDTO;
+import ocsf.server.AbstractServer;
+import ocsf.server.ConnectionToClient;
+
+import java.io.IOException;
 
 /**
  * This class overrides some of the methods in the abstract
@@ -18,21 +24,23 @@ import ocsf.server.*;
  * @author Paul Holden
  * @version July 2000
  */
-public class EchoServer extends AbstractServer {
+public class HospitalServer extends AbstractServer {
     //Class variables *************************************************
 
     /**
      * The default port to listen on.
      */
     final public static int DEFAULT_PORT = 5555;
-    
+
     //Instance variables **********************************************
-    
+
     /**
      * The interface type variable. It allows the implementation of
      * the display method in the server.
      */
     ChatIF serverUI;
+
+    private final HospitalController hospitalController;
 
     //Constructors ****************************************************
 
@@ -41,20 +49,22 @@ public class EchoServer extends AbstractServer {
      *
      * @param port The port number to connect on.
      */
-    public EchoServer(int port) {
+    public HospitalServer(int port) {
         super(port);
         this.serverUI = null;
+        hospitalController = new HospitalController();
     }
-    
+
     /**
      * Constructs an instance of the echo server.
      *
-     * @param port The port number to connect on.
+     * @param port     The port number to connect on.
      * @param serverUI The interface type variable.
      */
-    public EchoServer(int port, ChatIF serverUI) {
+    public HospitalServer(int port, ChatIF serverUI) {
         super(port);
         this.serverUI = serverUI;
+        this.hospitalController = new HospitalController();
     }
 
 
@@ -66,10 +76,53 @@ public class EchoServer extends AbstractServer {
      * @param msg    The message received from the client.
      * @param client The connection from which the message originated.
      */
-    public void handleMessageFromClient
-    (Object msg, ConnectionToClient client) {
-        System.out.println("Message received: " + msg + " from " + client);
-        this.sendToAllClients(msg.toString().getBytes(StandardCharsets.UTF_8));
+    @Override
+    public void handleMessageFromClient(Object msg, ConnectionToClient client) {
+
+        try {
+            // Validate request
+            if (!(msg instanceof Request request)) {
+                client.sendToClient(Response.error(
+                        "INVALID_REQUEST",
+                        "Invalid request object"
+                ));
+                return;
+            }
+
+            // Validate request type
+            if (request.getType() != RequestType.COMMAND) {
+                client.sendToClient(Response.error(
+                        "INVALID_REQUEST",
+                        "Unsupported request type"
+                ));
+                return;
+            }
+
+            // Validate payload
+            if (!(request.getPayload() instanceof CommandDTO command)) {
+                client.sendToClient(Response.error(
+                        "INVALID_REQUEST",
+                        "Payload must be CommandDTO"
+                ));
+                return;
+            }
+
+            // Delegate to controller
+            Response response = hospitalController.handle(command, client);
+
+            // Send response back ONLY to this client
+            client.sendToClient(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                client.sendToClient(Response.error(
+                        "SERVER_ERROR",
+                        e.getMessage()
+                ));
+            } catch (IOException ignored) {
+            }
+        }
     }
 
 
@@ -227,4 +280,4 @@ public class EchoServer extends AbstractServer {
         System.out.println("Client disconected: " + client);
     }
 }
-//End of network.EchoServer class
+//End of network.HospitalServer class

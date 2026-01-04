@@ -2,7 +2,7 @@ package dto;
 
 import java.io.Serializable;
 
-public class LoginResponseDTO implements Serializable {
+    public class LoginResponseDTO implements Serializable {
     private long userId;
     private String role;     // PATIENT, DOCTOR, MANAGER, ADMIN
     private String fullName; // "First Last"

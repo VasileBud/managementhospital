@@ -7,53 +7,10 @@ import java.time.OffsetDateTime;
 
 public class UserRepository {
 
-    public boolean save(User user) throws SQLException {
-        // "user" is reserved in Postgres -> must be quoted
-        String sql = """
-                INSERT INTO "user" (first_name, last_name, email, password_hash, role_id)
-                VALUES (?, ?, ?, ?, ?)
-                """;
-
-        try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, user.getFirstName());
-            pstmt.setString(2, user.getLastName());
-            pstmt.setString(3, user.getEmail());
-            pstmt.setString(4, user.getPasswordHash());
-            pstmt.setLong(5, user.getRoleId());
-
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
-        }
-    }
-
-    public long saveAndReturnId(User user) throws SQLException {
-        String sql = """
-                INSERT INTO "user" (first_name, last_name, email, password_hash, role_id)
-                VALUES (?, ?, ?, ?, ?)
-                RETURNING user_id
-                """;
-
-        try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, user.getFirstName());
-            pstmt.setString(2, user.getLastName());
-            pstmt.setString(3, user.getEmail());
-            pstmt.setString(4, user.getPasswordHash());
-            pstmt.setLong(5, user.getRoleId());
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getLong("user_id");
-                }
-            }
-        }
-        return -1;
-    }
-
-
+    /**
+     * Finds a user by email (table "user").
+     * Returns null if not found.
+     */
     public User findByEmail(String email) throws SQLException {
         String sql = """
                 SELECT user_id, first_name, last_name, email, password_hash, created_at, role_id
@@ -61,71 +18,81 @@ public class UserRepository {
                 WHERE email = ?
                 """;
 
-        try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, email);
+            ps.setString(1, email);
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    OffsetDateTime createdAt = null;
-                    Timestamp ts = rs.getTimestamp("created_at");
-                    if (ts != null) {
-                        // Timestamp doesn't carry offset; Postgres TIMESTAMPTZ is in UTC internally.
-                        // This is fine for most apps; if you need exact offset handling, we can use getObject with OffsetDateTime.
-                        createdAt = ts.toInstant().atOffset(OffsetDateTime.now().getOffset());
-                    }
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) return null;
 
-                    User user = new User();
-                    user.setUserId(rs.getLong("user_id"));
-                    user.setFirstName(rs.getString("first_name"));
-                    user.setLastName(rs.getString("last_name"));
-                    user.setEmail(rs.getString("email"));
-                    user.setPasswordHash(rs.getString("password_hash"));
-                    user.setCreatedAt(createdAt);
-                    user.setRoleId(rs.getLong("role_id"));
-                    return user;
-                }
+                long userId = rs.getLong("user_id");
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String userEmail = rs.getString("email");
+                String passwordHash = rs.getString("password_hash");
+                OffsetDateTime createdAt = rs.getObject("created_at", OffsetDateTime.class);
+                long roleId = rs.getLong("role_id");
+
+                return new User(userId, firstName, lastName, userEmail, passwordHash, createdAt, roleId);
             }
         }
-        return null;
     }
 
     /**
-     * Finds a user by id.
+     * Creates a new user and returns the generated user_id.
+     * roleName must exist in role.role_name (PATIENT/DOCTOR/MANAGER/ADMIN).
      */
-    public User findById(long userId) throws SQLException {
+    public long createUser(String firstName,
+                           String lastName,
+                           String email,
+                           String passwordHash,
+                           String roleName) throws SQLException {
+
         String sql = """
-                SELECT user_id, first_name, last_name, email, password_hash, created_at, role_id
-                FROM "user"
-                WHERE user_id = ?
+                INSERT INTO "user" (first_name, last_name, email, password_hash, role_id)
+                VALUES (?, ?, ?, ?, (SELECT role_id FROM role WHERE role_name = ?))
+                RETURNING user_id
                 """;
 
-        try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            pstmt.setLong(1, userId);
+            ps.setString(1, firstName);
+            ps.setString(2, lastName);
+            ps.setString(3, email);
+            ps.setString(4, passwordHash);
+            ps.setString(5, roleName);
 
-            try (ResultSet rs = pstmt.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    User user = new User();
-                    user.setUserId(rs.getLong("user_id"));
-                    user.setFirstName(rs.getString("first_name"));
-                    user.setLastName(rs.getString("last_name"));
-                    user.setEmail(rs.getString("email"));
-                    user.setPasswordHash(rs.getString("password_hash"));
+                    return rs.getLong("user_id");
+                }
+            }
+        }
 
-                    // Better mapping for TIMESTAMPTZ (Postgres JDBC supports this):
-                    // If your driver supports it, prefer:
-                    // OffsetDateTime createdAt = rs.getObject("created_at", OffsetDateTime.class);
-                    // For compatibility:
-                    Timestamp ts = rs.getTimestamp("created_at");
-                    if (ts != null) {
-                        user.setCreatedAt(ts.toInstant().atOffset(OffsetDateTime.now().getOffset()));
-                    }
+        throw new SQLException("Failed to create user (no user_id returned). Check role_name exists.");
+    }
 
-                    user.setRoleId(rs.getLong("role_id"));
-                    return user;
+    /**
+     * Returns the role_name for a given user_id (join role).
+     */
+    public String findRoleNameByUserId(long userId) throws SQLException {
+        String sql = """
+                SELECT r.role_name
+                FROM "user" u
+                JOIN role r ON r.role_id = u.role_id
+                WHERE u.user_id = ?
+                """;
+
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("role_name");
                 }
             }
         }

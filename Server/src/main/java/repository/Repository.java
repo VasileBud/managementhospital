@@ -2,7 +2,7 @@ package repository;
 
 import java.sql.*;
 
-public class DatabaseManager {
+public class Repository {
     private static final String URL = "jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:6543/postgres";
     private static final String USER = "postgres.kpvooltkaebzdkinypzh";
     private static final String PASSWORD = "RazvanSiVasi";
