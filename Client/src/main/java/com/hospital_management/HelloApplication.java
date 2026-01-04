@@ -1,4 +1,4 @@
-package com.hospital_management.client;
+package com.hospital_management;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
