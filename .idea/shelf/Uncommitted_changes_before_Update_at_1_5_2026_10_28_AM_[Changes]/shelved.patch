@@ -1,0 +1,86 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"22801927-82a4-4558-828d-7004ef1d5a62\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/DbConnectionTest.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/DbConnectionTest.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/controller/HospitalController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/controller/HospitalController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/dto/CommandDTO.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/dto/CommandDTO.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/dto/LoginResponseDTO.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/dto/LoginResponseDTO.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/model/User.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/model/User.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/network/EchoServer.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/network/HospitalServer.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/network/MessageRouter.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/network/ServerConsole.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/network/ServerConsole.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/network/ServerMain.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/repository/DatabaseManager.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/repository/Repository.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/repository/DoctorRepository.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/repository/DoctorRepository.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/repository/UserRepository.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/repository/UserRepository.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/service/AdminService.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/service/AppointmentService.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/service/AuthService.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/service/ConsultationService.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/service/DoctorService.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/service/FeedbackService.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/service/StatsService.java\" beforeDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectLevelVcsManager\">\r\n    <ConfirmationsSetting value=\"1\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Application.DbConnectionTest.executor\": \"Run\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\"\r\n  }\r\n}]]></component>\r\n  <component name=\"TaskManager\">\r\n    <servers />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 5137db23332328821a98d5e13fc2f9d78d5139cc)
++++ b/.idea/workspace.xml	(date 1767601679471)
+@@ -4,28 +4,7 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="22801927-82a4-4558-828d-7004ef1d5a62" name="Changes" comment="">
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/DbConnectionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/DbConnectionTest.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/controller/HospitalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/controller/HospitalController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/dto/CommandDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/dto/CommandDTO.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/dto/LoginResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/dto/LoginResponseDTO.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/model/User.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/network/EchoServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/network/HospitalServer.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/network/MessageRouter.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/network/ServerConsole.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/network/ServerConsole.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/network/ServerMain.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/Repository.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/DoctorRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/DoctorRepository.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/repository/UserRepository.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/AdminService.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/AppointmentService.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/AuthService.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/ConsultationService.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/DoctorService.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/FeedbackService.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/service/StatsService.java" beforeDir="false" />
+-    </list>
++    <list default="true" id="22801927-82a4-4558-828d-7004ef1d5a62" name="Changes" comment="" />
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -41,6 +20,18 @@
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
++  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
++  "lastFilter": {
++    "state": "OPEN",
++    "assignee": "VasileBud"
++  }
++}]]></component>
++  <component name="GithubPullRequestsUISettings"><![CDATA[{
++  "selectedUrlAndAccountId": {
++    "url": "https://github.com/VasileBud/managementhospital.git",
++    "accountId": "5b3c1c9e-b8e7-49fa-8120-5ecddc2b7849"
++  }
++}]]></component>
+   <component name="ProjectLevelVcsManager">
+     <ConfirmationsSetting value="1" id="Add" />
+   </component>
+@@ -48,10 +39,24 @@
+   "keyToString": {
+     "Application.DbConnectionTest.executor": "Run",
+     "git-widget-placeholder": "main",
+-    "node.js.selected.package.tslint": "(autodetect)"
++    "node.js.detected.package.eslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm"
+   }
+ }]]></component>
+   <component name="TaskManager">
+     <servers />
+   </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++  </component>
+ </project>
+\ No newline at end of file

@@ -1,7 +1,7 @@
 package com.hospital_management.client.network;
 
-import common.Response;
-import common.Request;
+import shared.common.Response;
+import shared.common.Request;
 import ocsf.client.AbstractClient;
 
 import java.io.IOException;

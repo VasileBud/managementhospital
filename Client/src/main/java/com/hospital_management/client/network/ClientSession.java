@@ -1,6 +1,6 @@
 package com.hospital_management.client.network;
 
-import dto.UserDTO;
+import shared.dto.UserDTO;
 
 public class ClientSession {
     private static ClientSession instance;
@@ -29,6 +29,19 @@ public class ClientSession {
 
     public boolean isConnected() {
         return client != null && client.isConnected();
+    }
+
+    public synchronized boolean ensureConnected() {
+        if (isConnected()) {
+            return true;
+        }
+        try {
+            client = new HospitalClient("localhost", 5555);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Nu ma pot conecta la server! Verifica daca ServerConsole ruleaza.");
+            return false;
+        }
     }
 
     public UserDTO getLoggedUser() { return loggedUser; }

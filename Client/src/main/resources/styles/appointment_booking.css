@@ -1,0 +1,196 @@
+.appointment-page {
+    -fx-background-color: #eef2f6;
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.appointment-scroll {
+    -fx-background-color: transparent;
+}
+
+.appointment-root {
+    -fx-padding: 20 32 40 32;
+}
+
+.topbar {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16;
+    -fx-padding: 12 18;
+    -fx-effect: dropshadow(gaussian, rgba(30, 90, 180, 0.18), 14, 0.2, 0, 4);
+}
+
+.brand-icon {
+    -fx-background-color: #dbeafe;
+    -fx-background-radius: 8;
+    -fx-padding: 4 8;
+    -fx-text-fill: #1d75d8;
+    -fx-font-weight: 700;
+}
+
+.brand-text {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-background-radius: 14;
+    -fx-padding: 6 12;
+    -fx-border-color: transparent;
+    -fx-border-radius: 14;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-effect: null;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.nav-active {
+    -fx-text-fill: #1d75d8;
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 14;
+    -fx-padding: 6 12;
+    -fx-border-color: #cfe1ff;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-effect: null;
+}
+
+.profile-name {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.profile-role {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.profile-avatar {
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 999;
+    -fx-pref-width: 36;
+    -fx-pref-height: 36;
+}
+
+.profile-initials {
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: 700;
+}
+
+.page-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 24px;
+    -fx-font-weight: 800;
+}
+
+.page-subtitle {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 12px;
+}
+
+.card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(30, 90, 180, 0.10), 12, 0.2, 0, 4);
+    -fx-border-color: #e2ecff;
+    -fx-border-radius: 16;
+}
+
+.section-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+}
+
+.muted-text {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.field-combo {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-font-size: 12px;
+}
+
+.field-date {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-font-size: 12px;
+}
+
+.slot-button {
+    -fx-background-color: #f8fafc;
+    -fx-text-fill: #0f172a;
+    -fx-background-radius: 10;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 6 10;
+}
+
+.slot-button:hover {
+    -fx-border-color: #1d75d8;
+    -fx-text-fill: #1d75d8;
+}
+
+.slot-selected {
+    -fx-background-color: #1d75d8;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: transparent;
+}
+
+.summary-value {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.summary-price {
+    -fx-text-fill: #1d75d8;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.primary-button {
+    -fx-background-color: #1d75d8;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-padding: 10 16;
+    -fx-min-width: 180;
+}
+
+.primary-button:hover {
+    -fx-background-color: #165ca8;
+}
+
+.ghost-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 6 12;
+}
+
+.status-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}

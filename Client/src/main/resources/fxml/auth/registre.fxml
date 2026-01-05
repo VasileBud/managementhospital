@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane prefWidth="1200.0" prefHeight="720.0" alignment="CENTER"
+          xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="com.hospital_management.client.view.auth.RegisterView"
+          styleClass="page">
+
+    <HBox styleClass="card">
+
+        <VBox styleClass="hero-panel" alignment="CENTER_LEFT" spacing="18.0">
+            <padding>
+                <Insets top="36.0" right="32.0" bottom="36.0" left="36.0" />
+            </padding>
+
+            <Label text="MediCare System" styleClass="brand" />
+
+            <VBox spacing="10.0">
+                <Label text="Gestiune eficienta." styleClass="hero-title" />
+                <Label text="Ingrijire superioara." styleClass="hero-title" />
+            </VBox>
+
+            <Label text="Platforma integrata pentru managementul complet al activitatii spitalicesti, dedicata medicilor, pacientilor si administratorilor."
+                   wrapText="true" styleClass="hero-subtitle" />
+
+            <HBox spacing="40.0" styleClass="hero-stats">
+                <VBox>
+                    <Label text="24/7" styleClass="stat-value" />
+                    <Label text="Suport" styleClass="stat-label" />
+                </VBox>
+                <VBox>
+                    <Label text="100%" styleClass="stat-value" />
+                    <Label text="Securizat" styleClass="stat-label" />
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <VBox styleClass="form-panel" alignment="CENTER_LEFT" spacing="18.0">
+            <padding>
+                <Insets top="36.0" right="40.0" bottom="36.0" left="40.0" />
+            </padding>
+
+            <VBox spacing="6.0">
+                <Label text="Creare cont" styleClass="form-title" />
+                <Label text="Completeaza datele pentru contul de pacient." styleClass="form-subtitle" />
+            </VBox>
+
+            <VBox spacing="14.0">
+                <VBox spacing="6.0">
+                    <Label text="Prenume" styleClass="field-label" />
+                    <TextField fx:id="firstNameField" promptText="Introdu prenumele" styleClass="field-input" />
+                </VBox>
+                <VBox spacing="6.0">
+                    <Label text="Nume" styleClass="field-label" />
+                    <TextField fx:id="lastNameField" promptText="Introdu numele" styleClass="field-input" />
+                </VBox>
+                <VBox spacing="6.0">
+                    <Label text="Email" styleClass="field-label" />
+                    <TextField fx:id="emailField" promptText="Introdu email-ul" styleClass="field-input" />
+                </VBox>
+                <VBox spacing="6.0">
+                    <Label text="Parola" styleClass="field-label" />
+                    <PasswordField fx:id="passwordField" promptText="********" styleClass="field-input" />
+                </VBox>
+                <VBox spacing="6.0">
+                    <Label text="Confirma parola" styleClass="field-label" />
+                    <PasswordField fx:id="confirmPasswordField" promptText="********" styleClass="field-input" />
+                </VBox>
+            </VBox>
+
+            <Label fx:id="errorLabel" wrapText="true" styleClass="status-label" />
+
+            <Button fx:id="registerButton" text="Creeaza cont" defaultButton="true" onAction="#onRegisterClick"
+                    styleClass="primary-button" />
+
+            <Separator styleClass="divider" />
+
+            <Button text="Inapoi la login" onAction="#onBackToLoginClick" styleClass="secondary-button" />
+
+            <HBox spacing="10.0" styleClass="footer-links">
+                <Label text="Termeni si conditii" styleClass="link-label" />
+                <Label text="|" styleClass="muted-label" />
+                <Label text="Politica de confidentialitate" styleClass="link-label" />
+            </HBox>
+        </VBox>
+    </HBox>
+</StackPane>

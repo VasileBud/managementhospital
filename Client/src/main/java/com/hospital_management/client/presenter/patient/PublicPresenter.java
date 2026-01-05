@@ -1,4 +1,161 @@
 package com.hospital_management.client.presenter.patient;
 
+import com.hospital_management.client.app.AppScene;
+import com.hospital_management.client.app.SceneNavigator;
+import com.hospital_management.client.network.ClientSession;
+import com.hospital_management.client.view.patient.PublicView;
+import javafx.application.Platform;
+import shared.common.Request;
+import shared.common.RequestType;
+import shared.common.Response;
+import shared.dto.CommandDTO;
+import shared.dto.DoctorDTO;
+import shared.dto.MedicalServiceDTO;
+import shared.dto.SpecializationDTO;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class PublicPresenter {
+
+    private final PublicView view;
+    private List<CommandDTO.Action> pendingActions = Collections.emptyList();
+    private CommandDTO.Action currentAction;
+    private List<DoctorDTO> doctors = Collections.emptyList();
+    private List<SpecializationDTO> specializations = Collections.emptyList();
+    private List<MedicalServiceDTO> services = Collections.emptyList();
+    private String lastQuery = "";
+    private String lastSpecialization = "";
+
+    public PublicPresenter(PublicView view) {
+        this.view = view;
+    }
+
+    public void loadAll() {
+        if (!ClientSession.getInstance().ensureConnected()) {
+            view.setError("Nu exista conexiune la server!");
+            return;
+        }
+
+        pendingActions = List.of(
+                CommandDTO.Action.GET_DOCTORS,
+                CommandDTO.Action.GET_SPECIALIZATIONS
+        );
+        view.setBusy(true);
+        view.setInfo("Se incarca informatiile publice...");
+        sendNext();
+    }
+
+    public void onGoToLogin() {
+        SceneNavigator.navigateTo(AppScene.LOGIN);
+    }
+
+    public void onGoToRegister() { SceneNavigator.navigateTo(AppScene.REGISTER);}
+
+    public void onSearch(String query, String specializationName) {
+        if (!validateSearch(query, specializationName)) {
+            return;
+        }
+        lastQuery = query == null ? "" : query.trim().toLowerCase();
+        lastSpecialization = specializationName == null ? "" : specializationName.trim();
+        applyFilters();
+    }
+
+    private void sendNext() {
+        if (pendingActions.isEmpty()) {
+            view.setBusy(false);
+            view.setInfo("Informatiile au fost incarcate.");
+            return;
+        }
+
+        currentAction = pendingActions.get(0);
+        pendingActions = pendingActions.subList(1, pendingActions.size());
+
+        CommandDTO cmd = new CommandDTO(currentAction);
+        Request req = new Request(cmd);
+        req.setType(RequestType.COMMAND);
+
+        ClientSession.getInstance().getClient().setOnResponseReceived(this::handleResponse);
+        ClientSession.getInstance().getClient().sendRequest(req);
+    }
+
+    private void handleResponse(Response response) {
+        Platform.runLater(() -> {
+            if (response.getStatus() != Response.Status.OK) {
+                view.setError("Eroare: " + response.getMessage());
+                view.setBusy(false);
+                return;
+            }
+
+            switch (currentAction) {
+                case GET_DOCTORS -> {
+                    doctors = castList(response.getData());
+                    applyFilters();
+                    view.setInfo("Doctori incarcati: " + doctors.size());
+                }
+                case GET_SPECIALIZATIONS -> {
+                    specializations = castList(response.getData());
+                    view.setSpecializations(specializations);
+                    view.setInfo("Specializari incarcate: " + specializations.size());
+                }
+                case GET_MEDICAL_SERVICES -> {
+                    services = castList(response.getData());
+                    view.setInfo("Servicii incarcate: " + services.size());
+                }
+                default -> view.setInfo("Raspuns primit.");
+            }
+
+            sendNext();
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> List<T> castList(Object data) {
+        if (data instanceof List<?>) {
+            return (List<T>) data;
+        }
+        return Collections.emptyList();
+    }
+
+    private void applyFilters() {
+        if (doctors.isEmpty()) {
+            view.setDoctors(Collections.emptyList());
+            return;
+        }
+
+        String specFilter = lastSpecialization;
+        boolean hasSpecFilter = specFilter != null && !specFilter.isBlank()
+                && !specFilter.equalsIgnoreCase("Toate specializarile");
+
+        List<DoctorDTO> filtered = doctors.stream()
+                .filter(d -> {
+                    String name = d.getFullName() == null ? "" : d.getFullName().toLowerCase();
+                    String spec = d.getSpecializationName() == null ? "" : d.getSpecializationName();
+                    boolean matchesQuery = lastQuery.isEmpty()
+                            || name.contains(lastQuery)
+                            || spec.toLowerCase().contains(lastQuery);
+                    boolean matchesSpec = !hasSpecFilter || spec.equalsIgnoreCase(specFilter);
+                    return matchesQuery && matchesSpec;
+                })
+                .collect(Collectors.toList());
+
+        view.setDoctors(filtered);
+    }
+
+    private boolean validateSearch(String query, String specializationName) {
+        String q = query == null ? "" : query.trim();
+        String s = specializationName == null ? "" : specializationName.trim();
+        if (q.length() > 100) {
+            view.setError("Cautarea este prea lunga.");
+            return false;
+        }
+        if (s.length() > 80) {
+            view.setError("Specializarea selectata este invalida.");
+            return false;
+        }
+        return true;
+    }
+
 }
+

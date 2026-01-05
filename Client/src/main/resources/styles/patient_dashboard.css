@@ -1,0 +1,306 @@
+.dashboard-page {
+    -fx-background-color: #eef2f6;
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.dashboard-scroll {
+    -fx-background-color: transparent;
+}
+
+.dashboard-root {
+    -fx-padding: 20 32 40 32;
+}
+
+.dashboard-topbar {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16;
+    -fx-padding: 12 18;
+    -fx-effect: dropshadow(gaussian, rgba(30, 90, 180, 0.18), 14, 0.2, 0, 4);
+}
+
+.brand-icon {
+    -fx-background-color: #dbeafe;
+    -fx-background-radius: 8;
+    -fx-padding: 4 8;
+    -fx-text-fill: #1d75d8;
+    -fx-font-weight: 700;
+}
+
+.brand-text {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-background-radius: 14;
+    -fx-padding: 6 12;
+    -fx-border-color: transparent;
+    -fx-border-radius: 14;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-effect: null;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.nav-active {
+    -fx-text-fill: #1d75d8;
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 14;
+    -fx-padding: 6 12;
+    -fx-border-color: #cfe1ff;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-effect: null;
+}
+
+.nav-button:focused {
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-effect: null;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.nav-active:focused {
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-effect: null;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.nav-button:armed,
+.nav-button:hover {
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-effect: null;
+}
+
+.nav-active:armed,
+.nav-active:hover {
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-effect: null;
+}
+
+.profile-name {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.profile-role {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.profile-avatar {
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 999;
+    -fx-pref-width: 36;
+    -fx-pref-height: 36;
+}
+
+.profile-initials {
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: 700;
+}
+
+.welcome-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 24px;
+    -fx-font-weight: 800;
+}
+
+.welcome-subtitle {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 12px;
+}
+
+.card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(30, 90, 180, 0.10), 12, 0.2, 0, 4);
+    -fx-border-color: #e2ecff;
+    -fx-border-radius: 16;
+}
+
+.section-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+}
+
+.section-icon {
+    -fx-text-fill: #1d75d8;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 8;
+    -fx-padding: 4 6;
+}
+
+.doctor-avatar-large {
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 12;
+    -fx-pref-width: 90;
+    -fx-pref-height: 90;
+}
+
+.doctor-initials {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+}
+
+.doctor-name {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+}
+
+.doctor-subtitle {
+    -fx-text-fill: #1d75d8;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.info-chip {
+    -fx-background-color: #f0f6ff;
+    -fx-background-radius: 12;
+    -fx-padding: 8 12;
+}
+
+.chip-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.chip-value {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.summary-row {
+    -fx-alignment: center-left;
+}
+
+.pill {
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 999;
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 10;
+}
+
+.pill-danger {
+    -fx-background-color: #fde8e8;
+    -fx-text-fill: #b91c1c;
+}
+
+.pill-warning {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #92400e;
+}
+
+.tag {
+    -fx-background-color: #fde8e8;
+    -fx-text-fill: #b91c1c;
+    -fx-background-radius: 999;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 10;
+}
+
+.tag-warning {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #92400e;
+    -fx-background-radius: 999;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 10;
+}
+
+.history-item {
+    -fx-padding: 12 0;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.history-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+}
+
+.muted-text {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.primary-button {
+    -fx-background-color: #1d75d8;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-padding: 8 16;
+    -fx-min-width: 140;
+}
+
+.primary-button:hover {
+    -fx-background-color: #165ca8;
+}
+
+.ghost-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 6 12;
+}
+
+.danger-button {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #b91c1c;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10;
+    -fx-padding: 6 12;
+}
+
+.link-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #1d75d8;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.status-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.nav-button nav-active {
+    -fx-background-color: #1d75d8;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-padding: 8 16;
+    -fx-min-width: 140;
+}

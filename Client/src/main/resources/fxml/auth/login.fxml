@@ -4,53 +4,85 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0"
-      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.hospital_management.client.controller.auth.LoginController">
+<StackPane prefWidth="1200.0" prefHeight="720.0" alignment="CENTER"
+          xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="com.hospital_management.client.view.auth.LoginView"
+          styleClass="page">
 
-    <padding>
-        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
-    </padding>
+    <HBox styleClass="card">
 
-    <Label text="Management Spital">
-        <font>
-            <Font name="System Bold" size="24.0" />
-        </font>
-    </Label>
-    <Label text="Autentificare în sistem" textFill="#666666">
-        <font>
-            <Font size="14.0" />
-        </font>
-    </Label>
+        <VBox styleClass="hero-panel" alignment="CENTER_LEFT" spacing="18.0">
+            <padding>
+                <Insets top="36.0" right="32.0" bottom="36.0" left="36.0" />
+            </padding>
 
-    <VBox maxWidth="300.0" spacing="15.0">
-        <VBox.margin>
-            <Insets top="20.0" />
-        </VBox.margin>
+            <Label text="MediCare System" styleClass="brand" />
 
-        <VBox spacing="5.0">
-            <Label text="Email:" />
-            <TextField fx:id="emailField" promptText="Introduceți email-ul..." />
+            <VBox spacing="10.0">
+                <Label text="Gestiune eficienta." styleClass="hero-title" />
+                <Label text="Ingrijire superioara." styleClass="hero-title" />
+            </VBox>
+
+            <Label text="Platforma integrata pentru managementul complet al activitatii spitalicesti, dedicata medicilor, pacientilor si administratorilor."
+                   wrapText="true" styleClass="hero-subtitle" />
+
+            <HBox spacing="40.0" styleClass="hero-stats">
+                <VBox>
+                    <Label text="24/7" styleClass="stat-value" />
+                    <Label text="Suport" styleClass="stat-label" />
+                </VBox>
+                <VBox>
+                    <Label text="100%" styleClass="stat-value" />
+                    <Label text="Securizat" styleClass="stat-label" />
+                </VBox>
+            </HBox>
         </VBox>
 
-        <VBox spacing="5.0">
-            <Label text="Parolă:" />
-            <PasswordField fx:id="passwordField" promptText="Introduceți parola..." />
+        <VBox styleClass="form-panel" alignment="CENTER_LEFT" spacing="18.0">
+            <padding>
+                <Insets top="36.0" right="40.0" bottom="36.0" left="40.0" />
+            </padding>
+
+            <VBox spacing="6.0">
+                <Label text="Bine ai venit" styleClass="form-title" />
+                <Label text="Te rugam sa te autentifici pentru a continua." styleClass="form-subtitle" />
+            </VBox>
+
+            <VBox spacing="14.0">
+                <VBox spacing="6.0">
+                    <Label text="Nume utilizator / Email" styleClass="field-label" />
+                    <TextField fx:id="emailField" promptText="Introdu numele de utilizator" styleClass="field-input" />
+                </VBox>
+
+                <VBox spacing="6.0">
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <Label text="Parola" styleClass="field-label" />
+                        <Label text="Am uitat parola?" styleClass="link-label" />
+                    </HBox>
+                    <PasswordField fx:id="passwordField" promptText="********" styleClass="field-input" />
+                </VBox>
+            </VBox>
+
+            <Label fx:id="errorLabel" wrapText="true" styleClass="status-label" />
+
+            <Button fx:id="loginButton" text="Conectare" defaultButton="true" onAction="#onLoginClick"
+                    styleClass="primary-button" />
+
+            <Separator styleClass="divider" />
+
+            <Button text="Inregistrare Pacient Nou" onAction="#onGoToRegisterClick" styleClass="secondary-button" />
+
+            <HBox spacing="10.0" styleClass="footer-links">
+                <Label text="Termeni si conditii" styleClass="link-label" />
+                <Label text="|" styleClass="muted-label" />
+                <Label text="Politica de confidentialitate" styleClass="link-label" />
+            </HBox>
         </VBox>
-    </VBox>
-
-    <Label fx:id="errorLabel" textFill="RED" wrapText="true" />
-
-    <Button defaultButton="true" mnemonicParsing="false" onAction="#onLoginClick" prefHeight="35.0" prefWidth="150.0" text="Autentificare">
-        <font>
-            <Font size="14.0" />
-        </font>
-        <VBox.margin>
-            <Insets top="10.0" />
-        </VBox.margin>
-    </Button>
-</VBox>
+    </HBox>
+</StackPane>
