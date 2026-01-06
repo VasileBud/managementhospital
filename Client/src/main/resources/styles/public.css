@@ -195,11 +195,24 @@
     -fx-min-height: 32;
 }
 
+.primary2-button {
+    -fx-background-color: #1d75d8;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-padding: 8 16;
+    -fx-min-width: 210;
+    -fx-pref-width: 120;
+    -fx-min-height: 32;
+}
+
 .secondary-button {
     -fx-background-color: #ffffff;
     -fx-text-fill: #1d75d8;
     -fx-font-size: 12px;
     -fx-font-weight: 700;
+    -fx-min-width: 120;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
     -fx-border-color: #cbd5f5;

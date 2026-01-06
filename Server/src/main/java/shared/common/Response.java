@@ -19,7 +19,7 @@ public class Response implements Serializable {
         this.status = status;
         this.message = message;
         this.errorCode = errorCode;
-        this.payload = payload;
+        this.payload = data;
     }
 
     public static Response ok(Object data) {

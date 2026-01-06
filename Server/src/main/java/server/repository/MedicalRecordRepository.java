@@ -12,7 +12,7 @@ public class MedicalRecordRepository {
         String sql = """
                 SELECT e.entry_id, e.diagnosis, e.treatment, e.notes, e.entry_date, 
                        a.appointment_id, 
-                       u.last_name AS doctor_name
+                       u.first_name || ' ' || u.last_name AS doctor_name
                 FROM medical_record_entry e
                 JOIN patient_medical_file f ON f.file_id = e.file_id
                 LEFT JOIN appointment a ON a.appointment_id = e.appointment_id

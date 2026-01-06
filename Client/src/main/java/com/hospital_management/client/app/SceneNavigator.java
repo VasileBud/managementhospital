@@ -87,6 +87,9 @@ public final class SceneNavigator {
         String publicCss = null;
         String appointmentCss = null;
         String medicalRecordCss = null;
+        String doctorCss = null;
+        String doctorConsultationCss = null;
+        String managerCss = null;
 
         if (SceneNavigator.class.getResource("/styles/login.css") != null) {
             loginCss = SceneNavigator.class.getResource("/styles/login.css").toExternalForm();
@@ -104,13 +107,25 @@ public final class SceneNavigator {
         if (SceneNavigator.class.getResource("/styles/patient_medical_record.css") != null) {
             medicalRecordCss = SceneNavigator.class.getResource("/styles/patient_medical_record.css").toExternalForm();
         }
+        if (SceneNavigator.class.getResource("/styles/doctor_dashboard.css") != null) {
+            doctorCss = SceneNavigator.class.getResource("/styles/doctor_dashboard.css").toExternalForm();
+        }
+        if (SceneNavigator.class.getResource("/styles/doctor_consultation.css") != null) {
+            doctorConsultationCss = SceneNavigator.class.getResource("/styles/doctor_consultation.css").toExternalForm();
+        }
+        if (SceneNavigator.class.getResource("/styles/manager_dashboard.css") != null) {
+            managerCss = SceneNavigator.class.getResource("/styles/manager_dashboard.css").toExternalForm();
+        }
 
         scene.getStylesheets().removeIf(s ->
                 s.endsWith("/styles/login.css")
                         || s.endsWith("/styles/public.css")
                         || s.endsWith("/styles/patient_dashboard.css")
                         || s.endsWith("/styles/appointment_booking.css")
-                        || s.endsWith("/styles/patient_medical_record.css"));
+                        || s.endsWith("/styles/patient_medical_record.css")
+                        || s.endsWith("/styles/doctor_dashboard.css")
+                        || s.endsWith("/styles/doctor_consultation.css")
+                        || s.endsWith("/styles/manager_dashboard.css"));
 
         if ((target == AppScene.LOGIN || target == AppScene.REGISTER) && loginCss != null) {
             scene.getStylesheets().add(loginCss);
@@ -126,6 +141,15 @@ public final class SceneNavigator {
         }
         if (target == AppScene.PATIENT_MEDICAL_RECORD && medicalRecordCss != null) {
             scene.getStylesheets().add(medicalRecordCss);
+        }
+        if (target == AppScene.DOCTOR_DASHBOARD && doctorCss != null) {
+            scene.getStylesheets().add(doctorCss);
+        }
+        if (target == AppScene.DOCTOR_CONSULTATION && doctorConsultationCss != null) {
+            scene.getStylesheets().add(doctorConsultationCss);
+        }
+        if (target == AppScene.MANAGER_DASHBOARD && managerCss != null) {
+            scene.getStylesheets().add(managerCss);
         }
     }
 

@@ -153,4 +153,32 @@ public class AppointmentController {
             return Response.error("DB_ERROR", e.getMessage());
         }
     }
+
+    public Response getDoctorAppointments(CommandDTO command) {
+        Long doctorId = command.getLong("doctorId");
+        LocalDate date = command.getDate("date");
+
+        if (doctorId == null) {
+            Long requesterUserId = command.getRequesterUserId();
+            if (requesterUserId != null) {
+                try {
+                    doctorId = doctorRepository.findDoctorIdByUserId(requesterUserId);
+                } catch (Exception e) {
+                    return Response.error("DB_ERROR", e.getMessage());
+                }
+            }
+        }
+
+        if (doctorId == null || date == null) {
+            return Response.error("VALIDATION_ERROR", "Doctor ID and date are required");
+        }
+
+        try {
+            List<shared.dto.AppointmentDTO> appointments =
+                    appointmentRepository.findByDoctorId(doctorId, date);
+            return Response.ok(appointments);
+        } catch (Exception e) {
+            return Response.error("DB_ERROR", e.getMessage());
+        }
+    }
 }

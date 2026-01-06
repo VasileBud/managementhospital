@@ -14,7 +14,6 @@ public class MainApp extends Application {
         stage.setMinHeight(864);
         stage.setMaxWidth(1000);
         stage.setMaxHeight(864);
-        stage.setResizable(false);
         SceneNavigator.navigateTo(AppScene.PUBLIC);
     }
 

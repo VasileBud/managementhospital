@@ -164,8 +164,7 @@ public class AppointmentBookingPresenter {
         currentAction = CommandDTO.Action.BOOK_APPOINTMENT;
         view.setBusy(true);
         view.setInfo("Se creeaza programarea...");
-        ClientSession.getInstance().getClient().setOnResponseReceived(this::handleResponse);
-        ClientSession.getInstance().getClient().sendRequest(req);
+        ClientSession.getInstance().getClient().sendRequest(req, this::handleResponse);
     }
 
     private void sendNext() {
@@ -183,8 +182,7 @@ public class AppointmentBookingPresenter {
         Request req = new Request(cmd);
         req.setType(RequestType.COMMAND);
 
-        ClientSession.getInstance().getClient().setOnResponseReceived(this::handleResponse);
-        ClientSession.getInstance().getClient().sendRequest(req);
+        ClientSession.getInstance().getClient().sendRequest(req, this::handleResponse);
     }
 
     private void handleResponse(Response response) {
@@ -257,8 +255,7 @@ public class AppointmentBookingPresenter {
         currentAction = CommandDTO.Action.GET_AVAILABLE_SLOTS;
         view.setBusy(true);
         view.setInfo("Se incarca orele disponibile...");
-        ClientSession.getInstance().getClient().setOnResponseReceived(this::handleResponse);
-        ClientSession.getInstance().getClient().sendRequest(req);
+        ClientSession.getInstance().getClient().sendRequest(req, this::handleResponse);
     }
 
     private List<DoctorDTO> filterDoctors(SpecializationDTO spec) {

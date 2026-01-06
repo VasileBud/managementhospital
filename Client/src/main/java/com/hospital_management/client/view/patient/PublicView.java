@@ -196,15 +196,11 @@ public class PublicView {
 
         // --- MODIFICARE AICI ---
         Button scheduleBtn = new Button("Vezi Program & Disponibilitate");
-        scheduleBtn.getStyleClass().add("secondary-button"); // Asigură-te că ai clasa asta în CSS
+        scheduleBtn.getStyleClass().add("primary2-button"); // Asigură-te că ai clasa asta în CSS
         // Aici apelăm metoda nouă pe care o vom scrie mai jos
         scheduleBtn.setOnAction(e -> showDoctorDetailsDialog(doctor));
 
-        Button bookBtn = new Button("Autentificare pentru Programare");
-        bookBtn.getStyleClass().add("primary-button");
-        bookBtn.setOnAction(e -> onGoToLoginClick()); // Redirecționăm la login
-
-        actions.getChildren().addAll(scheduleBtn, bookBtn);
+        actions.getChildren().addAll(scheduleBtn);
 
         card.getChildren().addAll(avatar, details, actions);
         HBox.setHgrow(details, javafx.scene.layout.Priority.ALWAYS);

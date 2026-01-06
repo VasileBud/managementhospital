@@ -76,8 +76,7 @@ public class PublicPresenter {
         Request req = new Request(cmd);
         req.setType(RequestType.COMMAND);
 
-        ClientSession.getInstance().getClient().setOnResponseReceived(this::handleResponse);
-        ClientSession.getInstance().getClient().sendRequest(req);
+        ClientSession.getInstance().getClient().sendRequest(req, this::handleResponse);
     }
 
     private void handleResponse(Response response) {
@@ -175,7 +174,7 @@ public class PublicPresenter {
         Request req = new Request(cmd);
         req.setType(RequestType.COMMAND);
 
-        ClientSession.getInstance().getClient().setOnResponseReceived(response -> {
+        ClientSession.getInstance().getClient().sendRequest(req, response -> {
             Platform.runLater(() -> {
                 if (response.getStatus() == Response.Status.OK) {
                     List<DoctorScheduleDTO> schedule = (List<DoctorScheduleDTO>) response.getPayload();
@@ -186,7 +185,6 @@ public class PublicPresenter {
             });
         });
 
-        ClientSession.getInstance().getClient().sendRequest(req);
     }
 
     public void fetchAvailableSlots(long doctorId, LocalDate date, Consumer<List<LocalTime>> onSuccess) {
@@ -199,7 +197,7 @@ public class PublicPresenter {
         Request req = new Request(cmd);
         req.setType(RequestType.COMMAND);
 
-        ClientSession.getInstance().getClient().setOnResponseReceived(response -> {
+        ClientSession.getInstance().getClient().sendRequest(req, response -> {
             Platform.runLater(() -> {
                 if (response.getStatus() == Response.Status.OK) {
                     List<LocalTime> slots = (List<LocalTime>) response.getPayload();
@@ -211,7 +209,6 @@ public class PublicPresenter {
             });
         });
 
-        ClientSession.getInstance().getClient().sendRequest(req);
     }
 
 }

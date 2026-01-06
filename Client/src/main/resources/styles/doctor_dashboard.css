@@ -1,0 +1,463 @@
+.doctor-dashboard {
+    -fx-background-color: #f5f6f8;
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.topbar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 12 20;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.brand-icon {
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 8;
+    -fx-padding: 4 8;
+    -fx-text-fill: #1d75d8;
+    -fx-font-weight: 700;
+}
+
+.brand-text {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+}
+
+.nav-link {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 6 10;
+}
+
+.nav-link:hover {
+    -fx-text-fill: #1d75d8;
+}
+
+.sidebar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 18 14;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 1 0 0;
+    -fx-pref-width: 220;
+}
+
+.profile-card {
+    -fx-padding: 6 8 18 8;
+}
+
+.avatar {
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 999;
+    -fx-pref-width: 44;
+    -fx-pref-height: 44;
+}
+
+.avatar-initials {
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: 700;
+}
+
+.profile-name {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+}
+
+.profile-role {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-background-radius: 10;
+    -fx-padding: 8 12;
+    -fx-alignment: center-left;
+}
+
+.nav-button:hover {
+    -fx-background-color: #f1f5f9;
+}
+
+.nav-active {
+    -fx-background-color: #e6f0ff;
+    -fx-text-fill: #1d75d8;
+    -fx-background-radius: 10;
+}
+
+.logout-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #dc2626;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 8 12;
+    -fx-alignment: center-left;
+}
+
+.main {
+    -fx-padding: 0;
+}
+
+.header-bar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 16 20;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.page-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 20px;
+    -fx-font-weight: 800;
+}
+
+.page-subtitle {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.header-button {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10;
+    -fx-padding: 8 14;
+}
+
+.header-button:hover {
+    -fx-background-color: #e2e8f0;
+}
+
+.primary-button {
+    -fx-background-color: #1d75d8;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10;
+    -fx-padding: 8 14;
+}
+
+.primary-button:hover {
+    -fx-background-color: #165ca8;
+}
+
+.main-scroll {
+    -fx-background-color: transparent;
+}
+
+.main-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.content-root {
+    -fx-padding: 20 24 32 24;
+    -fx-spacing: 18;
+}
+
+.stats-row {
+    -fx-spacing: 12;
+}
+
+.stat-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-padding: 14 16;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.08), 10, 0.2, 0, 4);
+}
+
+.stat-title {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.stat-value {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 22px;
+    -fx-font-weight: 800;
+}
+
+.stat-icon {
+    -fx-background-color: #e6f0ff;
+    -fx-text-fill: #1d75d8;
+    -fx-background-radius: 8;
+    -fx-padding: 4 8;
+    -fx-font-weight: 700;
+}
+
+.filter-bar {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-padding: 12 14;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.05), 8, 0.2, 0, 2);
+}
+
+.search-box {
+    -fx-background-color: #f1f5f9;
+    -fx-background-radius: 10;
+    -fx-padding: 6 10;
+    -fx-alignment: center-left;
+}
+
+.search-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.search-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #0f172a;
+    -fx-prompt-text-fill: #94a3b8;
+    -fx-border-color: transparent;
+    -fx-padding: 4 6;
+}
+
+.header-avatar {
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 999;
+    -fx-pref-width: 36;
+    -fx-pref-height: 36;
+}
+
+.header-name {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+}
+
+.header-role {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 10px;
+}
+
+.filter-control {
+    -fx-background-color: #f1f5f9;
+    -fx-background-radius: 10;
+    -fx-border-color: transparent;
+    -fx-padding: 4 8;
+    -fx-font-size: 11px;
+}
+
+.filter-control:focused {
+    -fx-border-color: #93c5fd;
+    -fx-border-radius: 10;
+}
+
+.card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 14;
+}
+
+.card-header {
+    -fx-padding: 12 16;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.card-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+}
+
+.link-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #1d75d8;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.table-header {
+    -fx-background-color: #f8fafc;
+    -fx-padding: 8 16;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-header-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.appointment-row {
+    -fx-padding: 10 16;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.row-active {
+    -fx-background-color: #eef5ff;
+}
+
+.row-urgent {
+    -fx-background-color: #fff5f5;
+}
+
+.patient-name {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.patient-meta {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 10px;
+}
+
+.patient-avatar {
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 999;
+    -fx-pref-width: 32;
+    -fx-pref-height: 32;
+}
+
+.patient-initials {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.pill {
+    -fx-background-radius: 999;
+    -fx-padding: 4 10;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.pill-blue {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #1d4ed8;
+}
+
+.pill-purple {
+    -fx-background-color: #ede9fe;
+    -fx-text-fill: #6d28d9;
+}
+
+.pill-orange {
+    -fx-background-color: #ffedd5;
+    -fx-text-fill: #c2410c;
+}
+
+.pill-red {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #b91c1c;
+}
+
+.pill-gray {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #334155;
+}
+
+.status-pill {
+    -fx-background-radius: 999;
+    -fx-padding: 4 10;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.status-pending {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #92400e;
+}
+
+.status-confirmed {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #15803d;
+}
+
+.status-done {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #334155;
+}
+
+.status-canceled {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #b91c1c;
+}
+
+.action-button {
+    -fx-background-radius: 8;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-padding: 6 10;
+}
+
+.action-primary {
+    -fx-background-color: #1d75d8;
+    -fx-text-fill: #ffffff;
+}
+
+.action-primary:hover {
+    -fx-background-color: #165ca8;
+}
+
+.action-secondary {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #0f172a;
+}
+
+.action-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+.table-footer {
+    -fx-background-color: #f8fafc;
+    -fx-padding: 10 16;
+}
+
+.pagination-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 10px;
+}
+
+.pagination-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #0f172a;
+}
+
+.quick-row {
+    -fx-spacing: 12;
+}
+
+.quick-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 14;
+    -fx-padding: 14 16;
+}
+
+.quick-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+}
+
+.quick-subtitle {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.status-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}

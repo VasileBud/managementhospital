@@ -6,14 +6,48 @@
   <component name="ChangeListManager">
     <list default="true" id="22801927-82a4-4558-828d-7004ef1d5a62" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/AppScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/AppScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/MainApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/SceneNavigator.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/SceneNavigator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/ClientSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/ClientSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/HospitalClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/HospitalClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/LoginPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/LoginPresenter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/RegisterPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/RegisterPresenter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/manager/ManagerStatsPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/manager/ManagerStatsPresenter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/medic/DoctorConsultationPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/medic/DoctorConsultationPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/AppointmentBookingPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/AppointmentBookingPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientDashboardPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientDashboardPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientMedicalRecordPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientMedicalRecordPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PublicPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PublicPresenter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/doctor/DoctorDashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/doctor/DoctorDashboardView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/manager/ManagerDashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/manager/ManagerDashboardView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/AppointmentBookingView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/AppointmentBookingView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PatientDashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PatientDashboardView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PatientMedicalRecordView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PatientMedicalRecordView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PublicView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PublicView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/shared/common/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/shared/common/Response.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/shared/dto/CommandDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/shared/dto/CommandDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/shared/dto/StatsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/shared/dto/StatsDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/auth/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/auth/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/doctor/doctor_dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/doctor/doctor_dashboard.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/manager/manager_dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/manager/manager_dashboard.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/appointment_booking.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/appointment_booking.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/patient_dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/patient_dashboard.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/patient_medical_record.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/patient_medical_record.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/public.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/public.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/styles/appointment_booking.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/styles/appointment_booking.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/styles/patient_medical_record.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/styles/patient_medical_record.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/styles/public.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/styles/public.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/controller/AppointmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/controller/AppointmentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/controller/HospitalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/controller/HospitalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/controller/StatsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/controller/StatsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/AppointmentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/AppointmentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/MedicalRecordRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/MedicalRecordRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/PatientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/PatientRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/StatsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/StatsRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/shared/common/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/shared/common/Response.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/shared/dto/CommandDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/shared/dto/CommandDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/shared/dto/StatsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/shared/dto/StatsDTO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,10 +135,10 @@
 }</component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1768730405594" />
-    <option name="spentUsd" value="0.19844756" />
+    <option name="spentUsd" value="0.2653023" />
   </component>
   <component name="RecapUselessUpdatesCounter">
-    <option name="suspendCountdown" value="4" />
+    <option name="suspendCountdown" value="0" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">

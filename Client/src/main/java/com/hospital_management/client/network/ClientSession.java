@@ -1,5 +1,6 @@
 package com.hospital_management.client.network;
 
+import shared.dto.AppointmentDTO;
 import shared.dto.UserDTO;
 
 public class ClientSession {
@@ -8,6 +9,7 @@ public class ClientSession {
     private UserDTO loggedUser;
 
     private Long appointmentIdToEdit = null;
+    private AppointmentDTO selectedAppointment = null;
 
     private ClientSession() {
         try {
@@ -59,5 +61,17 @@ public class ClientSession {
 
     public void clearEditMode() {
         this.appointmentIdToEdit = null;
+    }
+
+    public void setSelectedAppointment(AppointmentDTO appointment) {
+        this.selectedAppointment = appointment;
+    }
+
+    public AppointmentDTO getSelectedAppointment() {
+        return selectedAppointment;
+    }
+
+    public void clearSelectedAppointment() {
+        this.selectedAppointment = null;
     }
 }

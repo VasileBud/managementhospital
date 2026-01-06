@@ -1,0 +1,156 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"22801927-82a4-4558-828d-7004ef1d5a62\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/ClientSession.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/ClientSession.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/LoginPresenter.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/LoginPresenter.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/AppointmentBookingPresenter.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/AppointmentBookingPresenter.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientDashboardPresenter.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientDashboardPresenter.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PatientDashboardView.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PatientDashboardView.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/main/java/shared/dto/CommandDTO.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/src/main/java/shared/dto/CommandDTO.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Client/src/main/resources/styles/patient_dashboard.css\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Client/src/main/resources/styles/patient_dashboard.css\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/server/controller/AppointmentController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/server/controller/AppointmentController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/server/controller/HospitalController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/server/controller/HospitalController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/server/repository/AppointmentRepository.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/server/repository/AppointmentRepository.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/server/repository/PatientRepository.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/server/repository/PatientRepository.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/Server/src/main/java/shared/dto/CommandDTO.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Server/src/main/java/shared/dto/CommandDTO.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"EmbeddingIndexingInfo\">\r\n    <option name=\"cachedIndexableFilesCount\" value=\"165\" />\r\n    <option name=\"fileBasedEmbeddingIndicesEnabled\" value=\"true\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n        <option value=\"FxmlFile\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;VasileBud&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/VasileBud/managementhospital.git&quot;,\r\n    &quot;accountId&quot;: &quot;5b3c1c9e-b8e7-49fa-8120-5ecddc2b7849&quot;\r\n  }\r\n}</component>\r\n  <component name=\"MacroExpansionManager\">\r\n    <option name=\"directoryName\" value=\"yjenEf8D\" />\r\n  </component>\r\n  <component name=\"McpProjectServerCommands\">\r\n    <commands />\r\n    <urls />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 5\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"37o7xyMUhAxMCg0RCHdTQLBi44b\" />\r\n  <component name=\"ProjectLevelVcsManager\">\r\n    <ConfirmationsSetting value=\"1\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Application.ClientConsole.executor\": \"Run\",\r\n    \"Application.DbConnectionTest.executor\": \"Run\",\r\n    \"Application.HelloApplication.executor\": \"Run\",\r\n    \"Application.MainApp.executor\": \"Run\",\r\n    \"Application.Server.executor\": \"Run\",\r\n    \"Application.ServerConsole.executor\": \"Run\",\r\n    \"Application.Unnamed.executor\": \"Run\",\r\n    \"RunOnceActivity.MCP Project settings loaded\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"RunOnceActivity.typescript.service.memoryLimit.init\": \"true\",\r\n    \"com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1\": \"true\",\r\n    \"dart.analysis.tool.window.visible\": \"false\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"ignore.virus.scanning.warn.message\": \"true\",\r\n    \"junie.onboarding.icon.badge.shown\": \"true\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/User/Desktop/ProiectIS_Floria_Bud/managementhospital\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"project.structure.last.edited\": \"Modules\",\r\n    \"project.structure.proportion\": \"0.0\",\r\n    \"project.structure.side.proportion\": \"0.0\",\r\n    \"settings.editor.selected.configurable\": \"ml.llm.LLMConfigurable\",\r\n    \"show.migrate.to.gradle.popup\": \"false\",\r\n    \"to.speed.mode.migration.done\": \"true\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecapSpentCounter\">\r\n    <option name=\"endsOfQuotaMs\" value=\"1768730405594\" />\r\n    <option name=\"spentUsd\" value=\"0.19844756\" />\r\n  </component>\r\n  <component name=\"RecapUselessUpdatesCounter\">\r\n    <option name=\"suspendCountdown\" value=\"4\" />\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyClassDialog.RECENTS_KEY\">\r\n      <recent name=\"shared.common\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Application.MainApp\">\r\n    <configuration name=\"ClientConsole\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.hospital_management.client.ClientConsole\" />\r\n      <module name=\"Client\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.hospital_management.client.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"MainApp\" type=\"Application\" factoryName=\"Application\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.hospital_management.client.app.MainApp\" />\r\n      <module name=\"Client\" />\r\n      <option name=\"VM_PARAMETERS\" value=\"--enable-native-access=javafx.graphics\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"Server\" type=\"Application\" factoryName=\"Application\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"server.network.ServerConsole\" />\r\n      <module name=\"Server\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"Application.MainApp\" />\r\n      <item itemvalue=\"Application.Server\" />\r\n      <item itemvalue=\"Application.ClientConsole\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.ClientConsole\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"22801927-82a4-4558-828d-7004ef1d5a62\" name=\"Changes\" comment=\"\" />\r\n      <created>1767557820472</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1767557820472</updated>\r\n      <workItem from=\"1767557821912\" duration=\"10336000\" />\r\n      <workItem from=\"1767603936734\" duration=\"13235000\" />\r\n      <workItem from=\"1767618540690\" duration=\"9419000\" />\r\n      <workItem from=\"1767628515680\" duration=\"5395000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\r\n    <expand />\r\n    <select />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 12875eb1f5fe7e7f304c1c771f1bf77e7c020d36)
++++ b/.idea/workspace.xml	(date 1767703582269)
+@@ -1,23 +1,30 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="AIDiffSettings">
++    <option name="showAIDiff" value="true" />
++  </component>
++  <component name="AIDiffStorage" id="1">
++    <groups>
++      <group changeListId="86cdfb14-f35f-4bf7-be7e-a68320f0a098" id="1" name="Escape double quotes in '.idea/workspace.xml' PropertiesComponent" description="Escape double quotes in '.idea/workspace.xml' to fix XML formatting." importance="0.6">
++        <files>
++          <file summary="Escapes double quotes in the `PropertiesComponent` section of `workspace.xml` to ensure valid XML structure and prevent parsing issues." importance="0.6" isPending="false">
++            <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++            <ranges>
++              <range afterLine1="71" afterLine2="102" beforeLine1="71" beforeLine2="102" groupId="1" />
++              <range afterLine1="103" afterLine2="104" beforeLine1="103" beforeLine2="104" groupId="1" />
++            </ranges>
++          </file>
++        </files>
++      </group>
++    </groups>
++  </component>
+   <component name="AutoImportSettings">
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="22801927-82a4-4558-828d-7004ef1d5a62" name="Changes" comment="">
++    <list default="true" id="22801927-82a4-4558-828d-7004ef1d5a62" name="Changes" comment="" />
++    <list id="86cdfb14-f35f-4bf7-be7e-a68320f0a098" name="Escape double quotes in '.idea/workspace.xml' PropertiesComponent" comment="Escape double quotes in '.idea/workspace.xml' to fix XML formatting.">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/ClientSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/ClientSession.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/LoginPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/LoginPresenter.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/AppointmentBookingPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/AppointmentBookingPresenter.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientDashboardPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientDashboardPresenter.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PatientDashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PatientDashboardView.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/shared/dto/CommandDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/shared/dto/CommandDTO.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/styles/patient_dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/styles/patient_dashboard.css" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/controller/AppointmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/controller/AppointmentController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/controller/HospitalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/controller/HospitalController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/AppointmentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/AppointmentRepository.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/PatientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/PatientRepository.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/shared/dto/CommandDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/shared/dto/CommandDTO.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -39,12 +46,16 @@
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+-  <component name="GitHubPullRequestSearchHistory">{
+-  &quot;lastFilter&quot;: {
+-    &quot;state&quot;: &quot;OPEN&quot;,
+-    &quot;assignee&quot;: &quot;VasileBud&quot;
++  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
++  "history": [
++    {
++      "assignee": "VasileBud"
++    }
++  ],
++  "lastFilter": {
++    "assignee": "VasileBud"
+   }
+-}</component>
++}]]></component>
+   <component name="GithubPullRequestsUISettings">{
+   &quot;selectedUrlAndAccountId&quot;: {
+     &quot;url&quot;: &quot;https://github.com/VasileBud/managementhospital.git&quot;,
+@@ -69,45 +80,45 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "Application.ClientConsole.executor": "Run",
+-    "Application.DbConnectionTest.executor": "Run",
+-    "Application.HelloApplication.executor": "Run",
+-    "Application.MainApp.executor": "Run",
+-    "Application.Server.executor": "Run",
+-    "Application.ServerConsole.executor": "Run",
+-    "Application.Unnamed.executor": "Run",
+-    "RunOnceActivity.MCP Project settings loaded": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "RunOnceActivity.git.unshallow": "true",
+-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+-    "dart.analysis.tool.window.visible": "false",
+-    "git-widget-placeholder": "main",
+-    "ignore.virus.scanning.warn.message": "true",
+-    "junie.onboarding.icon.badge.shown": "true",
+-    "kotlin-language-version-configured": "true",
+-    "last_opened_file_path": "C:/Users/User/Desktop/ProiectIS_Floria_Bud/managementhospital",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "project.structure.last.edited": "Modules",
+-    "project.structure.proportion": "0.0",
+-    "project.structure.side.proportion": "0.0",
+-    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
+-    "show.migrate.to.gradle.popup": "false",
+-    "to.speed.mode.migration.done": "true",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;Application.ClientConsole.executor&quot;: &quot;Run&quot;,
++    &quot;Application.DbConnectionTest.executor&quot;: &quot;Run&quot;,
++    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
++    &quot;Application.MainApp.executor&quot;: &quot;Run&quot;,
++    &quot;Application.Server.executor&quot;: &quot;Run&quot;,
++    &quot;Application.ServerConsole.executor&quot;: &quot;Run&quot;,
++    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
++    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
++    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
++    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/Desktop/ProiectIS_Floria_Bud/managementhospital&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
++    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
++    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
++    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
++    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RecapSpentCounter">
+     <option name="endsOfQuotaMs" value="1768730405594" />
+-    <option name="spentUsd" value="0.19844756" />
++    <option name="spentUsd" value="0.21029255" />
+   </component>
+   <component name="RecapUselessUpdatesCounter">
+-    <option name="suspendCountdown" value="4" />
++    <option name="suspendCountdown" value="3" />
+   </component>
+   <component name="RecentsManager">
+     <key name="CopyClassDialog.RECENTS_KEY">

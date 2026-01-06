@@ -1,14 +1,287 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Polyline?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hospital_management.client.view.manager.ManagerDashboardView"
+            styleClass="manager-dashboard">
 
-</AnchorPane>
+    <left>
+        <VBox styleClass="sidebar">
+            <HBox styleClass="brand-block" alignment="CENTER_LEFT" spacing="10.0">
+                <StackPane styleClass="brand-icon">
+                    <Label text="+" styleClass="brand-icon-text" />
+                </StackPane>
+                <VBox spacing="2.0">
+                    <Label text="MediManager" styleClass="brand-title" />
+                    <Label text="Admin Panel" styleClass="brand-subtitle" />
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="nav-list" spacing="6.0">
+                <Button onAction="#onNavDashboardClick" styleClass="nav-button nav-active" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <StackPane styleClass="nav-icon"><Label text="DB" styleClass="nav-icon-text" /></StackPane>
+                            <Label text="Tablou de Bord" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button onAction="#onNavStaffClick" styleClass="nav-button" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <StackPane styleClass="nav-icon"><Label text="PM" styleClass="nav-icon-text" /></StackPane>
+                            <Label text="Personal Medical" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button onAction="#onNavPatientsClick" styleClass="nav-button" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <StackPane styleClass="nav-icon"><Label text="PC" styleClass="nav-icon-text" /></StackPane>
+                            <Label text="Pacienti" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button onAction="#onNavAppointmentsClick" styleClass="nav-button" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <StackPane styleClass="nav-icon"><Label text="PR" styleClass="nav-icon-text" /></StackPane>
+                            <Label text="Programari" styleClass="nav-text" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label text="12" styleClass="nav-badge" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button onAction="#onNavFinanceClick" styleClass="nav-button" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <StackPane styleClass="nav-icon"><Label text="FN" styleClass="nav-icon-text" /></StackPane>
+                            <Label text="Financiar" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                </Button>
+
+                <Region styleClass="nav-divider" />
+
+                <Button onAction="#onNavInventoryClick" styleClass="nav-button" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <StackPane styleClass="nav-icon"><Label text="IN" styleClass="nav-icon-text" /></StackPane>
+                            <Label text="Inventar" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button onAction="#onNavSettingsClick" styleClass="nav-button" contentDisplay="GRAPHIC_ONLY">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <StackPane styleClass="nav-icon"><Label text="ST" styleClass="nav-icon-text" /></StackPane>
+                            <Label text="Setari" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                </Button>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <HBox styleClass="profile-card" alignment="CENTER_LEFT" spacing="10.0">
+                <StackPane styleClass="profile-avatar">
+                    <Label fx:id="managerInitialsLabel" text="MP" styleClass="profile-initials" />
+                </StackPane>
+                <VBox spacing="2.0">
+                    <Label fx:id="managerNameLabel" text="Dr. Andrei Popescu" styleClass="profile-name" />
+                    <Label fx:id="managerRoleLabel" text="Manager General" styleClass="profile-role" />
+                </VBox>
+            </HBox>
+            <Button onAction="#onLogoutClick" styleClass="logout-button" text="Deconectare" />
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="main">
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12.0">
+                <Label text="Panou Control" styleClass="topbar-title" />
+                <Region HBox.hgrow="ALWAYS" />
+                <HBox styleClass="search-box" alignment="CENTER_LEFT" spacing="6.0">
+                    <Label text="Cauta" styleClass="search-label" />
+                    <TextField promptText="Cauta pacient, medic..." styleClass="search-field" />
+                </HBox>
+                <Button onAction="#onNotificationsClick" styleClass="icon-button" text="Notificari" />
+                <Button onAction="#onHelpClick" styleClass="icon-button" text="Ajutor" />
+            </HBox>
+
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="main-scroll">
+                <VBox styleClass="content-root">
+                    <HBox styleClass="page-header" alignment="CENTER_LEFT" spacing="10.0">
+                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                            <Label fx:id="welcomeLabel" text="Bun venit, Dr. Popescu" styleClass="page-title" />
+                            <Label text="Analiza si statistici spitalicesti in timp real" styleClass="page-subtitle" />
+                        </VBox>
+                        <Button text="Ultima luna" styleClass="secondary-button" />
+                        <Button text="Export Raport" styleClass="primary-button" />
+                    </HBox>
+
+                    <HBox styleClass="chip-row" spacing="8.0">
+                        <Button text="Azi" styleClass="chip chip-active" />
+                        <Button text="Saptamana aceasta" styleClass="chip" />
+                        <Button text="Luna aceasta" styleClass="chip" />
+                    </HBox>
+
+                    <HBox styleClass="stats-row" spacing="12.0">
+                        <VBox styleClass="stat-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                <StackPane styleClass="stat-icon stat-blue"><Label text="PT" styleClass="stat-icon-text" /></StackPane>
+                                <Label fx:id="patientsTodayTrendLabel" text="+12%" styleClass="stat-tag stat-tag-up" />
+                            </HBox>
+                            <Label text="Total Pacienti Astazi" styleClass="stat-title" />
+                            <Label fx:id="patientsTodayValueLabel" text="1,240" styleClass="stat-value" />
+                        </VBox>
+                        <VBox styleClass="stat-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                <StackPane styleClass="stat-icon stat-purple"><Label text="CA" styleClass="stat-icon-text" /></StackPane>
+                                <Label fx:id="activeConsultationsTrendLabel" text="+5%" styleClass="stat-tag stat-tag-up" />
+                            </HBox>
+                            <Label text="Consultatii Active" styleClass="stat-title" />
+                            <Label fx:id="activeConsultationsValueLabel" text="45" styleClass="stat-value" />
+                        </VBox>
+                        <VBox styleClass="stat-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                <StackPane styleClass="stat-icon stat-orange"><Label text="GM" styleClass="stat-icon-text" /></StackPane>
+                                <Label fx:id="doctorOccupancyTrendLabel" text="-2%" styleClass="stat-tag stat-tag-down" />
+                            </HBox>
+                            <Label text="Grad Ocupare Medici" styleClass="stat-title" />
+                            <Label fx:id="doctorOccupancyValueLabel" text="88%" styleClass="stat-value" />
+                        </VBox>
+                        <VBox styleClass="stat-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                <StackPane styleClass="stat-icon stat-green"><Label text="RN" styleClass="stat-icon-text" /></StackPane>
+                                <Label fx:id="revenueTrendLabel" text="+8.4%" styleClass="stat-tag stat-tag-up" />
+                            </HBox>
+                            <Label text="Venituri Estimate (RON)" styleClass="stat-title" />
+                            <Label fx:id="revenueValueLabel" text="45,200" styleClass="stat-value" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox styleClass="charts-row" spacing="12.0">
+                        <VBox styleClass="chart-card" spacing="12.0" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="6.0">
+                                <Label text="Flux Pacienti (Admisii vs. Externari)" styleClass="card-title" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button text="..." styleClass="icon-button" />
+                            </HBox>
+                            <StackPane styleClass="chart-area">
+                                <Pane fx:id="lineChartPane" prefHeight="220.0" prefWidth="520.0">
+                                    <Line startX="0" startY="40" endX="520" endY="40" styleClass="chart-grid-line" />
+                                    <Line startX="0" startY="80" endX="520" endY="80" styleClass="chart-grid-line" />
+                                    <Line startX="0" startY="120" endX="520" endY="120" styleClass="chart-grid-line" />
+                                    <Line startX="0" startY="160" endX="520" endY="160" styleClass="chart-grid-line" />
+                                    <Polyline fx:id="admissionsLine" points="0,170,60,150,120,110,180,130,240,90,300,100,360,60,420,80,480,50,520,70"
+                                              styleClass="chart-line-primary" />
+                                    <Polyline fx:id="dischargesLine" points="0,190,60,175,120,160,180,165,240,140,300,150,360,120,420,135,480,110,520,120"
+                                              styleClass="chart-line-secondary" />
+                                </Pane>
+                            </StackPane>
+                            <HBox alignment="CENTER" spacing="16.0">
+                                <HBox fx:id="cardioRow" alignment="CENTER_LEFT" spacing="6.0">
+                                    <Region styleClass="legend-dot legend-blue" />
+                                    <Label text="Internari" styleClass="legend-text" />
+                                </HBox>
+                                <HBox fx:id="neuroRow" alignment="CENTER_LEFT" spacing="6.0">
+                                    <Region styleClass="legend-dot legend-green" />
+                                    <Label text="Externari" styleClass="legend-text" />
+                                </HBox>
+                            </HBox>
+                        </VBox>
+
+                        <VBox styleClass="chart-card" spacing="12.0" prefWidth="320.0">
+                            <Label text="Ocupare pe Sectii" styleClass="card-title" />
+                            <StackPane styleClass="donut-wrapper">
+                                <Group>
+                                    <Arc fx:id="arcCardio" centerX="0" centerY="0" radiusX="70" radiusY="70" startAngle="90" length="-126" styleClass="donut-arc arc-blue" />
+                                    <Arc fx:id="arcNeuro" centerX="0" centerY="0" radiusX="70" radiusY="70" startAngle="-36" length="-90" styleClass="donut-arc arc-green" />
+                                    <Arc fx:id="arcPeds" centerX="0" centerY="0" radiusX="70" radiusY="70" startAngle="-126" length="-90" styleClass="donut-arc arc-amber" />
+                                    <Arc fx:id="arcUrgent" centerX="0" centerY="0" radiusX="70" radiusY="70" startAngle="-216" length="-54" styleClass="donut-arc arc-red" />
+                                </Group>
+                                <VBox alignment="CENTER" spacing="2.0">
+                                    <Label fx:id="donutValueLabel" text="94%" styleClass="donut-value" />
+                                    <Label text="TOTAL" styleClass="donut-label" />
+                                </VBox>
+                            </StackPane>
+                            <VBox spacing="8.0">
+                                <HBox fx:id="pedsRow" alignment="CENTER_LEFT" spacing="6.0">
+                                    <Region styleClass="legend-dot legend-blue" />
+                                    <Label fx:id="cardioLabel" text="Cardiologie" styleClass="legend-text" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="cardioPercentLabel" text="35%" styleClass="legend-value" />
+                                </HBox>
+                                <HBox fx:id="urgentRow" alignment="CENTER_LEFT" spacing="6.0">
+                                    <Region styleClass="legend-dot legend-green" />
+                                    <Label fx:id="neuroLabel" text="Neurologie" styleClass="legend-text" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="neuroPercentLabel" text="25%" styleClass="legend-value" />
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="6.0">
+                                    <Region styleClass="legend-dot legend-amber" />
+                                    <Label fx:id="pedsLabel" text="Pediatrie" styleClass="legend-text" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="pedsPercentLabel" text="25%" styleClass="legend-value" />
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="6.0">
+                                    <Region styleClass="legend-dot legend-red" />
+                                    <Label fx:id="urgentLabel" text="Urgente" styleClass="legend-text" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="urgentPercentLabel" text="15%" styleClass="legend-value" />
+                                </HBox>
+                            </VBox>
+                        </VBox>
+                    </HBox>
+
+                    <VBox styleClass="table-card">
+                        <HBox styleClass="table-header" alignment="CENTER_LEFT" spacing="8.0">
+                            <Label text="Programari Recente si Stare" styleClass="card-title" HBox.hgrow="ALWAYS" />
+                            <TextField promptText="Filtreaza dupa nume..." styleClass="table-search" />
+                            <Button text="Vezi tot" styleClass="secondary-button" />
+                        </HBox>
+
+                        <GridPane styleClass="table-row table-row-header">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="24" />
+                                <ColumnConstraints percentWidth="18" />
+                                <ColumnConstraints percentWidth="14" />
+                                <ColumnConstraints percentWidth="16" />
+                                <ColumnConstraints percentWidth="14" />
+                                <ColumnConstraints percentWidth="14" />
+                            </columnConstraints>
+                            <Label text="PACIENT" styleClass="table-header-text" GridPane.columnIndex="0" />
+                            <Label text="MEDIC" styleClass="table-header-text" GridPane.columnIndex="1" />
+                            <Label text="SECTIE" styleClass="table-header-text" GridPane.columnIndex="2" />
+                            <Label text="DATA/ORA" styleClass="table-header-text" GridPane.columnIndex="3" />
+                            <Label text="STATUS" styleClass="table-header-text" GridPane.columnIndex="4" />
+                            <Label text="ACTIUNI" styleClass="table-header-text" GridPane.columnIndex="5" />
+                        </GridPane>
+
+                        <VBox fx:id="recentAppointmentsContainer" spacing="0.0" />
+                    </VBox>
+
+                    <Label fx:id="statusLabel" text="" styleClass="status-message" />
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

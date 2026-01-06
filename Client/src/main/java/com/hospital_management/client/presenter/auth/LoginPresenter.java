@@ -43,8 +43,7 @@ public class LoginPresenter {
         view.setBusy(true);
         view.setInfo("Se autentifică...");
 
-        ClientSession.getInstance().getClient().setOnResponseReceived(this::handleResponse);
-        ClientSession.getInstance().getClient().sendRequest(req);
+        ClientSession.getInstance().getClient().sendRequest(req, this::handleResponse);
     }
 
     private void handleResponse(Response response) {

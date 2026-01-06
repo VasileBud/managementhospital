@@ -25,13 +25,7 @@
                     <Label text="Spitalul Central" styleClass="brand-text" />
                 </HBox>
 
-                <HBox styleClass="nav" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
-                    <Button text="Acasa" onAction="#onNavHomeClick" styleClass="nav-button" />
-                    <Button text="Medici" onAction="#onNavDoctorsClick" styleClass="nav-button" />
-                    <Button text="Specializari" onAction="#onNavSpecializationsClick" styleClass="nav-button" />
-                </HBox>
-
-                <HBox styleClass="top-actions" alignment="CENTER_RIGHT" spacing="10.0">
+                <HBox styleClass="top-actions" alignment="TOP_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
                     <Button text="Autentificare" onAction="#onGoToLoginClick" styleClass="primary-button" />
                     <Button text="Inregistrare" onAction="#onGoToRegisterClick" styleClass="secondary-button" />
                 </HBox>

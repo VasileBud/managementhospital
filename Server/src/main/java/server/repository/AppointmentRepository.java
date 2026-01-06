@@ -223,4 +223,52 @@ public class AppointmentRepository {
         }
         return result;
     }
+
+    public java.util.List<shared.dto.AppointmentDTO> findByDoctorId(long doctorId, LocalDate date)
+            throws SQLException {
+        String sql = """
+                SELECT a.appointment_id,
+                       a.patient_id,
+                       a.doctor_id,
+                       a.appointment_date,
+                       a.appointment_time,
+                       a.status,
+                       pu.first_name || ' ' || pu.last_name AS patient_name,
+                       du.first_name || ' ' || du.last_name AS doctor_name,
+                       COALESCE(s.name, sp.name) AS service_name
+                FROM appointment a
+                JOIN patient p ON p.patient_id = a.patient_id
+                JOIN "user" pu ON pu.user_id = p.user_id
+                JOIN doctor d ON d.doctor_id = a.doctor_id
+                JOIN "user" du ON du.user_id = d.user_id
+                LEFT JOIN medical_service s ON s.service_id = a.service_id
+                LEFT JOIN specialization sp ON sp.specialization_id = d.specialization_id
+                WHERE a.doctor_id = ?
+                  AND a.appointment_date = ?
+                ORDER BY a.appointment_time
+                """;
+
+        java.util.List<shared.dto.AppointmentDTO> result = new java.util.ArrayList<>();
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, doctorId);
+            ps.setDate(2, Date.valueOf(date));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    result.add(new shared.dto.AppointmentDTO(
+                            rs.getLong("appointment_id"),
+                            rs.getLong("patient_id"),
+                            rs.getString("patient_name"),
+                            rs.getLong("doctor_id"),
+                            rs.getString("doctor_name"),
+                            rs.getString("service_name"),
+                            rs.getDate("appointment_date").toLocalDate(),
+                            rs.getTime("appointment_time").toLocalTime(),
+                            rs.getString("status")
+                    ));
+                }
+            }
+        }
+        return result;
+    }
 }

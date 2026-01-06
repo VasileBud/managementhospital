@@ -40,8 +40,7 @@ public class PatientDashboardPresenter {
         view.setBusy(true);
         view.setInfo("Se incarca datele...");
 
-        ClientSession.getInstance().getClient().setOnResponseReceived(this::handleResponse);
-        ClientSession.getInstance().getClient().sendRequest(req);
+        ClientSession.getInstance().getClient().sendRequest(req, this::handleResponse);
     }
 
     private void handleResponse(Response response) {
@@ -73,7 +72,7 @@ public class PatientDashboardPresenter {
         view.setBusy(true);
         view.setInfo("Se anulează programarea...");
 
-        ClientSession.getInstance().getClient().setOnResponseReceived(response -> {
+        ClientSession.getInstance().getClient().sendRequest(req, response -> {
             Platform.runLater(() -> {
                 view.setBusy(false);
                 if (response.getStatus() != Response.Status.OK) {
@@ -85,8 +84,6 @@ public class PatientDashboardPresenter {
                 }
             });
         });
-
-        ClientSession.getInstance().getClient().sendRequest(req);
     }
 
     public void onSendFeedback(long appointmentId, int rating, String comment) {
@@ -105,7 +102,7 @@ public class PatientDashboardPresenter {
 
         view.setInfo("Se trimite feedback-ul...");
 
-        ClientSession.getInstance().getClient().setOnResponseReceived(response -> {
+        ClientSession.getInstance().getClient().sendRequest(req, response -> {
             Platform.runLater(() -> {
                 if (response.getStatus() == Response.Status.OK) {
                     view.setInfo("Mulțumim pentru feedback!");
@@ -115,7 +112,5 @@ public class PatientDashboardPresenter {
                 }
             });
         });
-
-        ClientSession.getInstance().getClient().sendRequest(req);
     }
 }

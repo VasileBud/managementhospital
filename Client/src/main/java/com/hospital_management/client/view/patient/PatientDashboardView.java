@@ -141,7 +141,6 @@ public class PatientDashboardView {
             return;
         }
         userNameLabel.setText(user.getFullName());
-        roleLabel.setText(user.getRole());
         initialsLabel.setText(initials(user.getFullName()));
         welcomeLabel.setText("Buna ziua, " + user.getFirstName() + "!");
     }

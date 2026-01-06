@@ -16,6 +16,7 @@ public class HospitalController {
     private final StatsController statsController;
     private final PublicController publicController;
     private final PatientDashboardController patientDashboardController;
+    private final PatientController patientController;
 
     public HospitalController() {
         this.authController = new AuthController();
@@ -27,6 +28,7 @@ public class HospitalController {
         this.statsController = new StatsController();
         this.publicController = new PublicController();
         this.patientDashboardController = new PatientDashboardController();
+        this.patientController = new PatientController();
     }
 
     /**
@@ -92,9 +94,14 @@ public class HospitalController {
                 case MARK_APPOINTMENT_DONE ->
                         appointmentController.markAppointmentDone(command);
 
-                case GET_MY_APPOINTMENTS,
-                     GET_DOCTOR_APPOINTMENTS ->
+                case GET_MY_APPOINTMENTS ->
                         Response.error("NOT_IMPLEMENTED", "GET_APPOINTMENTS not implemented yet");
+
+                case GET_DOCTOR_APPOINTMENTS ->
+                        appointmentController.getDoctorAppointments(command);
+
+                case GET_PATIENT_DETAILS ->
+                        patientController.getPatientDetails(command);
 
                 // =====================
                 // MEDICAL RECORD

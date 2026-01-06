@@ -1,14 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hospital_management.client.view.doctor.DoctorDashboardView"
+            styleClass="doctor-dashboard">
 
-</AnchorPane>
+    <top>
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16.0">
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Label text="+" styleClass="brand-icon" />
+                <Label text="Hospital Manager" styleClass="brand-text" />
+            </HBox>
+
+            <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                <Label fx:id="dateTimeLabel" text="-" styleClass="page-subtitle" />
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS" />
+            <HBox spacing="12.0" alignment="CENTER_RIGHT">
+                <HBox spacing="8.0" alignment="CENTER_RIGHT">
+                    <StackPane styleClass="header-avatar">
+                        <Label fx:id="doctorInitialsLabel" text="DR" styleClass="avatar-initials" />
+                    </StackPane>
+                    <VBox spacing="2.0">
+                        <Label fx:id="doctorNameLabel" text="Dr. --" styleClass="header-name" />
+                        <Label fx:id="doctorSpecializationLabel" text="Specializare" styleClass="header-role" />
+                    </VBox>
+                </HBox>
+            </HBox>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox styleClass="main">
+
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="main-scroll">
+                <VBox styleClass="content-root">
+                    <HBox styleClass="stats-row">
+                        <VBox styleClass="stat-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                <Label text="Total Programari Azi" styleClass="stat-title" />
+                                <Label text="P" styleClass="stat-icon" />
+                            </HBox>
+                            <Label fx:id="totalAppointmentsLabel" text="-" styleClass="stat-value" />
+                        </VBox>
+                        <VBox styleClass="stat-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                <Label text="Pacienti in Asteptare" styleClass="stat-title" />
+                                <Label text="A" styleClass="stat-icon" />
+                            </HBox>
+                            <Label fx:id="waitingPatientsLabel" text="-" styleClass="stat-value" />
+                        </VBox>
+                        <VBox styleClass="stat-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                <Label text="Urmatoarea Pauza" styleClass="stat-title" />
+                                <Label text="-" styleClass="stat-icon" />
+                            </HBox>
+                            <Label fx:id="nextBreakLabel" text="-" styleClass="stat-value" />
+                        </VBox>
+                    </HBox>
+
+                    <VBox styleClass="card">
+                        <HBox styleClass="card-header" alignment="CENTER_LEFT" spacing="12.0">
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Programari Curente" styleClass="card-title" />
+                                <Button text="Vezi tot calendarul" onAction="#onViewCalendarClick" styleClass="link-button" />
+                            </VBox>
+                            <Button text="Programeaza" onAction="#onNewAppointmentClick" styleClass="primary-button" />
+                        </HBox>
+
+                        <HBox styleClass="table-header" spacing="10.0">
+                            <Label text="ORA" styleClass="table-header-label" prefWidth="60.0" />
+                            <Label text="PACIENT" styleClass="table-header-label" prefWidth="240.0" />
+                            <Label text="TIP VIZITA" styleClass="table-header-label" prefWidth="160.0" />
+                            <Label text="STATUS" styleClass="table-header-label" prefWidth="140.0" />
+                            <Label text="ACTIUNI" styleClass="table-header-label" HBox.hgrow="ALWAYS" />
+                        </HBox>
+
+                        <VBox fx:id="appointmentsContainer" />
+
+                        <HBox styleClass="table-footer" alignment="CENTER_LEFT" spacing="6.0">
+                            <Label fx:id="paginationLabel" text="-" styleClass="pagination-label" HBox.hgrow="ALWAYS" />
+                            <Button fx:id="prevPageButton" text="&lt;" onAction="#onPrevPageClick" styleClass="pagination-button" />
+                            <Button fx:id="nextPageButton" text="&gt;" onAction="#onNextPageClick" styleClass="pagination-button" />
+                        </HBox>
+                    </VBox>
+
+                    <HBox styleClass="quick-row">
+                        <VBox styleClass="quick-card" spacing="6.0" HBox.hgrow="ALWAYS">
+                            <Label text="Nota Rapida" styleClass="quick-title" />
+                            <Label text="Adauga o nota personala pentru vizitele de dupa-amiaza."
+                                   styleClass="quick-subtitle"
+                                   wrapText="true" />
+                            <Button text="Creeaza nota" onAction="#onCreateNoteClick" styleClass="link-button" />
+                        </VBox>
+                        <VBox styleClass="quick-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                            <Label text="Rezultate Analize Recente" styleClass="quick-title" />
+                            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                <Label text="Popescu Maria" styleClass="quick-subtitle" HBox.hgrow="ALWAYS" />
+                                <Label text="Complet" styleClass="pill pill-blue" />
+                            </HBox>
+                            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                <Label text="Dumitrescu Vlad" styleClass="quick-subtitle" HBox.hgrow="ALWAYS" />
+                                <Label text="In lucru" styleClass="pill pill-orange" />
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <Label fx:id="statusLabel" text="" styleClass="status-label" />
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

@@ -55,12 +55,8 @@ public class RegisterPresenter {
         view.setBusy(true);
         view.setInfo("Se creează contul...");
 
-        // 4️⃣ Callback
-        ClientSession.getInstance().getClient()
-                .setOnResponseReceived(this::handleResponse);
+        ClientSession.getInstance().getClient().sendRequest(req, this::handleResponse);
 
-        // 5️⃣ Trimitere la server
-        ClientSession.getInstance().getClient().sendRequest(req);
     }
 
     private void handleResponse(Response response) {

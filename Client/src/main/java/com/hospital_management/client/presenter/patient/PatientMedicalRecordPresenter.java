@@ -38,8 +38,7 @@ public class PatientMedicalRecordPresenter {
         req.setType(RequestType.COMMAND);
 
         view.setInfo("Se incarca fisa medicala...");
-        ClientSession.getInstance().getClient().setOnResponseReceived(this::handleResponse);
-        ClientSession.getInstance().getClient().sendRequest(req);
+        ClientSession.getInstance().getClient().sendRequest(req, this::handleResponse);
     }
 
     private void handleResponse(Response response) {

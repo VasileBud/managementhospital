@@ -11,7 +11,7 @@
     -fx-padding: 20 32 40 32;
 }
 
-.topbar {
+.dashboard-topbar {
     -fx-background-color: #ffffff;
     -fx-background-radius: 16;
     -fx-padding: 12 18;

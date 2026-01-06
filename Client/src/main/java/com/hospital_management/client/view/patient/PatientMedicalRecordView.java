@@ -141,7 +141,6 @@ public class PatientMedicalRecordView {
             return;
         }
         userNameLabel.setText(user.getFullName());
-        roleLabel.setText(user.getRole());
         initialsLabel.setText(initials(user.getFullName()));
     }
 

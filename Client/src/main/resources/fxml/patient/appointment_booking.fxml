@@ -19,7 +19,7 @@
     <ScrollPane fitToWidth="true" vbarPolicy="AS_NEEDED" hbarPolicy="NEVER" styleClass="appointment-scroll">
         <VBox styleClass="appointment-root" spacing="24.0">
 
-            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="20.0">
+            <HBox styleClass="dashboard-topbar" alignment="CENTER_LEFT" spacing="20.0">
                 <HBox styleClass="brand" alignment="CENTER_LEFT" spacing="10.0">
                     <Label text="+" styleClass="brand-icon" />
                     <Label text="Spitalul Central" styleClass="brand-text" />
@@ -27,15 +27,13 @@
 
                 <HBox styleClass="nav" alignment="CENTER" spacing="12.0" HBox.hgrow="ALWAYS">
                     <Button text="Acasa" onAction="#onNavHomeClick" styleClass="nav-button" />
-                    <Button text="Programari" onAction="#onNavAppointmentsClick" styleClass="nav-button nav-active" />
-                    <Button text="Istoric Medical" onAction="#onNavHistoryClick" styleClass="nav-button" />
-                    <Button text="Rezultate" onAction="#onNavResultsClick" styleClass="nav-button" />
+                    <Button text="Programare" onAction="#onNavAppointmentsClick" styleClass="nav-button" />
+                    <Button text="Fisa Medicala" onAction="#onNavHistoryClick" styleClass="nav-button" />
                 </HBox>
 
                 <HBox styleClass="profile" alignment="CENTER_RIGHT" spacing="10.0">
                     <VBox spacing="2.0">
                         <Label fx:id="userNameLabel" text="User" styleClass="profile-name" />
-                        <Label fx:id="roleLabel" text="Pacient" styleClass="profile-role" />
                     </VBox>
                     <StackPane styleClass="profile-avatar">
                         <Label fx:id="initialsLabel" text="U" styleClass="profile-initials" />
@@ -124,9 +122,8 @@
                         </VBox>
                     </VBox>
 
-                    <Button fx:id="bookButton" text="Continua spre confirmare"
+                    <Button fx:id="bookButton" text="Confirmare programare"
                             onAction="#onBookClick" styleClass="primary-button" />
-                    <Button text="Inapoi" onAction="#onBackClick" styleClass="ghost-button" />
                 </VBox>
             </HBox>
 

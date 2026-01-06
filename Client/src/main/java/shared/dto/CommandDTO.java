@@ -29,6 +29,7 @@ public class CommandDTO implements Serializable {
         GET_MY_APPOINTMENTS,          // patient
         GET_PATIENT_DASHBOARD,        // patient dashboard summary
         GET_DOCTOR_APPOINTMENTS,      // doctor/manager
+        GET_PATIENT_DETAILS,          // doctor/manager
         APPROVE_APPOINTMENT,          // admin
         MARK_APPOINTMENT_DONE,        // doctor/manager (optional)
 
