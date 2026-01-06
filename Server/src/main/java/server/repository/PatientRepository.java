@@ -37,7 +37,7 @@ public class PatientRepository {
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, userId);
-            ps.setString(2, nationalId);
+            ps.setString(2, (nationalId == null) ? "" : nationalId); //if nationalId is null, send empty string
             ps.setString(3, address);
             ps.setString(4, phone);
 

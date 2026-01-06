@@ -49,7 +49,7 @@ public class AppointmentRepository {
                                   LocalDate date, LocalTime time, AppointmentStatus status) throws SQLException {
         String sql = """
                 INSERT INTO appointment (patient_id, doctor_id, service_id, appointment_date, appointment_time, status, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                VALUES (?, ?, ?, ?, ?, ?::appointment_status, CURRENT_TIMESTAMP)
                 RETURNING appointment_id
                 """;
 
@@ -70,8 +70,33 @@ public class AppointmentRepository {
         throw new SQLException("Failed to create appointment");
     }
 
+    public boolean updateAppointment(long appointmentId, long doctorId, Long serviceId,
+                                     LocalDate date, LocalTime time) throws SQLException {
+        String sql = """
+            UPDATE appointment
+            SET doctor_id = ?,
+                service_id = ?,
+                appointment_date = ?,
+                appointment_time = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE appointment_id = ?
+            """;
+
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, doctorId);
+            if (serviceId != null) ps.setLong(2, serviceId); else ps.setNull(2, Types.BIGINT);
+            ps.setDate(3, Date.valueOf(date));
+            ps.setTime(4, Time.valueOf(time));
+            ps.setLong(5, appointmentId);
+
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     public boolean updateStatus(long appointmentId, AppointmentStatus status) throws SQLException {
-        String sql = "UPDATE appointment SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE appointment_id = ?";
+        String sql = "UPDATE appointment SET status = ?::appointment_status, updated_at = CURRENT_TIMESTAMP WHERE appointment_id = ?";
 
         try (Connection conn = Repository.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

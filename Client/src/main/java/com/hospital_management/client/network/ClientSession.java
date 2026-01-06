@@ -7,6 +7,8 @@ public class ClientSession {
     private HospitalClient client;
     private UserDTO loggedUser;
 
+    private Long appointmentIdToEdit = null;
+
     private ClientSession() {
         try {
             // Ne conectăm la localhost, port 5555 (unde rulează ServerConsole)
@@ -46,4 +48,16 @@ public class ClientSession {
 
     public UserDTO getLoggedUser() { return loggedUser; }
     public void setLoggedUser(UserDTO loggedUser) { this.loggedUser = loggedUser; }
+
+    public void setAppointmentToEdit(Long id) {
+        this.appointmentIdToEdit = id;
+    }
+
+    public Long getAppointmentToEdit() {
+        return appointmentIdToEdit;
+    }
+
+    public void clearEditMode() {
+        this.appointmentIdToEdit = null;
+    }
 }

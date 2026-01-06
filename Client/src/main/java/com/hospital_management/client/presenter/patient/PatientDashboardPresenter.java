@@ -57,4 +57,65 @@ public class PatientDashboardPresenter {
             view.renderDashboard(data);
         });
     }
+
+    public void onCancelAppointment(long appointmentId) {
+        if (!ClientSession.getInstance().ensureConnected()) {
+            view.setError("Nu există conexiune la server!");
+            return;
+        }
+
+        CommandDTO cmd = new CommandDTO(CommandDTO.Action.CANCEL_APPOINTMENT)
+                .put("appointmentId", appointmentId);
+
+        Request req = new Request(cmd);
+        req.setType(RequestType.COMMAND);
+
+        view.setBusy(true);
+        view.setInfo("Se anulează programarea...");
+
+        ClientSession.getInstance().getClient().setOnResponseReceived(response -> {
+            Platform.runLater(() -> {
+                view.setBusy(false);
+                if (response.getStatus() != Response.Status.OK) {
+                    view.setError("Eroare anulare: " + response.getMessage());
+                } else {
+                    view.setInfo("Programarea a fost anulată cu succes.");
+                    // reload la dashboard
+                    loadDashboard();
+                }
+            });
+        });
+
+        ClientSession.getInstance().getClient().sendRequest(req);
+    }
+
+    public void onSendFeedback(long appointmentId, int rating, String comment) {
+        if (!ClientSession.getInstance().ensureConnected()) {
+            view.setError("Lipsă conexiune server.");
+            return;
+        }
+
+        CommandDTO cmd = new CommandDTO(CommandDTO.Action.SEND_FEEDBACK)
+                .put("appointmentId", appointmentId)
+                .put("rating", rating)
+                .put("comment", comment);
+
+        Request req = new Request(cmd);
+        req.setType(RequestType.COMMAND);
+
+        view.setInfo("Se trimite feedback-ul...");
+
+        ClientSession.getInstance().getClient().setOnResponseReceived(response -> {
+            Platform.runLater(() -> {
+                if (response.getStatus() == Response.Status.OK) {
+                    view.setInfo("Mulțumim pentru feedback!");
+                    // Opțional: Reîncarci dashboard-ul ca să ascunzi butonul de feedback pentru asta
+                } else {
+                    view.setError("Eroare: " + response.getMessage());
+                }
+            });
+        });
+
+        ClientSession.getInstance().getClient().sendRequest(req);
+    }
 }

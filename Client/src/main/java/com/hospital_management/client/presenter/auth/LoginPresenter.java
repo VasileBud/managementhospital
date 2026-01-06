@@ -72,10 +72,10 @@ public class LoginPresenter {
 
             // Navigare după rol
             switch (data.getRole()) {
-                case "ADMIN" -> SceneNavigator.navigateTo(AppScene.ADMIN_DASHBOARD);
-                case "DOCTOR" -> SceneNavigator.navigateTo(AppScene.DOCTOR_DASHBOARD);
-                case "MANAGER" -> SceneNavigator.navigateTo(AppScene.MANAGER_DASHBOARD);
-                case "PATIENT" -> SceneNavigator.navigateTo(AppScene.PATIENT_DASHBOARD);
+                case "ADMIN" -> SceneNavigator.navigateToFresh(AppScene.ADMIN_DASHBOARD);
+                case "DOCTOR" -> SceneNavigator.navigateToFresh(AppScene.DOCTOR_DASHBOARD);
+                case "MANAGER" -> SceneNavigator.navigateToFresh(AppScene.MANAGER_DASHBOARD);
+                case "PATIENT" -> SceneNavigator.navigateToFresh(AppScene.PATIENT_DASHBOARD);
                 default -> SceneNavigator.navigateTo(AppScene.PUBLIC);
             }
         });
