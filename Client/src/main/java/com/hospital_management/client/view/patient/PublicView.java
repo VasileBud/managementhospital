@@ -16,6 +16,14 @@ import javafx.application.Platform;
 import shared.dto.DoctorDTO;
 import shared.dto.MedicalServiceDTO;
 import shared.dto.SpecializationDTO;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import java.time.LocalTime;
+import java.time.format.TextStyle;
+import java.util.Locale;
+import shared.dto.DoctorScheduleDTO;
 
 import java.util.List;
 import java.util.Objects;
@@ -164,29 +172,39 @@ public class PublicView {
 
     private Node createDoctorCard(DoctorDTO doctor) {
         HBox card = new HBox(16.0);
-        card.getStyleClass().add("doctor-card");
+        card.getStyleClass().add("doctor-card"); // Asigură-te că ai stilul 'card' sau 'doctor-card' în CSS
 
+        // Avatar
         StackPane avatar = new StackPane();
-        avatar.getStyleClass().add("doctor-avatar");
+        avatar.getStyleClass().add("doctor-avatar"); // Sau 'profile-avatar' conform CSS-ului tau
         Label initials = new Label(getInitials(doctor.getFullName()));
-        initials.getStyleClass().add("doctor-initials");
+        initials.getStyleClass().add("doctor-initials"); // Sau 'profile-initials'
         avatar.getChildren().add(initials);
 
+        // Detalii Text
         VBox details = new VBox(6.0);
         Label name = new Label(doctor.getFullName());
         name.getStyleClass().add("doctor-name");
         Label spec = new Label(doctor.getSpecializationName());
         spec.getStyleClass().add("doctor-subtitle");
-        Label meta = new Label("Disponibil pentru programare");
-        meta.getStyleClass().add("doctor-meta");
-        details.getChildren().addAll(name, spec, meta);
 
+        // Putem scoate "Disponibil pentru programare" daca punem butonul explicit
+        details.getChildren().addAll(name, spec);
+
+        // Actiuni (Butoane)
         VBox actions = new VBox(8.0);
-        Button viewBtn = new Button("Vezi profil");
-        viewBtn.getStyleClass().add("ghost-button");
-        Button bookBtn = new Button("Programeaza");
+
+        // --- MODIFICARE AICI ---
+        Button scheduleBtn = new Button("Vezi Program & Disponibilitate");
+        scheduleBtn.getStyleClass().add("secondary-button"); // Asigură-te că ai clasa asta în CSS
+        // Aici apelăm metoda nouă pe care o vom scrie mai jos
+        scheduleBtn.setOnAction(e -> showDoctorDetailsDialog(doctor));
+
+        Button bookBtn = new Button("Autentificare pentru Programare");
         bookBtn.getStyleClass().add("primary-button");
-        actions.getChildren().addAll(viewBtn, bookBtn);
+        bookBtn.setOnAction(e -> onGoToLoginClick()); // Redirecționăm la login
+
+        actions.getChildren().addAll(scheduleBtn, bookBtn);
 
         card.getChildren().addAll(avatar, details, actions);
         HBox.setHgrow(details, javafx.scene.layout.Priority.ALWAYS);
@@ -220,6 +238,109 @@ public class PublicView {
             v = Math.max(0, Math.min(1, v));
             scrollPane.setVvalue(v);
         });
+    }
+
+    // --- METODE NOI PENTRU SCHEDULE ---
+
+    private void showDoctorDetailsDialog(DoctorDTO doctor) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Detalii " + doctor.getFullName());
+        dialog.setHeaderText("Orar și Disponibilitate - " + doctor.getSpecializationName());
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+        // Încărcare CSS (opțional, ca să arate bine)
+        var cssUrl = getClass().getResource("/css/patient_dashboard.css");
+        if (cssUrl != null) {
+            dialog.getDialogPane().getStylesheets().add(cssUrl.toExternalForm());
+        }
+
+        VBox content = new VBox(20);
+        content.setPadding(new Insets(20));
+        content.setMinWidth(450);
+
+        // 1. ORAR GENERAL
+        VBox scheduleBox = new VBox(10);
+        Label scheduleTitle = new Label("Orar General de Lucru");
+        scheduleTitle.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+        VBox scheduleList = new VBox(5);
+        Label loadingLabel = new Label("Se încarcă orarul...");
+        scheduleList.getChildren().add(loadingLabel);
+
+        scheduleBox.getChildren().addAll(scheduleTitle, scheduleList);
+
+        // 2. DISPONIBILITATE
+        VBox checkBox = new VBox(10);
+        Label checkTitle = new Label("Verifică locuri libere");
+        checkTitle.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+        HBox pickerRow = new HBox(10);
+        pickerRow.setAlignment(Pos.CENTER_LEFT);
+        Label pickLabel = new Label("Alege data:");
+        DatePicker datePicker = new DatePicker();
+        datePicker.setPromptText("Selectează data...");
+        pickerRow.getChildren().addAll(pickLabel, datePicker);
+
+        FlowPane slotsPane = new FlowPane();
+        slotsPane.setHgap(10);
+        slotsPane.setVgap(10);
+        Label slotsHint = new Label("Selectează o dată pentru a vedea orele.");
+        slotsPane.getChildren().add(slotsHint);
+
+        checkBox.getChildren().addAll(checkTitle, pickerRow, slotsPane);
+
+        content.getChildren().addAll(scheduleBox, new Separator(), checkBox);
+        dialog.getDialogPane().setContent(content);
+
+        // LOGICA DE INCARCARE
+        // A. Cerem orarul
+        presenter.fetchDoctorSchedule(doctor.getDoctorId(), schedule -> {
+            scheduleList.getChildren().clear();
+            if (schedule.isEmpty()) {
+                scheduleList.getChildren().add(new Label("Medicul nu are orar configurat."));
+            } else {
+                for (DoctorScheduleDTO s : schedule) {
+                    String dayName = getDayName(s.getDayOfWeek());
+                    String interval = s.getStartTime() + " - " + s.getEndTime();
+                    scheduleList.getChildren().add(new Label("• " + dayName + ": " + interval));
+                }
+            }
+        });
+
+        // B. Listener pe DatePicker
+        datePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) return;
+
+            slotsPane.getChildren().clear();
+            slotsPane.getChildren().add(new Label("Se caută..."));
+
+            presenter.fetchAvailableSlots(doctor.getDoctorId(), newVal, slots -> {
+                slotsPane.getChildren().clear();
+                if (slots.isEmpty()) {
+                    Label empty = new Label("Nu sunt locuri libere.");
+                    empty.setStyle("-fx-text-fill: red;");
+                    slotsPane.getChildren().add(empty);
+                } else {
+                    for (LocalTime time : slots) {
+                        Label slotLabel = new Label(time.toString());
+                        slotLabel.setStyle("-fx-background-color: #dbeafe; -fx-text-fill: #1e40af; -fx-padding: 4 8; -fx-background-radius: 6;");
+                        slotsPane.getChildren().add(slotLabel);
+                    }
+                }
+            });
+        });
+
+        dialog.showAndWait();
+    }
+
+    private String getDayName(int dayOfWeek) {
+        try {
+            return java.time.DayOfWeek.of(dayOfWeek)
+                    .getDisplayName(TextStyle.FULL, new Locale("ro", "RO"));
+        } catch (Exception e) {
+            return "Ziua " + dayOfWeek;
+        }
     }
 
 }

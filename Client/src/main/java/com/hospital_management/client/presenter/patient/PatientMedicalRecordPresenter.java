@@ -51,8 +51,8 @@ public class PatientMedicalRecordPresenter {
             }
 
             @SuppressWarnings("unchecked")
-            List<MedicalRecordEntryDTO> entries = response.getData() instanceof List<?>
-                    ? (List<MedicalRecordEntryDTO>) response.getData()
+            List<MedicalRecordEntryDTO> entries = response.getPayload() instanceof List<?>
+                    ? (List<MedicalRecordEntryDTO>) response.getPayload()
                     : Collections.emptyList();
 
             view.renderEntries(entries);

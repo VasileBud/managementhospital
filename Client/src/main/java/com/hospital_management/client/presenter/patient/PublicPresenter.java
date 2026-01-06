@@ -8,13 +8,13 @@ import javafx.application.Platform;
 import shared.common.Request;
 import shared.common.RequestType;
 import shared.common.Response;
-import shared.dto.CommandDTO;
-import shared.dto.DoctorDTO;
-import shared.dto.MedicalServiceDTO;
-import shared.dto.SpecializationDTO;
+import shared.dto.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class PublicPresenter {
@@ -82,6 +82,9 @@ public class PublicPresenter {
 
     private void handleResponse(Response response) {
         Platform.runLater(() -> {
+            System.out.println("DEBUG: Am primit raspuns pentru " + currentAction);
+            System.out.println("DEBUG: Status: " + response.getStatus());
+            System.out.println("DEBUG: Payload este null? " + (response.getPayload() == null));
             if (response.getStatus() != Response.Status.OK) {
                 view.setError("Eroare: " + response.getMessage());
                 view.setBusy(false);
@@ -90,17 +93,18 @@ public class PublicPresenter {
 
             switch (currentAction) {
                 case GET_DOCTORS -> {
-                    doctors = castList(response.getData());
+                    doctors = castList(response.getPayload());
+                    System.out.println("DEBUG: Lista doctori dupa cast: " + doctors.size());
                     applyFilters();
                     view.setInfo("Doctori incarcati: " + doctors.size());
                 }
                 case GET_SPECIALIZATIONS -> {
-                    specializations = castList(response.getData());
+                    specializations = castList(response.getPayload());
                     view.setSpecializations(specializations);
                     view.setInfo("Specializari incarcate: " + specializations.size());
                 }
                 case GET_MEDICAL_SERVICES -> {
-                    services = castList(response.getData());
+                    services = castList(response.getPayload());
                     view.setInfo("Servicii incarcate: " + services.size());
                 }
                 default -> view.setInfo("Raspuns primit.");
@@ -119,6 +123,9 @@ public class PublicPresenter {
     }
 
     private void applyFilters() {
+        System.out.println("DEBUG: Aplic filtre. Total: " + doctors.size() +
+                ", Query: '" + lastQuery + "'" +
+                ", Spec: '" + lastSpecialization + "'");
         if (doctors.isEmpty()) {
             view.setDoctors(Collections.emptyList());
             return;
@@ -140,6 +147,8 @@ public class PublicPresenter {
                 })
                 .collect(Collectors.toList());
 
+        System.out.println("DEBUG: Rezultat dupa filtrare: " + filtered.size());
+
         view.setDoctors(filtered);
     }
 
@@ -155,6 +164,54 @@ public class PublicPresenter {
             return false;
         }
         return true;
+    }
+
+    public void fetchDoctorSchedule(long doctorId, Consumer<List<DoctorScheduleDTO>> onSuccess) {
+        if (!ClientSession.getInstance().ensureConnected()) return;
+
+        CommandDTO cmd = new CommandDTO(CommandDTO.Action.GET_DOCTOR_SCHEDULE)
+                .put("doctorId", doctorId);
+
+        Request req = new Request(cmd);
+        req.setType(RequestType.COMMAND);
+
+        ClientSession.getInstance().getClient().setOnResponseReceived(response -> {
+            Platform.runLater(() -> {
+                if (response.getStatus() == Response.Status.OK) {
+                    List<DoctorScheduleDTO> schedule = (List<DoctorScheduleDTO>) response.getPayload();
+                    onSuccess.accept(schedule);
+                } else {
+                    view.setError("Eroare la încărcarea orarului.");
+                }
+            });
+        });
+
+        ClientSession.getInstance().getClient().sendRequest(req);
+    }
+
+    public void fetchAvailableSlots(long doctorId, LocalDate date, Consumer<List<LocalTime>> onSuccess) {
+        if (!ClientSession.getInstance().ensureConnected()) return;
+
+        CommandDTO cmd = new CommandDTO(CommandDTO.Action.GET_AVAILABLE_SLOTS)
+                .put("doctorId", doctorId)
+                .put("date", date);
+
+        Request req = new Request(cmd);
+        req.setType(RequestType.COMMAND);
+
+        ClientSession.getInstance().getClient().setOnResponseReceived(response -> {
+            Platform.runLater(() -> {
+                if (response.getStatus() == Response.Status.OK) {
+                    List<LocalTime> slots = (List<LocalTime>) response.getPayload();
+                    onSuccess.accept(slots);
+                } else {
+                    // Putem ignora eroarea vizual, sau afișa un mesaj discret
+                    System.out.println("Eroare slots: " + response.getMessage());
+                }
+            });
+        });
+
+        ClientSession.getInstance().getClient().sendRequest(req);
     }
 
 }

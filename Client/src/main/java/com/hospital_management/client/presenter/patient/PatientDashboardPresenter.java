@@ -53,7 +53,7 @@ public class PatientDashboardPresenter {
                 return;
             }
 
-            PatientDashboardDTO data = (PatientDashboardDTO) response.getData();
+            PatientDashboardDTO data = (PatientDashboardDTO) response.getPayload();
             view.renderDashboard(data);
         });
     }

@@ -197,20 +197,20 @@ public class AppointmentBookingPresenter {
 
             switch (currentAction) {
                 case GET_SPECIALIZATIONS -> {
-                    specializations = castList(response.getData());
+                    specializations = castList(response.getPayload());
                     view.setSpecializations(specializations, allSpecializations);
                     selectedSpecialization = allSpecializations;
                 }
                 case GET_DOCTORS -> {
-                    doctors = castList(response.getData());
+                    doctors = castList(response.getPayload());
                     view.setDoctors(doctors);
                 }
                 case GET_MEDICAL_SERVICES -> {
-                    services = castList(response.getData());
+                    services = castList(response.getPayload());
                     view.setServices(services);
                 }
                 case GET_AVAILABLE_SLOTS -> {
-                    List<LocalTime> times = castList(response.getData());
+                    List<LocalTime> times = castList(response.getPayload());
                     view.setAvailableTimes(times);
                     view.setBusy(false);
                     view.setInfo("");

@@ -56,7 +56,7 @@ public class LoginPresenter {
                 return;
             }
 
-            LoginResponseDTO data = (LoginResponseDTO) response.getData();
+            LoginResponseDTO data = (LoginResponseDTO) response.getPayload();
 
             UserDTO user = new UserDTO(
                     data.getUserId(),
