@@ -5,10 +5,12 @@ import com.hospital_management.client.app.SceneNavigator;
 import com.hospital_management.client.network.ClientSession;
 import com.hospital_management.client.presenter.patient.PatientDashboardPresenter;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.util.Pair;
+import java.util.Optional;
 import shared.dto.AppointmentDTO;
 import shared.dto.PatientDashboardDTO;
 import shared.dto.PatientProfileDTO;
@@ -37,6 +39,7 @@ public class PatientDashboardView {
     @FXML private Label statusLabel;
 
     private PatientDashboardPresenter presenter;
+    private Long currentAppointmentId = null;
 
     @FXML
     public void initialize() {
@@ -73,12 +76,23 @@ public class PatientDashboardView {
 
     @FXML
     public void onModifyAppointmentClick() {
-        statusLabel.setText("Modificarea programarii nu este disponibila.");
+        if (currentAppointmentId == null) {
+            setError("Nu există o programare de modificat.");
+            return;
+        }
+
+        ClientSession.getInstance().setAppointmentToEdit(currentAppointmentId);
+
+        SceneNavigator.navigateToFresh(AppScene.APPOINTMENT_BOOKING);
     }
 
     @FXML
     public void onCancelAppointmentClick() {
-        statusLabel.setText("Anularea programarii nu este disponibila.");
+        if(currentAppointmentId == null) {
+            setError("Nu există o programare de anulat!");
+            return;
+        }
+        presenter.onCancelAppointment(currentAppointmentId);
     }
 
     @FXML
@@ -160,6 +174,8 @@ public class PatientDashboardView {
             return;
         }
 
+        this.currentAppointmentId = appt.getAppointmentId();
+
         nextDoctorName.setText(appt.getDoctorName() == null ? "Doctor" : appt.getDoctorName());
         String spec = appt.getServiceName() == null ? "Consultatie" : appt.getServiceName();
         nextDoctorSpecialization.setText(spec);
@@ -170,9 +186,40 @@ public class PatientDashboardView {
 
     private void setHistory(List<AppointmentDTO> history) {
         historyContainer.getChildren().clear();
-        Label hint = new Label("Detaliile sunt disponibile in fisa medicala.");
-        hint.getStyleClass().add("muted-text");
-        historyContainer.getChildren().add(hint);
+
+        if (history == null || history.isEmpty()) {
+            Label hint = new Label("Nu există istoric recent.");
+            hint.getStyleClass().add("muted-text");
+            historyContainer.getChildren().add(hint);
+            return;
+        }
+
+        for (AppointmentDTO appt : history) {
+            HBox row = new HBox(10);
+            row.getStyleClass().add("card"); // Sau un stil mai simplu
+            row.setAlignment(Pos.CENTER_LEFT);
+
+            Label date = new Label(appt.getDate().toString());
+            Label doctor = new Label(appt.getDoctorName());
+            Label status = new Label(appt.getStatus());
+
+            // Spacer
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+
+            row.getChildren().addAll(date, doctor, status, spacer);
+
+            // --- BUTONUL DE FEEDBACK ---
+            // Verificăm dacă statusul este DONE (sau terminat)
+            if ("DONE".equalsIgnoreCase(appt.getStatus())) {
+                Button feedbackBtn = new Button("Feedback");
+                feedbackBtn.getStyleClass().add("secondary-button"); // Stil mai mic
+                feedbackBtn.setOnAction(e -> showFeedbackDialog(appt.getAppointmentId()));
+                row.getChildren().add(feedbackBtn);
+            }
+
+            historyContainer.getChildren().add(row);
+        }
     }
 
     private void renderTags(FlowPane pane, List<String> values, String styleClass) {
@@ -211,5 +258,59 @@ public class PatientDashboardView {
             return ("" + parts[0].charAt(0)).toUpperCase();
         }
         return ("" + parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+    }
+
+    private void showFeedbackDialog(long appointmentId) {
+        Dialog<Pair<Integer, String>> dialog = new Dialog<>();
+        dialog.setTitle("Feedback Consultatie");
+        dialog.setHeaderText("Cum a decurs vizita la medic?");
+
+        // Butoanele standard (Trimite / Anuleaza)
+        ButtonType loginButtonType = new ButtonType("Trimite", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        // Layout
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new javafx.geometry.Insets(20, 150, 10, 10));
+
+        // Input Rating (ComboBox 1-5)
+        ComboBox<Integer> ratingCombo = new ComboBox<>();
+        ratingCombo.getItems().addAll(5, 4, 3, 2, 1);
+        ratingCombo.setValue(5); // Default maxim :)
+
+        // Input Comentariu
+        TextArea commentArea = new TextArea();
+        commentArea.setPromptText("Scrie aici opinia ta...");
+        commentArea.setPrefRowCount(3);
+
+        grid.add(new Label("Nota:"), 0, 0);
+        grid.add(ratingCombo, 1, 0);
+        grid.add(new Label("Comentariu:"), 0, 1);
+        grid.add(commentArea, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Convertim rezultatul când se apasă Trimite
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return new Pair<>(ratingCombo.getValue(), commentArea.getText());
+            }
+            return null;
+        });
+
+        dialog.getDialogPane().getStylesheets().add(
+                getClass().getResource("/styles/patient_dashboard.css").toExternalForm()
+        );
+
+        dialog.getDialogPane().getStyleClass().add("my-dialog");
+
+        Optional<Pair<Integer, String>> result = dialog.showAndWait();
+
+        result.ifPresent(feedback -> {
+            // AICI APELĂM PRESENTER-UL
+            presenter.onSendFeedback(appointmentId, feedback.getKey(), feedback.getValue());
+        });
     }
 }

@@ -55,6 +55,25 @@ public class AppointmentController {
         }
     }
 
+    public Response updateAppointment(CommandDTO command) {
+        Long appointmentId = command.getLong("appointmentId");
+        Long doctorId = command.getLong("doctorId");
+        Long serviceId = command.getLong("serviceId");
+        LocalDate date = command.getDate("date");
+        LocalTime time = (LocalTime) command.getData().get("time");
+
+        try {
+            boolean updated = appointmentRepository.updateAppointment(appointmentId, doctorId, serviceId, date, time);
+            if (updated) {
+                return Response.okMessage("Appointment updated successfully");
+            } else {
+                return Response.error("NOT_FOUND", "Appointment not found");
+            }
+        } catch (Exception e) {
+            return Response.error("DB_ERROR", e.getMessage());
+        }
+    }
+
     public Response cancelAppointment(CommandDTO command) {
         Long appointmentId = command.getLong("appointmentId");
 

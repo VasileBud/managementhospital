@@ -304,3 +304,115 @@
     -fx-padding: 8 16;
     -fx-min-width: 140;
 }
+
+/* =========================================
+   FEEDBACK & DIALOG STYLES
+   ========================================= */
+
+/* Butonul mic de Feedback din lista de istoric */
+.secondary-button {
+    -fx-background-color: #eff6ff; /* Albastru foarte deschis */
+    -fx-text-fill: #1d75d8;        /* Albastru principal */
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 8;
+    -fx-padding: 5 12;
+    -fx-cursor: hand;
+    -fx-border-color: #dbeafe;
+    -fx-border-radius: 8;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #dbeafe;
+    -fx-border-color: #bfdbfe;
+}
+
+.secondary-button:pressed {
+    -fx-background-color: #bfdbfe;
+}
+
+/* Stiluri pentru Fereastra de Dialog (Pop-up) */
+.dialog-pane {
+    -fx-background-color: #ffffff;
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+    -fx-padding: 0;
+}
+
+/* Header-ul dialogului */
+.dialog-pane .header-panel {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20 20 10 20;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+}
+
+/* Zona de continut a dialogului */
+.dialog-pane .content {
+    -fx-padding: 10 20 20 20;
+}
+
+/* Input-urile din dialog (TextArea si ComboBox) */
+.text-area {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #0f172a;
+    -fx-prompt-text-fill: #94a3b8;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 4;
+}
+
+.text-area .content {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+}
+
+.text-area:focused {
+    -fx-border-color: #1d75d8;
+    -fx-effect: dropshadow(gaussian, rgba(29, 117, 216, 0.15), 4, 0, 0, 0);
+}
+
+.combo-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 2 6;
+}
+
+.combo-box:focused {
+    -fx-border-color: #1d75d8;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #0f172a;
+}
+
+/* Butoanele de jos din dialog (Trimite / Anuleaza) */
+.dialog-pane .button-bar .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #64748b;
+    -fx-font-weight: 600;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.dialog-pane .button-bar .button:hover {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #0f172a;
+}
+
+/* Butonul "Trimite" (care este default) */
+.dialog-pane .button-bar .button:default {
+    -fx-background-color: #1d75d8;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: 700;
+}
+
+.dialog-pane .button-bar .button:default:hover {
+    -fx-background-color: #165ca8;
+}

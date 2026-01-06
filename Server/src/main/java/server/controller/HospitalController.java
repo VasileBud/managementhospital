@@ -80,6 +80,9 @@ public class HospitalController {
                 case BOOK_APPOINTMENT ->
                         appointmentController.bookAppointment(command);
 
+                case UPDATE_APPOINTMENT ->
+                        appointmentController.updateAppointment(command);
+
                 case CANCEL_APPOINTMENT ->
                         appointmentController.cancelAppointment(command);
 

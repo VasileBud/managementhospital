@@ -24,6 +24,7 @@ public class CommandDTO implements Serializable {
 
         // APPOINTMENTS
         BOOK_APPOINTMENT,
+        UPDATE_APPOINTMENT,
         CANCEL_APPOINTMENT,
         GET_MY_APPOINTMENTS,          // patient
         GET_PATIENT_DASHBOARD,        // patient dashboard summary

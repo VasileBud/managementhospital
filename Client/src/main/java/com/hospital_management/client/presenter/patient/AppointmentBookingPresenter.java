@@ -128,11 +128,31 @@ public class AppointmentBookingPresenter {
             return;
         }
 
-        CommandDTO cmd = new CommandDTO(CommandDTO.Action.BOOK_APPOINTMENT, user.getUserId())
-                .put("patientId", user.getPatientId())
-                .put("doctorId", selectedDoctor.getDoctorId())
-                .put("date", selectedDate)
-                .put("time", selectedTime);
+        Long editId = ClientSession.getInstance().getAppointmentToEdit();
+
+        CommandDTO cmd;
+
+        if (editId != null) {
+            cmd = new CommandDTO(CommandDTO.Action.UPDATE_APPOINTMENT, user.getUserId())
+                    .put("appointmentId", editId)
+                    .put("patientId", user.getPatientId())
+                    .put("doctorId", selectedDoctor.getDoctorId())
+                    .put("date", selectedDate)
+                    .put("time", selectedTime);
+
+            view.setInfo("Se actualizează programarea...");
+            currentAction = CommandDTO.Action.UPDATE_APPOINTMENT;
+
+        } else {
+            cmd = new CommandDTO(CommandDTO.Action.BOOK_APPOINTMENT, user.getUserId())
+                    .put("patientId", user.getPatientId())
+                    .put("doctorId", selectedDoctor.getDoctorId())
+                    .put("date", selectedDate)
+                    .put("time", selectedTime);
+
+            view.setInfo("Se creează programarea...");
+            currentAction = CommandDTO.Action.BOOK_APPOINTMENT;
+        }
 
         if (selectedService != null) {
             cmd.put("serviceId", selectedService.getServiceId());
@@ -199,7 +219,16 @@ public class AppointmentBookingPresenter {
                 case BOOK_APPOINTMENT -> {
                     view.setBusy(false);
                     view.setInfo("Programare creata cu succes.");
-                    SceneNavigator.navigateTo(AppScene.PATIENT_DASHBOARD);
+                    SceneNavigator.navigateToFresh(AppScene.PATIENT_DASHBOARD);
+                    return;
+                }
+                case UPDATE_APPOINTMENT -> {
+                    view.setBusy(false);
+                    view.setInfo("Programare actualizata cu succes.");
+
+                    ClientSession.getInstance().clearEditMode();
+
+                    SceneNavigator.navigateToFresh(AppScene.PATIENT_DASHBOARD);
                     return;
                 }
                 default -> view.setInfo("Raspuns primit.");
