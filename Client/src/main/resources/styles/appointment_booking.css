@@ -67,6 +67,11 @@
     -fx-font-weight: 700;
 }
 
+.profile-role {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 10px;
+}
+
 .profile-avatar {
     -fx-background-color: #e6f0ff;
     -fx-background-radius: 999;
@@ -124,6 +129,16 @@
     -fx-border-color: #e2e8f0;
     -fx-border-radius: 12;
     -fx-font-size: 12px;
+}
+
+.field-static {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-font-size: 12px;
+    -fx-padding: 6 10;
+    -fx-text-fill: #0f172a;
 }
 
 .slot-button {
@@ -188,4 +203,97 @@
 .status-label {
     -fx-text-fill: #64748b;
     -fx-font-size: 11px;
+}
+
+.table-row {
+    -fx-padding: 10 14;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+    -fx-hgap: 6;
+}
+
+.table-row:hover {
+    -fx-background-color: #f8fafc;
+}
+
+.table-row-header {
+    -fx-background-color: #f8fafc;
+}
+
+.table-header-text {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.table-text {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.table-text-muted {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.table-avatar {
+    -fx-background-color: #e2e8f0;
+    -fx-background-radius: 999;
+    -fx-pref-width: 28;
+    -fx-pref-height: 28;
+}
+
+.table-avatar-text {
+    -fx-text-fill: #1f2937;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.status-pill {
+    -fx-background-radius: 999;
+    -fx-padding: 2 8;
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+}
+
+.status-confirmed {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #15803d;
+}
+
+.status-pending {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #92400e;
+}
+
+.status-done {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #1d4ed8;
+}
+
+.status-canceled {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #b91c1c;
+}
+
+.status-active {
+    -fx-background-color: #e0f2fe;
+    -fx-text-fill: #0369a1;
+}
+
+.table-action {
+    -fx-background-color: transparent;
+    -fx-text-fill: #137fec;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 6;
+}
+
+.table-action-danger {
+    -fx-background-color: transparent;
+    -fx-text-fill: #dc2626;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 6;
 }

@@ -78,10 +78,8 @@ public class HospitalServer extends AbstractServer {
      */
     @Override
     public void handleMessageFromClient(Object msg, ConnectionToClient client) {
-
-        System.out.println(msg);
         try {
-            // Validate request
+
             if (!(msg instanceof Request request)) {
                 client.sendToClient(Response.error(
                         "INVALID_REQUEST",
@@ -90,7 +88,6 @@ public class HospitalServer extends AbstractServer {
                 return;
             }
 
-            // Validate request type
             if (request.getType() != RequestType.COMMAND) {
                 client.sendToClient(Response.error(
                         "INVALID_REQUEST",
@@ -99,7 +96,6 @@ public class HospitalServer extends AbstractServer {
                 return;
             }
 
-            // Validate payload
             if (!(request.getPayload() instanceof CommandDTO command)) {
                 client.sendToClient(Response.error(
                         "INVALID_REQUEST",
@@ -108,10 +104,8 @@ public class HospitalServer extends AbstractServer {
                 return;
             }
 
-            // Delegate to controller
-            Response response = hospitalController.handle(command, client);
+            Response response = hospitalController.handle(command);
 
-            // Send response back ONLY to this client
             client.sendToClient(response);
 
         } catch (Exception e) {

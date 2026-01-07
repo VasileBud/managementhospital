@@ -51,7 +51,9 @@ public class PublicPresenter {
         SceneNavigator.navigateTo(AppScene.LOGIN);
     }
 
-    public void onGoToRegister() { SceneNavigator.navigateTo(AppScene.REGISTER);}
+    public void onGoToRegister() {
+        SceneNavigator.navigateTo(AppScene.REGISTER);
+    }
 
     public void onSearch(String query, String specializationName) {
         if (!validateSearch(query, specializationName)) {
@@ -83,7 +85,7 @@ public class PublicPresenter {
         Platform.runLater(() -> {
             System.out.println("DEBUG: Am primit raspuns pentru " + currentAction);
             System.out.println("DEBUG: Status: " + response.getStatus());
-            System.out.println("DEBUG: Payload este null? " + (response.getPayload() == null));
+            System.out.println("DEBUG: Payload este null? " + (response.getData() == null));
             if (response.getStatus() != Response.Status.OK) {
                 view.setError("Eroare: " + response.getMessage());
                 view.setBusy(false);
@@ -92,18 +94,18 @@ public class PublicPresenter {
 
             switch (currentAction) {
                 case GET_DOCTORS -> {
-                    doctors = castList(response.getPayload());
+                    doctors = castList(response.getData());
                     System.out.println("DEBUG: Lista doctori dupa cast: " + doctors.size());
                     applyFilters();
                     view.setInfo("Doctori incarcati: " + doctors.size());
                 }
                 case GET_SPECIALIZATIONS -> {
-                    specializations = castList(response.getPayload());
+                    specializations = castList(response.getData());
                     view.setSpecializations(specializations);
                     view.setInfo("Specializari incarcate: " + specializations.size());
                 }
                 case GET_MEDICAL_SERVICES -> {
-                    services = castList(response.getPayload());
+                    services = castList(response.getData());
                     view.setInfo("Servicii incarcate: " + services.size());
                 }
                 default -> view.setInfo("Raspuns primit.");
@@ -145,9 +147,6 @@ public class PublicPresenter {
                     return matchesQuery && matchesSpec;
                 })
                 .collect(Collectors.toList());
-
-        System.out.println("DEBUG: Rezultat dupa filtrare: " + filtered.size());
-
         view.setDoctors(filtered);
     }
 
@@ -155,18 +154,21 @@ public class PublicPresenter {
         String q = query == null ? "" : query.trim();
         String s = specializationName == null ? "" : specializationName.trim();
         if (q.length() > 100) {
-            view.setError("Cautarea este prea lunga.");
+            view.setError("Campul de cautare accepta maxim 100 caractere.");
             return false;
         }
         if (s.length() > 80) {
-            view.setError("Specializarea selectata este invalida.");
+            view.setError("Specializarea selectata este invalida (max 80 caractere).");
             return false;
         }
         return true;
     }
 
-    public void fetchDoctorSchedule(long doctorId, Consumer<List<DoctorScheduleDTO>> onSuccess) {
-        if (!ClientSession.getInstance().ensureConnected()) return;
+    public void fetchDoctorSchedule(long doctorId, Consumer<List<DoctorScheduleDTO>> onSuccess, Consumer<String> onError) {
+        if (!ClientSession.getInstance().ensureConnected()) {
+            notifyError(onError, "Nu exista conexiune la server.");
+            return;
+        }
 
         CommandDTO cmd = new CommandDTO(CommandDTO.Action.GET_DOCTOR_SCHEDULE)
                 .put("doctorId", doctorId);
@@ -177,18 +179,30 @@ public class PublicPresenter {
         ClientSession.getInstance().getClient().sendRequest(req, response -> {
             Platform.runLater(() -> {
                 if (response.getStatus() == Response.Status.OK) {
-                    List<DoctorScheduleDTO> schedule = (List<DoctorScheduleDTO>) response.getPayload();
-                    onSuccess.accept(schedule);
+                    List<DoctorScheduleDTO> schedule = castList(response.getData());
+                    if (onSuccess != null) {
+                        onSuccess.accept(schedule);
+                    }
                 } else {
-                    view.setError("Eroare la încărcarea orarului.");
+                    String message = response.getMessage();
+                    if (message == null || message.isBlank()) {
+                        message = "Nu pot incarca orarul medicului.";
+                    }
+                    notifyError(onError, message);
                 }
             });
         });
-
     }
 
-    public void fetchAvailableSlots(long doctorId, LocalDate date, Consumer<List<LocalTime>> onSuccess) {
-        if (!ClientSession.getInstance().ensureConnected()) return;
+    public void fetchAvailableSlots(long doctorId, LocalDate date, Consumer<List<LocalTime>> onSuccess, Consumer<String> onError) {
+        if (date == null) {
+            notifyError(onError, "Selecteaza o data valida.");
+            return;
+        }
+        if (!ClientSession.getInstance().ensureConnected()) {
+            notifyError(onError, "Nu exista conexiune la server.");
+            return;
+        }
 
         CommandDTO cmd = new CommandDTO(CommandDTO.Action.GET_AVAILABLE_SLOTS)
                 .put("doctorId", doctorId)
@@ -200,16 +214,27 @@ public class PublicPresenter {
         ClientSession.getInstance().getClient().sendRequest(req, response -> {
             Platform.runLater(() -> {
                 if (response.getStatus() == Response.Status.OK) {
-                    List<LocalTime> slots = (List<LocalTime>) response.getPayload();
-                    onSuccess.accept(slots);
+                    List<LocalTime> slots = castList(response.getData());
+                    if (onSuccess != null) {
+                        onSuccess.accept(slots);
+                    }
                 } else {
-                    // Putem ignora eroarea vizual, sau afișa un mesaj discret
-                    System.out.println("Eroare slots: " + response.getMessage());
+                    String message = response.getMessage();
+                    if (message == null || message.isBlank()) {
+                        message = "Nu pot incarca orele disponibile.";
+                    }
+                    notifyError(onError, message);
                 }
             });
         });
+    }
 
+    private void notifyError(Consumer<String> onError, String message) {
+        if (onError != null) {
+            onError.accept(message);
+        } else {
+            view.setError(message);
+        }
     }
 
 }
-

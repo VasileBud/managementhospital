@@ -38,7 +38,7 @@ public class DoctorConsultationView {
     @FXML private Label patientConditionsLabel;
     @FXML private DatePicker visitDatePicker;
     @FXML private ComboBox<String> visitTypeCombo;
-    @FXML private TextField visitReasonField;
+    @FXML private       TextField visitReasonField;
     @FXML private TextField icdField;
     @FXML private TextArea primaryDiagnosisArea;
     @FXML private TextArea secondaryDiagnosisArea;
@@ -73,7 +73,7 @@ public class DoctorConsultationView {
 
     @FXML
     public void onNavAppointmentsClick() {
-        setInfo("Sunteti deja in sectiunea Programari.");
+        SceneNavigator.navigateTo(AppScene.APPOINTMENT_BOOKING);
     }
 
     @FXML

@@ -13,13 +13,13 @@ public class Response implements Serializable {
     private Status status;
     private String message;   // human-readable
     private String errorCode; // optional: e.g. AUTH_FAILED, VALIDATION_ERROR
-    private Object payload;      // DTO / List<DTO> / null
+    private Object data;      // DTO / List<DTO> / null
 
     private Response(Status status, String message, String errorCode, Object data) {
         this.status = status;
         this.message = message;
         this.errorCode = errorCode;
-        this.payload = data;
+        this.data = data;
     }
 
     public static Response ok(Object data) {
@@ -37,7 +37,7 @@ public class Response implements Serializable {
     public Status getStatus() { return status; }
     public String getMessage() { return message; }
     public String getErrorCode() { return errorCode; }
-    public Object getPayload() { return payload; }
+    public Object getData() { return data; }
 
     public boolean isOk() { return status == Status.OK; }
 }

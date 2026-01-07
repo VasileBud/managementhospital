@@ -5,20 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="22801927-82a4-4558-828d-7004ef1d5a62" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.ai/mcp/mcp.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/AppScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/AppScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/MainApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/SceneNavigator.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/app/SceneNavigator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/ClientGateway.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/ClientSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/ClientSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/HospitalClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/network/HospitalClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/admin/AdminUsersPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/admin/AdminUsersPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/LoginPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/LoginPresenter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/RegisterPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/auth/RegisterPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/manager/ManagerStatsPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/manager/ManagerStatsPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/medic/DoctorConsultationPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/medic/DoctorConsultationPresenter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/medic/DoctorDashboardPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/medic/DoctorDashboardPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/AppointmentBookingPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/AppointmentBookingPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientDashboardPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientDashboardPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientMedicalRecordPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PatientMedicalRecordPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PublicPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/presenter/patient/PublicPresenter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/admin/AdminDashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/admin/AdminDashboardView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/doctor/DoctorConsultationView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/doctor/DoctorConsultationView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/doctor/DoctorDashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/doctor/DoctorDashboardView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/manager/ManagerDashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/manager/ManagerDashboardView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/AppointmentBookingView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/AppointmentBookingView.java" afterDir="false" />
@@ -27,27 +29,34 @@
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PublicView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/com/hospital_management/client/view/patient/PublicView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/shared/common/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/shared/common/Response.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/shared/dto/CommandDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/shared/dto/CommandDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/shared/dto/StatsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/shared/dto/StatsDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/auth/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/auth/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/admin/admin_dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/admin/admin_dashboard.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/doctor/doctor_dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/doctor/doctor_dashboard.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/manager/manager_dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/manager/manager_dashboard.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/appointment_booking.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/appointment_booking.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/patient_dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/patient_dashboard.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/patient_medical_record.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/patient_medical_record.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/public.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/fxml/patient/public.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/resources/styles/appointment_booking.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/styles/appointment_booking.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/styles/patient_medical_record.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/styles/patient_medical_record.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/styles/doctor_dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/styles/doctor_dashboard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/styles/manager_dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/styles/manager_dashboard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/resources/styles/patient_dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/styles/patient_dashboard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/resources/styles/public.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/resources/styles/public.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/controller/AdminController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/controller/AppointmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/controller/AppointmentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/controller/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/controller/HospitalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/controller/HospitalController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/controller/StatsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/controller/StatsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/network/HospitalServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/network/HospitalServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/AppointmentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/AppointmentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/MedicalRecordRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/MedicalRecordRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/ConsultationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/ConsultationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/DoctorRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/DoctorRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/PatientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/PatientRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/Repository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/Repository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/ScheduleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/ScheduleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/SpecializationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/SpecializationRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/StatsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/StatsRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/server/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/server/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/shared/common/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/shared/common/Response.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/shared/dto/CommandDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/shared/dto/CommandDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/shared/dto/StatsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/shared/dto/StatsDTO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +64,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="165" />
+    <option name="cachedIndexableFilesCount" value="191" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -99,40 +108,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.ClientConsole.executor&quot;: &quot;Run&quot;,
-    &quot;Application.DbConnectionTest.executor&quot;: &quot;Run&quot;,
-    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.MainApp.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Server.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ServerConsole.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/Desktop/ProiectIS_Floria_Bud/managementhospital&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.ClientConsole.executor": "Run",
+    "Application.DbConnectionTest.executor": "Run",
+    "Application.HelloApplication.executor": "Run",
+    "Application.MainApp.executor": "Run",
+    "Application.Server.executor": "Run",
+    "Application.ServerConsole.executor": "Run",
+    "Application.Unnamed.executor": "Run",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/User/Desktop/ProiectIS_Floria_Bud/managementhospital",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "ml.llm.LLMAIWorkflowsConfigurable",
+    "show.migrate.to.gradle.popup": "false",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1768730405594" />
     <option name="spentUsd" value="0.2653023" />
@@ -206,6 +215,7 @@
       <workItem from="1767628515680" duration="5395000" />
       <workItem from="1767688906820" duration="3395000" />
       <workItem from="1767692435130" duration="9000" />
+      <workItem from="1767775172412" duration="33645000" />
     </task>
     <servers />
   </component>

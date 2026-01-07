@@ -5,9 +5,12 @@ import com.hospital_management.client.app.SceneNavigator;
 import com.hospital_management.client.network.ClientSession;
 import com.hospital_management.client.presenter.manager.ManagerStatsPresenter;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -72,10 +75,14 @@ public class ManagerDashboardView {
     @FXML private Label urgentPercentLabel;
 
     @FXML private VBox recentAppointmentsContainer;
+    @FXML private TextField appointmentsSearchField;
+    @FXML private ComboBox<String> appointmentsStatusFilter;
 
     private ManagerStatsPresenter presenter;
     private List<ChartPointDTO> pendingAdmissionsSeries = List.of();
     private List<ChartPointDTO> pendingDischargesSeries = List.of();
+    private List<AppointmentDTO> recentAppointments = List.of();
+    private String appointmentsStatusCode = "ALL";
 
     @FXML
     public void initialize() {
@@ -88,6 +95,10 @@ public class ManagerDashboardView {
             lineChartPane.widthProperty().addListener((obs, oldVal, newVal) -> updateLineChart());
             lineChartPane.heightProperty().addListener((obs, oldVal, newVal) -> updateLineChart());
         }
+        if (appointmentsSearchField != null) {
+            appointmentsSearchField.textProperty().addListener((obs, oldVal, newVal) -> applyRecentAppointmentsFilter());
+        }
+        setupAppointmentsStatusFilter();
         presenter.loadStats();
     }
 
@@ -110,7 +121,7 @@ public class ManagerDashboardView {
 
     @FXML
     public void onNavAppointmentsClick() {
-        setInfo("Sectiunea Programari este in lucru.");
+        SceneNavigator.navigateTo(AppScene.APPOINTMENT_BOOKING);
     }
 
     @FXML
@@ -143,6 +154,7 @@ public class ManagerDashboardView {
         ClientSession.getInstance().setLoggedUser(null);
         ClientSession.getInstance().clearSelectedAppointment();
         ClientSession.getInstance().clearEditMode();
+        SceneNavigator.clearCache();
         SceneNavigator.navigateTo(AppScene.LOGIN);
     }
 
@@ -167,7 +179,68 @@ public class ManagerDashboardView {
         updateLineChart();
 
         updateDonut(stats.getOccupancyBySpecialization(), stats.getDoctorOccupancyPercent());
-        renderRecentAppointments(stats.getRecentAppointments());
+        recentAppointments = stats.getRecentAppointments() == null ? List.of() : stats.getRecentAppointments();
+        applyRecentAppointmentsFilter();
+    }
+
+    private void setupAppointmentsStatusFilter() {
+        if (appointmentsStatusFilter == null) {
+            return;
+        }
+        appointmentsStatusFilter.setItems(FXCollections.observableArrayList(
+                "Toate",
+                "In asteptare",
+                "Confirmate",
+                "Finalizate",
+                "Anulate"
+        ));
+        appointmentsStatusFilter.getSelectionModel().selectFirst();
+        appointmentsStatusFilter.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            appointmentsStatusCode = statusCodeForAppointmentLabel(newVal);
+            applyRecentAppointmentsFilter();
+        });
+    }
+
+    private String statusCodeForAppointmentLabel(String label) {
+        if (label == null) {
+            return "ALL";
+        }
+        return switch (label.trim().toLowerCase(Locale.ROOT)) {
+            case "in asteptare" -> "PENDING";
+            case "confirmate" -> "CONFIRMED";
+            case "finalizate" -> "DONE";
+            case "anulate" -> "CANCELED";
+            default -> "ALL";
+        };
+    }
+
+    private void applyRecentAppointmentsFilter() {
+        String search = normalize(appointmentsSearchField == null ? null : appointmentsSearchField.getText());
+
+        List<AppointmentDTO> filtered = new ArrayList<>(recentAppointments == null ? List.of() : recentAppointments);
+        filtered = filtered.stream()
+                .filter(this::matchesTab)
+                .filter(appt -> matchesSearch(appt, search))
+                .toList();
+
+        renderRecentAppointments(filtered);
+    }
+
+    private boolean matchesTab(AppointmentDTO appt) {
+        if (appt == null || "ALL".equals(appointmentsStatusCode)) {
+            return true;
+        }
+        return normalizeStatus(appt.getStatus()).equals(appointmentsStatusCode);
+    }
+
+    private boolean matchesSearch(AppointmentDTO appt, String search) {
+        if (search == null || search.isBlank()) {
+            return true;
+        }
+        String patient = normalize(appt == null ? null : appt.getPatientName());
+        String doctor = normalize(appt == null ? null : appt.getDoctorName());
+        String service = normalize(appt == null ? null : appt.getServiceName());
+        return patient.contains(search) || doctor.contains(search) || service.contains(search);
     }
 
     private void renderUserHeader(UserDTO user) {
@@ -484,6 +557,10 @@ public class ManagerDashboardView {
     private String formatChange(double value) {
         String sign = value >= 0 ? "+" : "";
         return sign + Math.round(value) + "%";
+    }
+
+    private String normalize(String value) {
+        return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
     }
 
     private String valueOrDefault(String value, String fallback) {

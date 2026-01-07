@@ -2,8 +2,6 @@ package server.controller;
 
 import shared.common.Response;
 import shared.dto.CommandDTO;
-import ocsf.server.ConnectionToClient;
-
 
 public class HospitalController {
 
@@ -31,10 +29,7 @@ public class HospitalController {
         this.patientController = new PatientController();
     }
 
-    /**
-     * Main dispatcher for ALL client commands.
-     */
-    public Response handle(CommandDTO command, ConnectionToClient client) {
+    public Response handle(CommandDTO command) {
 
         if (command == null || command.getAction() == null) {
             return Response.error("INVALID_COMMAND", "Command or action is null");
@@ -43,9 +38,6 @@ public class HospitalController {
         try {
             return switch (command.getAction()) {
 
-                // =====================
-                // AUTH
-                // =====================
                 case LOGIN ->
                         authController.login(command);
 
@@ -55,9 +47,6 @@ public class HospitalController {
                 case LOGOUT ->
                         authController.logout(command);
 
-                // =====================
-                // PUBLIC / PATIENT
-                // =====================
                 case GET_DOCTORS ->
                         doctorController.getDoctors();
 
@@ -76,9 +65,6 @@ public class HospitalController {
                 case GET_PATIENT_DASHBOARD ->
                         patientDashboardController.getDashboard(command);
 
-                // =====================
-                // APPOINTMENTS
-                // =====================
                 case BOOK_APPOINTMENT ->
                         appointmentController.bookAppointment(command);
 
@@ -95,7 +81,10 @@ public class HospitalController {
                         appointmentController.markAppointmentDone(command);
 
                 case GET_MY_APPOINTMENTS ->
-                        Response.error("NOT_IMPLEMENTED", "GET_APPOINTMENTS not implemented yet");
+                        appointmentController.getMyAppointments(command);
+
+                case GET_ALL_APPOINTMENTS ->
+                        appointmentController.getAllAppointments(command);
 
                 case GET_DOCTOR_APPOINTMENTS ->
                         appointmentController.getDoctorAppointments(command);
@@ -103,9 +92,6 @@ public class HospitalController {
                 case GET_PATIENT_DETAILS ->
                         patientController.getPatientDetails(command);
 
-                // =====================
-                // MEDICAL RECORD
-                // =====================
                 case ADD_MEDICAL_RECORD_ENTRY ->
                         medicalRecordController.addMedicalRecordEntry(command);
 
@@ -115,15 +101,9 @@ public class HospitalController {
                 case GET_PATIENT_MEDICAL_RECORD ->
                         medicalRecordController.getPatientMedicalRecord(command);
 
-                // =====================
-                // FEEDBACK
-                // =====================
                 case SEND_FEEDBACK ->
                         feedbackController.sendFeedback(command);
 
-                // =====================
-                // ADMIN
-                // =====================
                 case ADMIN_CREATE_USER ->
                         adminController.createUser(command);
 
@@ -136,15 +116,12 @@ public class HospitalController {
                 case ADMIN_LIST_USERS ->
                         adminController.listUsers();
 
-                // =====================
-                // MANAGER / ADMIN
-                // =====================
+                case ADMIN_GET_STATS ->
+                        adminController.getAdminStats();
+
                 case GET_STATS ->
                         statsController.getStats(command);
 
-                // =====================
-                // DEFAULT
-                // =====================
                 default ->
                         Response.error("UNKNOWN_ACTION", "Unknown action: " + command.getAction());
             };

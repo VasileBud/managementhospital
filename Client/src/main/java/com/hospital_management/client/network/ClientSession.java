@@ -13,7 +13,6 @@ public class ClientSession {
 
     private ClientSession() {
         try {
-            // Ne conectăm la localhost, port 5555 (unde rulează ServerConsole)
             client = new HospitalClient("localhost", 5555);
         } catch (Exception e) {
             System.err.println("Nu ma pot conecta la server! Verifică dacă ServerConsole rulează.");

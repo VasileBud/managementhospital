@@ -13,7 +13,6 @@ public class CommandDTO implements Serializable {
         // AUTH
         REGISTER,
         LOGIN,
-        LOGOUT,
 
         // PUBLIC/PATIENT
         GET_DOCTORS,
@@ -28,6 +27,7 @@ public class CommandDTO implements Serializable {
         CANCEL_APPOINTMENT,
         GET_MY_APPOINTMENTS,          // patient
         GET_PATIENT_DASHBOARD,        // patient dashboard summary
+        GET_ALL_APPOINTMENTS,         // admin/manager: hospital-wide
         GET_DOCTOR_APPOINTMENTS,      // doctor/manager
         GET_PATIENT_DETAILS,          // doctor/manager
         APPROVE_APPOINTMENT,          // admin
@@ -47,6 +47,8 @@ public class CommandDTO implements Serializable {
         ADMIN_CREATE_USER,
         ADMIN_UPDATE_USER,
         ADMIN_DELETE_USER,
+
+        ADMIN_GET_STATS,
 
         // MANAGER/ADMIN: STATS
         GET_STATS

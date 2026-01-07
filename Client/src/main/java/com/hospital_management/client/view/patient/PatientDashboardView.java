@@ -4,25 +4,31 @@ import com.hospital_management.client.app.AppScene;
 import com.hospital_management.client.app.SceneNavigator;
 import com.hospital_management.client.network.ClientSession;
 import com.hospital_management.client.presenter.patient.PatientDashboardPresenter;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.util.Pair;
 import java.util.Optional;
 import shared.dto.AppointmentDTO;
+import shared.dto.MedicalRecordEntryDTO;
 import shared.dto.PatientDashboardDTO;
+import shared.dto.PatientDetailsDTO;
 import shared.dto.PatientProfileDTO;
 import shared.dto.UserDTO;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 public class PatientDashboardView {
 
     @FXML private Label userNameLabel;
-    @FXML private Label roleLabel;
     @FXML private Label initialsLabel;
     @FXML private Label welcomeLabel;
     @FXML private Label nextDoctorName;
@@ -30,57 +36,63 @@ public class PatientDashboardView {
     @FXML private Label nextDateLabel;
     @FXML private Label nextTimeLabel;
     @FXML private Label nextDoctorInitials;
+    @FXML private Label patientNameLabel;
+    @FXML private Label patientCnpLabel;
+    @FXML private Label patientBirthDateLabel;
+    @FXML private Label patientAgeLabel;
+    @FXML private Label patientGenderLabel;
+    @FXML private Label patientPhoneLabel;
+    @FXML private Label patientAddressLabel;
     @FXML private Label bloodTypeLabel;
     @FXML private Label weightLabel;
     @FXML private Label heightLabel;
     @FXML private FlowPane allergiesPane;
     @FXML private FlowPane conditionsPane;
-    @FXML private VBox historyContainer;
+    @FXML private Label totalEntriesLabel;
+    @FXML private Label lastUpdateLabel;
+    @FXML private VBox medicalRecordsContainer;
+    @FXML private DatePicker appointmentsFilterDatePicker;
+    @FXML private ComboBox<String> appointmentsStatusFilter;
+    @FXML private Button clearAppointmentsFilterButton;
+    @FXML private GridPane appointmentsTableHeader;
+    @FXML private VBox appointmentsContainer;
     @FXML private Label statusLabel;
 
     private PatientDashboardPresenter presenter;
     private Long currentAppointmentId = null;
+    private AppointmentDTO currentAppointment = null;
 
     @FXML
     public void initialize() {
         presenter = new PatientDashboardPresenter(this);
         statusLabel.setText("");
         renderUserHeader(ClientSession.getInstance().getLoggedUser());
+        setupAppointmentsTableHeader();
+        appointmentsFilterDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> presenter.onAppointmentsFilterDateSelected(newVal));
+        setupAppointmentsStatusFilter();
         presenter.loadDashboard();
     }
 
     @FXML
-    public void onNavHomeClick() {
-        SceneNavigator.navigateTo(AppScene.PATIENT_DASHBOARD);
-    }
-
-    @FXML
-    public void onNavAppointmentsClick() {
-        SceneNavigator.navigateTo(AppScene.APPOINTMENT_BOOKING);
-    }
-
-    @FXML
-    public void onNavHistoryClick() {
-        SceneNavigator.navigateTo(AppScene.PATIENT_MEDICAL_RECORD);
-    }
-
-    @FXML
-    public void onNavResultsClick() {
-        statusLabel.setText("Sectiunea Rezultate este in pregatire.");
+    public void onClearAppointmentsFilterClick() {
+        presenter.onClearAppointmentsFilter();
     }
 
     @FXML
     public void onNewAppointmentClick() {
+        ClientSession.getInstance().clearEditMode();
+        ClientSession.getInstance().clearSelectedAppointment();
         SceneNavigator.navigateTo(AppScene.APPOINTMENT_BOOKING);
     }
 
     @FXML
     public void onModifyAppointmentClick() {
-        if (currentAppointmentId == null) {
+        if (currentAppointmentId == null || currentAppointment == null) {
             setError("Nu există o programare de modificat.");
             return;
         }
 
+        ClientSession.getInstance().setSelectedAppointment(currentAppointment);
         ClientSession.getInstance().setAppointmentToEdit(currentAppointmentId);
 
         SceneNavigator.navigateToFresh(AppScene.APPOINTMENT_BOOKING);
@@ -96,13 +108,11 @@ public class PatientDashboardView {
     }
 
     @FXML
-    public void onHistoryClick() {
-        SceneNavigator.navigateTo(AppScene.PATIENT_MEDICAL_RECORD);
-    }
-
-    @FXML
     public void onLogoutClick() {
         ClientSession.getInstance().setLoggedUser(null);
+        ClientSession.getInstance().clearSelectedAppointment();
+        ClientSession.getInstance().clearEditMode();
+        SceneNavigator.clearCache();
         SceneNavigator.navigateTo(AppScene.LOGIN);
     }
 
@@ -112,14 +122,261 @@ public class PatientDashboardView {
             return;
         }
 
+        resetPatientDetails();
         setProfile(dto.getProfile());
         setNextAppointment(dto.getNextAppointment());
-        setHistory(dto.getHistory());
         setInfo("");
     }
 
     public void setBusy(boolean busy) {
-        // optional placeholder if needed
+        if (appointmentsFilterDatePicker != null) {
+            appointmentsFilterDatePicker.setDisable(busy);
+        }
+        if (clearAppointmentsFilterButton != null) {
+            clearAppointmentsFilterButton.setDisable(busy);
+        }
+    }
+
+    public void setAppointmentsFilterDate(LocalDate date) {
+        if (appointmentsFilterDatePicker == null) {
+            return;
+        }
+        appointmentsFilterDatePicker.setValue(date);
+    }
+
+    public void setAppointmentsStatusFilter(String statusCode) {
+        if (appointmentsStatusFilter == null) {
+            return;
+        }
+        appointmentsStatusFilter.getSelectionModel().select(labelForAppointmentStatus(statusCode));
+    }
+
+    public void renderAppointments(List<AppointmentDTO> appointments) {
+        appointmentsContainer.getChildren().clear();
+        if (appointments == null || appointments.isEmpty()) {
+            Label empty = new Label("Nu exista programari pentru criteriile selectate.");
+            empty.getStyleClass().add("muted-text");
+            appointmentsContainer.getChildren().add(empty);
+            return;
+        }
+
+        for (AppointmentDTO appt : appointments) {
+            appointmentsContainer.getChildren().add(buildAppointmentRow(appt));
+        }
+    }
+
+    private void setupAppointmentsStatusFilter() {
+        if (appointmentsStatusFilter == null) {
+            return;
+        }
+        appointmentsStatusFilter.setItems(FXCollections.observableArrayList(
+                "Toate",
+                "In asteptare",
+                "Confirmate",
+                "Finalizate",
+                "Anulate"
+        ));
+        appointmentsStatusFilter.getSelectionModel().selectFirst();
+        appointmentsStatusFilter.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) ->
+                presenter.onAppointmentsStatusSelected(statusCodeForAppointmentLabel(newVal)));
+    }
+
+    private String statusCodeForAppointmentLabel(String label) {
+        if (label == null) {
+            return "ALL";
+        }
+        return switch (label.trim().toLowerCase(Locale.ROOT)) {
+            case "in asteptare" -> "PENDING";
+            case "confirmate" -> "CONFIRMED";
+            case "finalizate" -> "DONE";
+            case "anulate" -> "CANCELED";
+            default -> "ALL";
+        };
+    }
+
+    private String labelForAppointmentStatus(String statusCode) {
+        String normalized = normalizeStatus(statusCode);
+        return switch (normalized) {
+            case "PENDING" -> "In asteptare";
+            case "CONFIRMED" -> "Confirmate";
+            case "DONE" -> "Finalizate";
+            case "CANCELED" -> "Anulate";
+            default -> "Toate";
+        };
+    }
+
+    private void setupAppointmentsTableHeader() {
+        if (appointmentsTableHeader == null) {
+            return;
+        }
+
+        appointmentsTableHeader.getChildren().clear();
+        appointmentsTableHeader.getColumnConstraints().setAll(appointmentsTableColumnConstraints());
+
+        addHeaderLabel("Pacient", 0);
+        addHeaderLabel("Medic", 1);
+        addHeaderLabel("Serviciu", 2);
+        addHeaderLabel("Data / Ora", 3);
+        addHeaderLabel("Status", 4);
+        addHeaderLabel("Actiuni", 5);
+    }
+
+    private List<ColumnConstraints> appointmentsTableColumnConstraints() {
+        ColumnConstraints c0 = new ColumnConstraints();
+        c0.setPercentWidth(24);
+        ColumnConstraints c1 = new ColumnConstraints();
+        c1.setPercentWidth(20);
+        ColumnConstraints c2 = new ColumnConstraints();
+        c2.setPercentWidth(16);
+        ColumnConstraints c3 = new ColumnConstraints();
+        c3.setPercentWidth(16);
+        ColumnConstraints c4 = new ColumnConstraints();
+        c4.setPercentWidth(12);
+        ColumnConstraints c5 = new ColumnConstraints();
+        c5.setPercentWidth(12);
+        return List.of(c0, c1, c2, c3, c4, c5);
+    }
+
+    private void addHeaderLabel(String text, int column) {
+        Label label = new Label(text);
+        label.getStyleClass().add("table-header-text");
+        appointmentsTableHeader.add(label, column, 0);
+    }
+
+    private GridPane buildAppointmentRow(AppointmentDTO appt) {
+        GridPane row = new GridPane();
+        row.getStyleClass().add("table-row");
+        row.getColumnConstraints().addAll(appointmentsTableColumnConstraints());
+
+        HBox patientCell = buildPersonCell(appt == null ? null : appt.getPatientName(), "Pacient");
+        Label doctorName = new Label(valueOrDefault(appt == null ? null : appt.getDoctorName(), "Medic"));
+        doctorName.getStyleClass().add("table-text");
+
+        Label service = new Label(valueOrDefault(appt == null ? null : appt.getServiceName(), "-"));
+        service.getStyleClass().add("table-text-muted");
+
+        Label dateTime = new Label(formatAppointmentDateTime(appt == null ? null : appt.getDate(), appt == null ? null : appt.getTime()));
+        dateTime.getStyleClass().add("table-text-muted");
+
+        String rawStatus = appt == null ? null : appt.getStatus();
+        Label status = new Label(appointmentStatusLabel(rawStatus));
+        status.getStyleClass().add("status-pill");
+        status.getStyleClass().add(appointmentStatusStyle(rawStatus));
+
+        HBox actions = buildAppointmentActions(appt);
+
+        row.add(patientCell, 0, 0);
+        row.add(doctorName, 1, 0);
+        row.add(service, 2, 0);
+        row.add(dateTime, 3, 0);
+        row.add(status, 4, 0);
+        row.add(actions, 5, 0);
+
+        GridPane.setHgrow(patientCell, Priority.ALWAYS);
+        GridPane.setHgrow(actions, Priority.ALWAYS);
+
+        return row;
+    }
+
+    private HBox buildPersonCell(String name, String fallback) {
+        String safeName = valueOrDefault(name, fallback);
+
+        StackPane avatar = new StackPane();
+        avatar.getStyleClass().add("table-avatar");
+        Label initials = new Label(initials(safeName));
+        initials.getStyleClass().add("table-avatar-text");
+        avatar.getChildren().add(initials);
+
+        Label label = new Label(safeName);
+        label.getStyleClass().add("table-text");
+
+        HBox cell = new HBox(8, avatar, label);
+        cell.setAlignment(Pos.CENTER_LEFT);
+        return cell;
+    }
+
+    private HBox buildAppointmentActions(AppointmentDTO appt) {
+        HBox actions = new HBox(6);
+        actions.setAlignment(Pos.CENTER_RIGHT);
+
+        if (appt == null) {
+            return actions;
+        }
+
+        String status = normalizeStatus(appt.getStatus());
+        if ("DONE".equals(status)) {
+            actions.getChildren().add(createActionButton("Feedback", "secondary-button", () ->
+                    showFeedbackDialog(appt.getAppointmentId())));
+            return actions;
+        }
+
+        if (!"CANCELED".equals(status)) {
+            actions.getChildren().add(createActionButton("Modifica", "table-action", () ->
+                    openEditAppointment(appt)));
+            actions.getChildren().add(createActionButton("Anuleaza", "table-action-danger", () ->
+                    presenter.onCancelAppointment(appt.getAppointmentId())));
+        }
+
+        return actions;
+    }
+
+    private Button createActionButton(String text, String styleClass, Runnable handler) {
+        Button button = new Button(text);
+        button.getStyleClass().add(styleClass);
+        button.setOnAction(event -> handler.run());
+        return button;
+    }
+
+    private void openEditAppointment(AppointmentDTO appt) {
+        if (appt == null) {
+            return;
+        }
+        ClientSession.getInstance().setSelectedAppointment(appt);
+        ClientSession.getInstance().setAppointmentToEdit(appt.getAppointmentId());
+        SceneNavigator.navigateToFresh(AppScene.APPOINTMENT_BOOKING);
+    }
+
+    private String formatAppointmentDateTime(LocalDate date, LocalTime time) {
+        if (date == null) {
+            return "-";
+        }
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM", Locale.forLanguageTag("ro"));
+        String dateText = date.format(dateFormatter);
+        String timeText = time == null ? "" : time.format(DateTimeFormatter.ofPattern("HH:mm"));
+        return timeText.isBlank() ? dateText : dateText + ", " + timeText;
+    }
+
+    private String appointmentStatusLabel(String raw) {
+        String normalized = normalizeStatus(raw);
+        return switch (normalized) {
+            case "PENDING" -> "In asteptare";
+            case "CONFIRMED" -> "Confirmat";
+            case "DONE" -> "Finalizat";
+            case "CANCELED" -> "Anulat";
+            default -> normalized;
+        };
+    }
+
+    private String appointmentStatusStyle(String raw) {
+        String normalized = normalizeStatus(raw);
+        return switch (normalized) {
+            case "PENDING" -> "status-pending";
+            case "CONFIRMED" -> "status-confirmed";
+            case "DONE" -> "status-done";
+            case "CANCELED" -> "status-canceled";
+            default -> "status-active";
+        };
+    }
+
+    private String normalizeStatus(String raw) {
+        if (raw == null) {
+            return "PENDING";
+        }
+        String value = raw.trim().toUpperCase(Locale.ROOT);
+        if (value.equals("CANCELLED")) {
+            return "CANCELED";
+        }
+        return value;
     }
 
     public void setInfo(String msg) {
@@ -135,7 +392,6 @@ public class PatientDashboardView {
     private void renderUserHeader(UserDTO user) {
         if (user == null) {
             userNameLabel.setText("User");
-            roleLabel.setText("Pacient");
             initialsLabel.setText("U");
             welcomeLabel.setText("Buna ziua!");
             return;
@@ -143,6 +399,26 @@ public class PatientDashboardView {
         userNameLabel.setText(user.getFullName());
         initialsLabel.setText(initials(user.getFullName()));
         welcomeLabel.setText("Buna ziua, " + user.getFirstName() + "!");
+    }
+
+    public void setPatientDetails(PatientDetailsDTO details) {
+        if (details == null) {
+            return;
+        }
+
+        patientNameLabel.setText(valueOrDash(details.getFullName()));
+        patientCnpLabel.setText(valueOrDash(details.getNationalId()));
+        patientBirthDateLabel.setText(formatBirthDate(details.getBirthDate()));
+        patientAgeLabel.setText(formatAge(details.getBirthDate()));
+        patientGenderLabel.setText(formatGender(details.getNationalId()));
+        patientPhoneLabel.setText(valueOrDash(details.getPhone()));
+        patientAddressLabel.setText(valueOrDash(details.getAddress()));
+
+        bloodTypeLabel.setText(valueOrDash(details.getBloodType()));
+        weightLabel.setText(formatWeight(details.getWeightKg()));
+        heightLabel.setText(formatHeight(details.getHeightCm()));
+        renderTags(allergiesPane, details.getAllergies(), "tag");
+        renderTags(conditionsPane, details.getConditions(), "tag-warning");
     }
 
     private void setProfile(PatientProfileDTO profile) {
@@ -165,6 +441,8 @@ public class PatientDashboardView {
 
     private void setNextAppointment(AppointmentDTO appt) {
         if (appt == null) {
+            this.currentAppointmentId = null;
+            this.currentAppointment = null;
             nextDoctorName.setText("Nu exista programari viitoare.");
             nextDoctorSpecialization.setText("-");
             nextDoctorInitials.setText("--");
@@ -174,6 +452,7 @@ public class PatientDashboardView {
         }
 
         this.currentAppointmentId = appt.getAppointmentId();
+        this.currentAppointment = appt;
 
         nextDoctorName.setText(appt.getDoctorName() == null ? "Doctor" : appt.getDoctorName());
         String spec = appt.getServiceName() == null ? "Consultatie" : appt.getServiceName();
@@ -183,41 +462,21 @@ public class PatientDashboardView {
         nextTimeLabel.setText(appt.getTime() == null ? "-" : appt.getTime().toString());
     }
 
-    private void setHistory(List<AppointmentDTO> history) {
-        historyContainer.getChildren().clear();
 
-        if (history == null || history.isEmpty()) {
-            Label hint = new Label("Nu există istoric recent.");
-            hint.getStyleClass().add("muted-text");
-            historyContainer.getChildren().add(hint);
+    public void renderMedicalRecordEntries(List<MedicalRecordEntryDTO> entries) {
+        medicalRecordsContainer.getChildren().clear();
+        if (entries == null || entries.isEmpty()) {
+            medicalRecordsContainer.getChildren().add(createMutedLabel("Nu exista inregistrari medicale."));
+            totalEntriesLabel.setText("0");
+            lastUpdateLabel.setText("-");
             return;
         }
 
-        for (AppointmentDTO appt : history) {
-            HBox row = new HBox(10);
-            row.getStyleClass().add("card"); // Sau un stil mai simplu
-            row.setAlignment(Pos.CENTER_LEFT);
+        totalEntriesLabel.setText(String.valueOf(entries.size()));
+        lastUpdateLabel.setText(formatRecordDate(entries.get(0).getEntryDate()));
 
-            Label date = new Label(appt.getDate().toString());
-            Label doctor = new Label(appt.getDoctorName());
-            Label status = new Label(appt.getStatus());
-
-            // Spacer
-            Region spacer = new Region();
-            HBox.setHgrow(spacer, Priority.ALWAYS);
-
-            row.getChildren().addAll(date, doctor, status, spacer);
-
-            // --- BUTONUL DE FEEDBACK ---
-            // Verificăm dacă statusul este DONE (sau terminat)
-            if ("DONE".equalsIgnoreCase(appt.getStatus())) {
-                Button feedbackBtn = new Button("Feedback");
-                feedbackBtn.getStyleClass().add("secondary-button"); // Stil mai mic
-                feedbackBtn.setOnAction(e -> showFeedbackDialog(appt.getAppointmentId()));
-                row.getChildren().add(feedbackBtn);
-            }
-
-            historyContainer.getChildren().add(row);
+        for (MedicalRecordEntryDTO entry : entries) {
+            medicalRecordsContainer.getChildren().add(buildMedicalRecordCard(entry));
         }
     }
 
@@ -236,6 +495,68 @@ public class PatientDashboardView {
         }
     }
 
+    private void resetPatientDetails() {
+        patientNameLabel.setText("-");
+        patientCnpLabel.setText("-");
+        patientBirthDateLabel.setText("-");
+        patientAgeLabel.setText("-");
+        patientGenderLabel.setText("-");
+        patientPhoneLabel.setText("-");
+        patientAddressLabel.setText("-");
+        totalEntriesLabel.setText("-");
+        lastUpdateLabel.setText("-");
+        if (medicalRecordsContainer != null) {
+            medicalRecordsContainer.getChildren().clear();
+        }
+    }
+
+    private Label createMutedLabel(String text) {
+        Label label = new Label(text);
+        label.getStyleClass().add("muted-text");
+        return label;
+    }
+
+    private VBox buildMedicalRecordCard(MedicalRecordEntryDTO entry) {
+        VBox card = new VBox(8.0);
+        card.getStyleClass().add("record-card");
+
+        HBox header = new HBox(8.0);
+        Label title = new Label(valueOrDefault(entry.getDiagnosis(), "Diagnostic"));
+        title.getStyleClass().add("record-title");
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        Label date = new Label(formatRecordDate(entry.getEntryDate()));
+        date.getStyleClass().add("record-date");
+        header.getChildren().addAll(title, spacer, date);
+
+        String doctorName = valueOrDefault(entry.getDoctorName(), "Doctor");
+        Label doctor = new Label("Medic: " + doctorName);
+        doctor.getStyleClass().add("muted-text");
+
+        String treatment = valueOrDefault(entry.getTreatment(), "Tratament: -");
+        if (!treatment.startsWith("Tratament:")) {
+            treatment = "Tratament: " + treatment;
+        }
+        Label treatmentLabel = new Label(treatment);
+        treatmentLabel.getStyleClass().add("record-text");
+
+        String notes = valueOrDefault(entry.getNotes(), "Observatii: -");
+        if (!notes.startsWith("Observatii:")) {
+            notes = "Observatii: " + notes;
+        }
+        Label notesLabel = new Label(notes);
+        notesLabel.getStyleClass().add("record-text");
+
+        String appointmentInfo = entry.getAppointmentId() == null
+                ? "Programare: -"
+                : "Programare: #" + entry.getAppointmentId();
+        Label appointmentLabel = new Label(appointmentInfo);
+        appointmentLabel.getStyleClass().add("muted-text");
+
+        card.getChildren().addAll(header, doctor, treatmentLabel, notesLabel, appointmentLabel);
+        return card;
+    }
+
     private String emptyOrDash(String value) {
         return value == null || value.isBlank() ? "-" : value;
     }
@@ -246,6 +567,73 @@ public class PatientDashboardView {
             return String.valueOf(value.longValue());
         }
         return String.format(java.util.Locale.US, "%.1f", value);
+    }
+
+    private String formatBirthDate(LocalDate birthDate) {
+        if (birthDate == null) {
+            return "-";
+        }
+        return birthDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
+
+    private String formatAge(LocalDate birthDate) {
+        if (birthDate == null) {
+            return "-";
+        }
+        int years = Period.between(birthDate, LocalDate.now()).getYears();
+        if (years < 0) {
+            return "-";
+        }
+        return years + " ani";
+    }
+
+    private String formatGender(String nationalId) {
+        if (nationalId == null || nationalId.isBlank()) {
+            return "-";
+        }
+        char first = nationalId.trim().charAt(0);
+        if (first == '1' || first == '5') {
+            return "Masculin";
+        }
+        if (first == '2' || first == '6') {
+            return "Feminin";
+        }
+        return "-";
+    }
+
+    private String formatWeight(Double weightKg) {
+        if (weightKg == null || weightKg <= 0) {
+            return "-";
+        }
+        return String.format(Locale.ROOT, "%.1f kg", weightKg);
+    }
+
+    private String formatHeight(Double heightCm) {
+        if (heightCm == null || heightCm <= 0) {
+            return "-";
+        }
+        return String.format(Locale.ROOT, "%.0f cm", heightCm);
+    }
+
+    private String formatRecordDate(OffsetDateTime dateTime) {
+        if (dateTime == null) {
+            return "-";
+        }
+        return dateTime.toLocalDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
+
+    private String valueOrDefault(String value, String fallback) {
+        if (value == null || value.isBlank()) {
+            return fallback;
+        }
+        return value;
+    }
+
+    private String valueOrDash(String value) {
+        if (value == null || value.isBlank()) {
+            return "-";
+        }
+        return value.trim();
     }
 
     private String initials(String name) {

@@ -32,11 +32,18 @@ public class StatsController {
             long activeConsultationsYesterday = statsRepo.countActiveConsultations(yesterday);
 
             long totalDoctors = statsRepo.countTotalDoctors();
-            long busyDoctors = statsRepo.countDoctorsWithAppointments(today);
-            long busyDoctorsYesterday = statsRepo.countDoctorsWithAppointments(yesterday);
 
-            double doctorOccupancy = totalDoctors == 0 ? 0.0 : (busyDoctors * 100.0) / totalDoctors;
-            double doctorOccupancyYesterday = totalDoctors == 0 ? 0.0 : (busyDoctorsYesterday * 100.0) / totalDoctors;
+            double scheduledMinutesToday = statsRepo.sumScheduledMinutesForDate(today);
+            double bookedMinutesToday = statsRepo.sumBookedMinutesForDate(today);
+            double doctorOccupancy = scheduledMinutesToday <= 0
+                    ? fallbackDoctorOccupancy(totalDoctors, statsRepo.countDoctorsWithAppointments(today))
+                    : clampPercent((bookedMinutesToday * 100.0) / scheduledMinutesToday);
+
+            double scheduledMinutesYesterday = statsRepo.sumScheduledMinutesForDate(yesterday);
+            double bookedMinutesYesterday = statsRepo.sumBookedMinutesForDate(yesterday);
+            double doctorOccupancyYesterday = scheduledMinutesYesterday <= 0
+                    ? fallbackDoctorOccupancy(totalDoctors, statsRepo.countDoctorsWithAppointments(yesterday))
+                    : clampPercent((bookedMinutesYesterday * 100.0) / scheduledMinutesYesterday);
 
             double revenueEstimate = statsRepo.sumRevenueForMonth(today);
             double revenueLastMonth = statsRepo.sumRevenueForMonth(today.minusMonths(1));
@@ -51,7 +58,9 @@ public class StatsController {
             List<ChartPointDTO> dischargesSeries =
                     statsRepo.getAppointmentSeries(today.minusDays(6), today, true);
 
-            List<ChartPointDTO> occupancyCounts = statsRepo.getAppointmentsBySpecialization();
+            LocalDate monthStart = today.withDayOfMonth(1);
+            LocalDate monthEndExclusive = monthStart.plusMonths(1);
+            List<ChartPointDTO> occupancyCounts = statsRepo.getAppointmentsBySpecialization(monthStart, monthEndExclusive);
             List<ChartPointDTO> occupancyBySpecialization = statsRepo.toPercentSeries(occupancyCounts);
 
             StatsDTO stats = new StatsDTO(
@@ -75,6 +84,20 @@ public class StatsController {
         } catch (Exception e) {
             return Response.error("DB_ERROR", e.getMessage());
         }
+    }
+
+    private double fallbackDoctorOccupancy(long totalDoctors, long busyDoctors) {
+        if (totalDoctors <= 0) {
+            return 0.0;
+        }
+        return clampPercent((busyDoctors * 100.0) / totalDoctors);
+    }
+
+    private double clampPercent(double value) {
+        if (Double.isNaN(value) || Double.isInfinite(value)) {
+            return 0.0;
+        }
+        return Math.max(0.0, Math.min(100.0, value));
     }
 
     private double percentChange(double current, double previous) {

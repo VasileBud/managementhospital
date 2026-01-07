@@ -5,6 +5,7 @@ import shared.dto.CommandDTO;
 import shared.dto.DoctorScheduleDTO;
 import server.repository.AppointmentRepository;
 import server.repository.DoctorRepository;
+import server.repository.PatientRepository;
 import server.model.AppointmentStatus;
 
 import java.time.LocalDate;
@@ -18,25 +19,34 @@ public class AppointmentController {
 
     private final AppointmentRepository appointmentRepository;
     private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
     private static final int SLOT_MINUTES = 30;
 
     public AppointmentController() {
         this.appointmentRepository = new AppointmentRepository();
         this.doctorRepository = new DoctorRepository();
+        this.patientRepository = new PatientRepository();
     }
 
     public Response bookAppointment(CommandDTO command) {
         Long patientId = command.getLong("patientId");
+        Long patientUserId = command.getLong("patientUserId");
         Long doctorId = command.getLong("doctorId");
         Long serviceId = command.getLong("serviceId"); // Poate fi null dacă nu e selectat
         LocalDate date = command.getDate("date"); // Asigură-te că CommandDTO știe să extragă LocalDate
         LocalTime time = (LocalTime) command.getData().get("time"); // Sau un helper getTime()
 
-        if (patientId == null || doctorId == null || date == null || time == null) {
+        if (doctorId == null || date == null || time == null) {
             return Response.error("VALIDATION_ERROR", "Missing appointment details");
         }
 
         try {
+            if (patientId == null && patientUserId != null) {
+                patientId = patientRepository.findPatientIdByUserId(patientUserId);
+            }
+            if (patientId == null) {
+                return Response.error("VALIDATION_ERROR", "Missing patient details");
+            }
             // Verificăm disponibilitatea (opțional, dar recomandat)
             boolean isFree = appointmentRepository.isSlotAvailable(doctorId, date, time);
             if (!isFree) {
@@ -169,13 +179,49 @@ public class AppointmentController {
             }
         }
 
-        if (doctorId == null || date == null) {
-            return Response.error("VALIDATION_ERROR", "Doctor ID and date are required");
+        if (date == null) {
+            return Response.error("VALIDATION_ERROR", "Date is required");
+        }
+
+        try {
+            List<shared.dto.AppointmentDTO> appointments = doctorId == null
+                    ? appointmentRepository.findByDate(date)
+                    : appointmentRepository.findByDoctorId(doctorId, date);
+            return Response.ok(appointments);
+        } catch (Exception e) {
+            return Response.error("DB_ERROR", e.getMessage());
+        }
+    }
+
+    public Response getMyAppointments(CommandDTO command) {
+        Long patientId = command.getLong("patientId");
+        if (patientId == null) {
+            Long requesterUserId = command.getRequesterUserId();
+            if (requesterUserId != null) {
+                try {
+                    patientId = patientRepository.findPatientIdByUserId(requesterUserId);
+                } catch (Exception e) {
+                    return Response.error("DB_ERROR", e.getMessage());
+                }
+            }
+        }
+
+        if (patientId == null) {
+            return Response.error("VALIDATION_ERROR", "Patient ID is required");
         }
 
         try {
             List<shared.dto.AppointmentDTO> appointments =
-                    appointmentRepository.findByDoctorId(doctorId, date);
+                    appointmentRepository.findByPatientId(patientId);
+            return Response.ok(appointments);
+        } catch (Exception e) {
+            return Response.error("DB_ERROR", e.getMessage());
+        }
+    }
+
+    public Response getAllAppointments(CommandDTO command) {
+        try {
+            List<shared.dto.AppointmentDTO> appointments = appointmentRepository.findAll();
             return Response.ok(appointments);
         } catch (Exception e) {
             return Response.error("DB_ERROR", e.getMessage());

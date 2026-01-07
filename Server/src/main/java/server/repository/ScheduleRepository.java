@@ -5,10 +5,19 @@ import java.sql.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ScheduleRepository {
+    private static final long CACHE_TTL_MS = Long.getLong("cache.schedule.ttl.ms", 60000L);
+    private static final Map<Long, CacheEntry<List<DoctorScheduleDTO>>> CACHE_BY_DOCTOR = new ConcurrentHashMap<>();
 
     public List<DoctorScheduleDTO> findByDoctorId(long doctorId) throws SQLException {
+        CacheEntry<List<DoctorScheduleDTO>> cached = CACHE_BY_DOCTOR.get(doctorId);
+        if (cached != null && !cached.isExpired()) {
+            return cached.value;
+        }
+
         String sql = """
                 SELECT doctor_id, day_of_week, start_time, end_time
                 FROM doctor_schedule
@@ -37,6 +46,12 @@ public class ScheduleRepository {
                 }
             }
         }
+        if (CACHE_TTL_MS > 0) {
+            List<DoctorScheduleDTO> snapshot = List.copyOf(schedule);
+            CACHE_BY_DOCTOR.put(doctorId,
+                    new CacheEntry<>(snapshot, System.currentTimeMillis() + CACHE_TTL_MS));
+            return snapshot;
+        }
         return schedule;
     }
 
@@ -56,6 +71,7 @@ public class ScheduleRepository {
 
             ps.executeUpdate();
         }
+        invalidateCache(doctorId);
     }
 
     public void deleteScheduleForDoctor(long doctorId) throws SQLException {
@@ -64,6 +80,28 @@ public class ScheduleRepository {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, doctorId);
             ps.executeUpdate();
+        }
+        invalidateCache(doctorId);
+    }
+
+    private static void invalidateCache(long doctorId) {
+        if (CACHE_TTL_MS <= 0) {
+            return;
+        }
+        CACHE_BY_DOCTOR.remove(doctorId);
+    }
+
+    private static final class CacheEntry<T> {
+        private final T value;
+        private final long expiresAt;
+
+        private CacheEntry(T value, long expiresAt) {
+            this.value = value;
+            this.expiresAt = expiresAt;
+        }
+
+        private boolean isExpired() {
+            return System.currentTimeMillis() > expiresAt;
         }
     }
 }

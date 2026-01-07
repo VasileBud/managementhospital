@@ -8,13 +8,25 @@ import javafx.application.Platform;
 import shared.common.Request;
 import shared.common.RequestType;
 import shared.common.Response;
+import shared.dto.AppointmentDTO;
 import shared.dto.CommandDTO;
 import shared.dto.PatientDashboardDTO;
+import shared.dto.PatientDetailsDTO;
+import shared.dto.MedicalRecordEntryDTO;
 import shared.dto.UserDTO;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Collections;
+import java.util.List;
 
 public class PatientDashboardPresenter {
 
     private final PatientDashboardView view;
+    private List<AppointmentDTO> allAppointments = List.of();
+    private LocalDate appointmentsFilterDate = null;
+    private String appointmentsStatusCode = "ALL";
 
     public PatientDashboardPresenter(PatientDashboardView view) {
         this.view = view;
@@ -52,8 +64,13 @@ public class PatientDashboardPresenter {
                 return;
             }
 
-            PatientDashboardDTO data = (PatientDashboardDTO) response.getPayload();
+            PatientDashboardDTO data = (PatientDashboardDTO) response.getData();
             view.renderDashboard(data);
+            if (data != null && data.getProfile() != null) {
+                loadPatientDetails(data.getProfile().getPatientId());
+            }
+            loadMedicalRecord();
+            loadAppointments();
         });
     }
 
@@ -112,5 +129,156 @@ public class PatientDashboardPresenter {
                 }
             });
         });
+    }
+
+    private void loadPatientDetails(long patientId) {
+        if (!ClientSession.getInstance().ensureConnected()) {
+            view.setError("Nu exista conexiune la server!");
+            return;
+        }
+
+        CommandDTO cmd = new CommandDTO(CommandDTO.Action.GET_PATIENT_DETAILS)
+                .put("patientId", patientId);
+
+        Request req = new Request(cmd);
+        req.setType(RequestType.COMMAND);
+
+        ClientSession.getInstance().getClient().sendRequest(req, response -> {
+            Platform.runLater(() -> {
+                if (response.getStatus() != Response.Status.OK) {
+                    return;
+                }
+
+                PatientDetailsDTO details = response.getData() instanceof PatientDetailsDTO
+                        ? (PatientDetailsDTO) response.getData()
+                        : null;
+                view.setPatientDetails(details);
+            });
+        });
+    }
+
+    private void loadMedicalRecord() {
+        UserDTO user = ClientSession.getInstance().getLoggedUser();
+        if (user == null) {
+            return;
+        }
+        if (!ClientSession.getInstance().ensureConnected()) {
+            return;
+        }
+
+        CommandDTO cmd = new CommandDTO(CommandDTO.Action.GET_MY_MEDICAL_RECORD, user.getUserId());
+        Request req = new Request(cmd);
+        req.setType(RequestType.COMMAND);
+
+        ClientSession.getInstance().getClient().sendRequest(req, response -> {
+            Platform.runLater(() -> {
+                if (response.getStatus() != Response.Status.OK) {
+                    view.renderMedicalRecordEntries(Collections.emptyList());
+                    return;
+                }
+
+                @SuppressWarnings("unchecked")
+                List<MedicalRecordEntryDTO> entries = response.getData() instanceof List<?>
+                        ? (List<MedicalRecordEntryDTO>) response.getData()
+                        : Collections.emptyList();
+
+                view.renderMedicalRecordEntries(entries);
+            });
+        });
+    }
+
+    public void onClearAppointmentsFilter() {
+        appointmentsFilterDate = null;
+        appointmentsStatusCode = "ALL";
+        view.setAppointmentsFilterDate(null);
+        view.setAppointmentsStatusFilter("ALL");
+        applyAppointmentsFilter();
+    }
+
+    public void onAppointmentsFilterDateSelected(LocalDate date) {
+        appointmentsFilterDate = date;
+        applyAppointmentsFilter();
+    }
+
+    public void onAppointmentsStatusSelected(String statusCode) {
+        appointmentsStatusCode = normalizeAppointmentsStatus(statusCode);
+        applyAppointmentsFilter();
+    }
+
+    private void loadAppointments() {
+        UserDTO user = ClientSession.getInstance().getLoggedUser();
+        if (user == null) {
+            return;
+        }
+        if (!ClientSession.getInstance().ensureConnected()) {
+            view.setError("Nu exista conexiune la server!");
+            return;
+        }
+
+        CommandDTO cmd = new CommandDTO(CommandDTO.Action.GET_MY_APPOINTMENTS, user.getUserId());
+        Request req = new Request(cmd);
+        req.setType(RequestType.COMMAND);
+
+        view.setBusy(true);
+        view.setInfo("Se incarca programarile...");
+
+        ClientSession.getInstance().getClient().sendRequest(req, response ->
+                Platform.runLater(() -> handleAppointmentsResponse(response)));
+    }
+
+    private void handleAppointmentsResponse(Response response) {
+        view.setBusy(false);
+
+        if (response.getStatus() != Response.Status.OK) {
+            view.setError("Eroare: " + response.getMessage());
+            view.renderAppointments(Collections.emptyList());
+            return;
+        }
+
+        @SuppressWarnings("unchecked")
+        List<AppointmentDTO> received = response.getData() instanceof List<?>
+                ? (List<AppointmentDTO>) response.getData()
+                : Collections.emptyList();
+
+        allAppointments = new ArrayList<>(received);
+        applyAppointmentsFilter();
+        view.setInfo("");
+    }
+
+    private void applyAppointmentsFilter() {
+        List<AppointmentDTO> filtered = new ArrayList<>(allAppointments);
+        if (appointmentsFilterDate != null) {
+            filtered = filtered.stream()
+                    .filter(appt -> appointmentsFilterDate.equals(appt.getDate()))
+                    .toList();
+        }
+
+        if (!"ALL".equals(appointmentsStatusCode)) {
+            String wantedStatus = appointmentsStatusCode;
+            filtered = filtered.stream()
+                    .filter(appt -> wantedStatus.equals(normalizeAppointmentsStatus(appt.getStatus())))
+                    .toList();
+        }
+
+        filtered = filtered.stream()
+                .sorted(Comparator.comparing(AppointmentDTO::getDate, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(AppointmentDTO::getTime, Comparator.nullsLast(Comparator.naturalOrder())))
+                .toList();
+
+        view.renderAppointments(filtered);
+    }
+
+    private String normalizeAppointmentsStatus(String raw) {
+        if (raw == null) {
+            return "ALL";
+        }
+        String value = raw.trim().toUpperCase();
+        if (value.equals("CANCELLED")) {
+            return "CANCELED";
+        }
+        return switch (value) {
+            case "ALL", "PENDING", "CONFIRMED", "DONE", "CANCELED" -> value;
+            default -> "ALL";
+        };
     }
 }

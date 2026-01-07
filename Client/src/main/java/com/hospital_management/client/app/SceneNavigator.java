@@ -13,13 +13,16 @@ public final class SceneNavigator {
 
     private static Stage primaryStage;
 
-    // cache pentru root-uri (poți scoate cache dacă vrei reîncărcare mereu)
     private static final Map<AppScene, Parent> rootsCache = new HashMap<>();
 
     private SceneNavigator() {}
 
     public static void init(Stage stage) {
         primaryStage = stage;
+    }
+
+    public static void clearCache() {
+        rootsCache.clear();
     }
 
     public static void navigateTo(AppScene target) {
@@ -90,6 +93,7 @@ public final class SceneNavigator {
         String doctorCss = null;
         String doctorConsultationCss = null;
         String managerCss = null;
+        String adminCss = null;
 
         if (SceneNavigator.class.getResource("/styles/login.css") != null) {
             loginCss = SceneNavigator.class.getResource("/styles/login.css").toExternalForm();
@@ -116,6 +120,9 @@ public final class SceneNavigator {
         if (SceneNavigator.class.getResource("/styles/manager_dashboard.css") != null) {
             managerCss = SceneNavigator.class.getResource("/styles/manager_dashboard.css").toExternalForm();
         }
+        if (SceneNavigator.class.getResource("/styles/admin_dashboard.css") != null) {
+            adminCss = SceneNavigator.class.getResource("/styles/admin_dashboard.css").toExternalForm();
+        }
 
         scene.getStylesheets().removeIf(s ->
                 s.endsWith("/styles/login.css")
@@ -125,7 +132,8 @@ public final class SceneNavigator {
                         || s.endsWith("/styles/patient_medical_record.css")
                         || s.endsWith("/styles/doctor_dashboard.css")
                         || s.endsWith("/styles/doctor_consultation.css")
-                        || s.endsWith("/styles/manager_dashboard.css"));
+                        || s.endsWith("/styles/manager_dashboard.css")
+                        || s.endsWith("/styles/admin_dashboard.css"));
 
         if ((target == AppScene.LOGIN || target == AppScene.REGISTER) && loginCss != null) {
             scene.getStylesheets().add(loginCss);
@@ -150,6 +158,9 @@ public final class SceneNavigator {
         }
         if (target == AppScene.MANAGER_DASHBOARD && managerCss != null) {
             scene.getStylesheets().add(managerCss);
+        }
+        if (target == AppScene.ADMIN_DASHBOARD && adminCss != null) {
+            scene.getStylesheets().add(adminCss);
         }
     }
 

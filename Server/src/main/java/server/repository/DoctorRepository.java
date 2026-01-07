@@ -7,8 +7,15 @@ import java.sql.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DoctorRepository {
+    private static final long SCHEDULE_CACHE_TTL_MS = Long.getLong("cache.schedule.ttl.ms", 60000L);
+    private static final Map<Long, CacheEntry<List<DoctorScheduleDTO>>> SCHEDULE_CACHE = new ConcurrentHashMap<>();
+    private static final long DOCTOR_LIST_CACHE_TTL_MS = Long.getLong("cache.doctors.ttl.ms", 60000L);
+    private static volatile CacheEntry<List<DoctorDTO>> DOCTOR_LIST_CACHE;
+    private static final Map<Long, CacheEntry<DoctorDTO>> DOCTOR_BY_ID_CACHE = new ConcurrentHashMap<>();
 
     // =========================================================
     // AUTH HELPERS
@@ -45,6 +52,11 @@ public class DoctorRepository {
      * Public list of doctors (name + specialization).
      */
     public List<DoctorDTO> findAllDoctors() throws SQLException {
+        CacheEntry<List<DoctorDTO>> cached = DOCTOR_LIST_CACHE;
+        if (cached != null && !cached.isExpired()) {
+            return cached.value;
+        }
+
         String sql = """
                 SELECT d.doctor_id,
                        u.first_name,
@@ -72,6 +84,16 @@ public class DoctorRepository {
             }
         }
 
+        if (DOCTOR_LIST_CACHE_TTL_MS > 0) {
+            List<DoctorDTO> snapshot = List.copyOf(result);
+            long expiresAt = System.currentTimeMillis() + DOCTOR_LIST_CACHE_TTL_MS;
+            DOCTOR_LIST_CACHE = new CacheEntry<>(snapshot, expiresAt);
+            for (DoctorDTO dto : snapshot) {
+                DOCTOR_BY_ID_CACHE.put(dto.getDoctorId(), new CacheEntry<>(dto, expiresAt));
+            }
+            return snapshot;
+        }
+
         return result;
     }
 
@@ -80,6 +102,22 @@ public class DoctorRepository {
      * Returns null if not found.
      */
     public DoctorDTO findDoctorById(long doctorId) throws SQLException {
+        CacheEntry<DoctorDTO> cached = DOCTOR_BY_ID_CACHE.get(doctorId);
+        if (cached != null && !cached.isExpired()) {
+            return cached.value;
+        }
+
+        CacheEntry<List<DoctorDTO>> listCache = DOCTOR_LIST_CACHE;
+        if (listCache != null && !listCache.isExpired()) {
+            for (DoctorDTO dto : listCache.value) {
+                if (dto.getDoctorId() == doctorId) {
+                    DOCTOR_BY_ID_CACHE.put(doctorId, new CacheEntry<>(dto, listCache.expiresAt));
+                    return dto;
+                }
+            }
+            return null;
+        }
+
         String sql = """
                 SELECT d.doctor_id,
                        u.first_name,
@@ -99,12 +137,16 @@ public class DoctorRepository {
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) return null;
 
-                return new DoctorDTO(
+                DoctorDTO dto = new DoctorDTO(
                         rs.getLong("doctor_id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("specialization_name")
                 );
+                if (DOCTOR_LIST_CACHE_TTL_MS > 0) {
+                    DOCTOR_BY_ID_CACHE.put(doctorId, new CacheEntry<>(dto, System.currentTimeMillis() + DOCTOR_LIST_CACHE_TTL_MS));
+                }
+                return dto;
             }
         }
     }
@@ -113,6 +155,20 @@ public class DoctorRepository {
      * Optional: search doctors by name (partial match).
      */
     public List<DoctorDTO> searchDoctorsByName(String search) throws SQLException {
+        CacheEntry<List<DoctorDTO>> cachedList = DOCTOR_LIST_CACHE;
+        if (cachedList != null && !cachedList.isExpired()) {
+            List<DoctorDTO> result = new ArrayList<>();
+            String lower = search == null ? "" : search.trim().toLowerCase();
+            for (DoctorDTO dto : cachedList.value) {
+                String first = dto.getFirstName() == null ? "" : dto.getFirstName().toLowerCase();
+                String last = dto.getLastName() == null ? "" : dto.getLastName().toLowerCase();
+                if (first.contains(lower) || last.contains(lower)) {
+                    result.add(dto);
+                }
+            }
+            return result;
+        }
+
         String sql = """
                 SELECT d.doctor_id,
                        u.first_name,
@@ -158,6 +214,11 @@ public class DoctorRepository {
      * Returns weekly schedule entries for a doctor.
      */
     public List<DoctorScheduleDTO> findScheduleByDoctorId(long doctorId) throws SQLException {
+        CacheEntry<List<DoctorScheduleDTO>> cached = SCHEDULE_CACHE.get(doctorId);
+        if (cached != null && !cached.isExpired()) {
+            return cached.value;
+        }
+
         String sql = """
                 SELECT doctor_id, day_of_week, start_time, end_time
                 FROM doctor_schedule
@@ -190,6 +251,11 @@ public class DoctorRepository {
             }
         }
 
+        if (SCHEDULE_CACHE_TTL_MS > 0) {
+            List<DoctorScheduleDTO> snapshot = List.copyOf(result);
+            SCHEDULE_CACHE.put(doctorId, new CacheEntry<>(snapshot, System.currentTimeMillis() + SCHEDULE_CACHE_TTL_MS));
+            return snapshot;
+        }
         return result;
     }
 
@@ -213,7 +279,10 @@ public class DoctorRepository {
             ps.setTime(4, Time.valueOf(endTime));
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return rs.getLong("schedule_id");
+                if (rs.next()) {
+                    invalidateScheduleCache(doctorId);
+                    return rs.getLong("schedule_id");
+                }
             }
         }
 
@@ -238,7 +307,11 @@ public class DoctorRepository {
             ps.setTime(3, Time.valueOf(endTime));
             ps.setLong(4, scheduleId);
 
-            return ps.executeUpdate() > 0;
+            boolean updated = ps.executeUpdate() > 0;
+            if (updated) {
+                clearScheduleCache();
+            }
+            return updated;
         }
     }
 
@@ -255,7 +328,11 @@ public class DoctorRepository {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setLong(1, scheduleId);
-            return ps.executeUpdate() > 0;
+            boolean deleted = ps.executeUpdate() > 0;
+            if (deleted) {
+                clearScheduleCache();
+            }
+            return deleted;
         }
     }
 
@@ -272,7 +349,11 @@ public class DoctorRepository {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setLong(1, doctorId);
-            return ps.executeUpdate();
+            int deleted = ps.executeUpdate();
+            if (deleted > 0) {
+                invalidateScheduleCache(doctorId);
+            }
+            return deleted;
         }
     }
 
@@ -298,7 +379,10 @@ public class DoctorRepository {
             ps.setLong(2, specializationId);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return rs.getLong("doctor_id");
+                if (rs.next()) {
+                    invalidateDoctorCaches();
+                    return rs.getLong("doctor_id");
+                }
             }
         }
 
@@ -320,7 +404,11 @@ public class DoctorRepository {
 
             ps.setLong(1, specializationId);
             ps.setLong(2, doctorId);
-            return ps.executeUpdate() > 0;
+            boolean updated = ps.executeUpdate() > 0;
+            if (updated) {
+                invalidateDoctorCaches();
+            }
+            return updated;
         }
     }
 
@@ -352,6 +440,8 @@ public class DoctorRepository {
                 }
 
                 conn.commit();
+                invalidateDoctorCaches();
+                invalidateScheduleCache(doctorId);
                 return affected > 0;
 
             } catch (SQLException e) {
@@ -361,5 +451,41 @@ public class DoctorRepository {
                 conn.setAutoCommit(true);
             }
         }
+    }
+
+    private static void invalidateScheduleCache(long doctorId) {
+        if (SCHEDULE_CACHE_TTL_MS <= 0) {
+            return;
+        }
+        SCHEDULE_CACHE.remove(doctorId);
+    }
+
+    private static void clearScheduleCache() {
+        if (SCHEDULE_CACHE_TTL_MS <= 0) {
+            return;
+        }
+        SCHEDULE_CACHE.clear();
+    }
+
+    private static final class CacheEntry<T> {
+        private final T value;
+        private final long expiresAt;
+
+        private CacheEntry(T value, long expiresAt) {
+            this.value = value;
+            this.expiresAt = expiresAt;
+        }
+
+        private boolean isExpired() {
+            return System.currentTimeMillis() > expiresAt;
+        }
+    }
+
+    private static void invalidateDoctorCaches() {
+        if (DOCTOR_LIST_CACHE_TTL_MS <= 0) {
+            return;
+        }
+        DOCTOR_LIST_CACHE = null;
+        DOCTOR_BY_ID_CACHE.clear();
     }
 }

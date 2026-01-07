@@ -1,14 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane styleClass="admin-dashboard" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospital_management.client.view.admin.AdminDashboardView">
 
-</AnchorPane>
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-topbar">
+            <BorderPane.margin>
+                <Insets top="20.0" right="32.0" bottom="0.0" left="32.0" />
+            </BorderPane.margin>
+            <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="brand">
+                <Label styleClass="brand-icon" text="+" />
+                <Label styleClass="brand-text" text="Spitalul Central" />
+            </HBox>
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <HBox alignment="CENTER_RIGHT" spacing="10.0" styleClass="profile">
+                <StackPane styleClass="profile-avatar">
+                    <Label fx:id="adminInitialsLabel" styleClass="profile-initials" text="U" />
+                </StackPane>
+                <Label fx:id="adminNameLabel" styleClass="profile-name" text="Admin System" />
+                <Label fx:id="adminRoleLabel" styleClass="profile-role" text="Administrator" visible="false" managed="false" />
+                <Button onAction="#onLogoutClick" styleClass="ghost-button" text="Logout" />
+            </HBox>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox styleClass="main">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="main-scroll" vbarPolicy="AS_NEEDED">
+                <VBox styleClass="content-root">
+
+                    <HBox spacing="12.0" styleClass="stats-row">
+                        <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                <StackPane styleClass="stat-icon stat-blue"><Label styleClass="stat-icon-text" text="MD" /></StackPane>
+                                <Label fx:id="totalDoctorsTrendLabel" styleClass="stat-tag stat-tag-up" text="+0%" />
+                            </HBox>
+                            <Label styleClass="stat-title" text="Total Medici" />
+                            <Label fx:id="totalDoctorsValueLabel" styleClass="stat-value" text="0" />
+                        </VBox>
+                        <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                <StackPane styleClass="stat-icon stat-purple"><Label styleClass="stat-icon-text" text="PC" /></StackPane>
+                                <Label fx:id="totalPatientsTrendLabel" styleClass="stat-tag stat-tag-up" text="+0%" />
+                            </HBox>
+                            <Label styleClass="stat-title" text="Total Pacienti" />
+                            <Label fx:id="totalPatientsValueLabel" styleClass="stat-value" text="0" />
+                        </VBox>
+                        <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                <StackPane styleClass="stat-icon stat-green"><Label styleClass="stat-icon-text" text="AC" /></StackPane>
+                                <Label fx:id="activeAccountsTrendLabel" styleClass="stat-tag stat-tag-up" text="+0%" />
+                            </HBox>
+                            <Label styleClass="stat-title" text="Conturi Active" />
+                            <Label fx:id="activeAccountsValueLabel" styleClass="stat-value" text="0" />
+                        </VBox>
+                        <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                <StackPane styleClass="stat-icon stat-amber"><Label styleClass="stat-icon-text" text="NU" /></StackPane>
+                                <Label fx:id="newAccountsTrendLabel" styleClass="stat-tag stat-tag-up" text="+0%" />
+                            </HBox>
+                            <Label styleClass="stat-title" text="Conturi Noi (Azi)" />
+                            <Label fx:id="newAccountsValueLabel" styleClass="stat-value" text="0" />
+                        </VBox>
+                    </HBox>
+
+                    <VBox styleClass="table-card">
+                        <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="tab-row">
+                            <Button fx:id="staffTabButton" onAction="#onStaffTabClick" styleClass="tab-button tab-active" text="Personal Medical" />
+                            <Button fx:id="patientsTabButton" onAction="#onPatientsTabClick" styleClass="tab-button" text="Pacienti" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button onAction="#onAddUserClick" styleClass="primary-button" text="Adauga Utilizator Nou" />
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="filter-row">
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label styleClass="filter-label" text="Cauta" />
+                                <TextField fx:id="searchField" promptText="Cauta dupa nume, email sau CNP..." styleClass="filter-field" />
+                            </VBox>
+                            <VBox spacing="4.0">
+                                <Label styleClass="filter-label" text="Departament" />
+                                <ComboBox fx:id="departmentFilter" styleClass="filter-combo" />
+                            </VBox>
+                            <VBox spacing="4.0">
+                                <Label styleClass="filter-label" text="Status" />
+                                <ComboBox fx:id="statusFilter" styleClass="filter-combo" />
+                            </VBox>
+                        </HBox>
+
+                        <GridPane styleClass="table-row table-row-header">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="34" />
+                                <ColumnConstraints percentWidth="20" />
+                                <ColumnConstraints percentWidth="18" />
+                                <ColumnConstraints percentWidth="14" />
+                                <ColumnConstraints percentWidth="14" />
+                            </columnConstraints>
+                            <Label styleClass="table-header-text" text="NUME &amp; EMAIL" GridPane.columnIndex="0" />
+                            <Label styleClass="table-header-text" text="ROL / DEPARTAMENT" GridPane.columnIndex="1" />
+                            <Label styleClass="table-header-text" text="ULTIMA ACTIVITATE" GridPane.columnIndex="2" />
+                            <Label styleClass="table-header-text" text="STATUS" GridPane.columnIndex="3" />
+                            <Label styleClass="table-header-text" text="ACTIUNI" GridPane.columnIndex="4" />
+                     <rowConstraints>
+                        <RowConstraints />
+                     </rowConstraints>
+                        </GridPane>
+
+                        <VBox fx:id="usersContainer" spacing="0.0" />
+
+                        <HBox alignment="CENTER_LEFT" spacing="6.0" styleClass="table-footer">
+                            <Label fx:id="paginationLabel" styleClass="pagination-label" text="-" HBox.hgrow="ALWAYS" />
+                            <Button fx:id="prevPageButton" onAction="#onPrevPageClick" styleClass="pagination-button" text="&lt;" />
+                            <Button fx:id="nextPageButton" onAction="#onNextPageClick" styleClass="pagination-button" text="&gt;" />
+                        </HBox>
+                    </VBox>
+
+                    <VBox styleClass="table-card" spacing="12.0">
+                        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="filter-row">
+                            <Label text="Filtru data" styleClass="filter-label" />
+                            <DatePicker fx:id="appointmentsFilterDatePicker" styleClass="field-date" />
+                            <Label text="Status" styleClass="filter-label" />
+                            <ComboBox fx:id="appointmentsStatusFilter" styleClass="filter-combo" />
+                            <Button fx:id="clearAppointmentsFilterButton" onAction="#onClearAppointmentsFilterClick" styleClass="ghost-button" text="Sterge filtru" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button onAction="#onNewAppointmentClick" styleClass="primary-button" text="Programare Noua" />
+                        </HBox>
+
+                        <GridPane fx:id="appointmentsTableHeader" styleClass="table-row table-row-header" />
+                        <VBox fx:id="appointmentsContainer" spacing="0.0" />
+                    </VBox>
+
+                    <Label fx:id="statusLabel" styleClass="status-message" text="" />
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

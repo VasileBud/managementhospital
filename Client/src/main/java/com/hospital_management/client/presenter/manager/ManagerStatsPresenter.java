@@ -46,8 +46,8 @@ public class ManagerStatsPresenter {
             return;
         }
 
-        StatsDTO stats = response.getPayload() instanceof StatsDTO
-                ? (StatsDTO) response.getPayload()
+        StatsDTO stats = response.getData() instanceof StatsDTO
+                ? (StatsDTO) response.getData()
                 : null;
 
         view.renderStats(stats);

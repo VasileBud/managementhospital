@@ -55,7 +55,7 @@ public class LoginPresenter {
                 return;
             }
 
-            LoginResponseDTO data = (LoginResponseDTO) response.getPayload();
+            LoginResponseDTO data = (LoginResponseDTO) response.getData();
 
             UserDTO user = new UserDTO(
                     data.getUserId(),
@@ -67,7 +67,10 @@ public class LoginPresenter {
                     data.getDoctorId()
             );
             System.out.println(user);
+            ClientSession.getInstance().clearSelectedAppointment();
+            ClientSession.getInstance().clearEditMode();
             ClientSession.getInstance().setLoggedUser(user);
+            SceneNavigator.clearCache();
 
             // Navigare după rol
             switch (data.getRole()) {

@@ -54,7 +54,7 @@ public class StatsRepository {
                 SELECT COUNT(*)
                 FROM appointment
                 WHERE appointment_date = ?
-                  AND status::text = 'CONFIRMED'
+                  AND status::text IN ('PENDING', 'CONFIRMED')
                 """;
         try (Connection conn = Repository.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -81,7 +81,7 @@ public class StatsRepository {
                 SELECT COUNT(DISTINCT doctor_id)
                 FROM appointment
                 WHERE appointment_date = ?
-                  AND status::text NOT IN ('CANCELED', 'CANCELLED')
+                  AND status::text IN ('PENDING', 'CONFIRMED')
                 """;
         try (Connection conn = Repository.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -97,15 +97,17 @@ public class StatsRepository {
         LocalDate firstDay = date.withDayOfMonth(1);
         LocalDate firstDayNext = firstDay.plusMonths(1);
         String sql = """
-                SELECT COALESCE(SUM(amount), 0)
-                FROM invoice
-                WHERE created_at >= ?
-                  AND created_at < ?
+                SELECT COALESCE(SUM(ms.price), 0)
+                FROM appointment a
+                JOIN medical_service ms ON ms.service_id = a.service_id
+                WHERE a.appointment_date >= ?
+                  AND a.appointment_date < ?
+                  AND a.status::text NOT IN ('CANCELED', 'CANCELLED')
                 """;
         try (Connection conn = Repository.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setTimestamp(1, Timestamp.valueOf(firstDay.atStartOfDay()));
-            ps.setTimestamp(2, Timestamp.valueOf(firstDayNext.atStartOfDay()));
+            ps.setDate(1, Date.valueOf(firstDay));
+            ps.setDate(2, Date.valueOf(firstDayNext));
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return rs.getDouble(1);
             }
@@ -113,26 +115,73 @@ public class StatsRepository {
         return 0;
     }
 
-    public List<ChartPointDTO> getAppointmentsBySpecialization() throws SQLException {
+    public double sumBookedMinutesForDate(LocalDate date) throws SQLException {
+        String sql = """
+                SELECT COALESCE(SUM(COALESCE(ms.duration_min, 30)), 0)
+                FROM appointment a
+                LEFT JOIN medical_service ms ON ms.service_id = a.service_id
+                WHERE a.appointment_date = ?
+                  AND a.status::text NOT IN ('CANCELED', 'CANCELLED')
+                """;
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDate(1, Date.valueOf(date));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble(1);
+                }
+            }
+        }
+        return 0.0;
+    }
+
+    public double sumScheduledMinutesForDate(LocalDate date) throws SQLException {
+        if (date == null) {
+            return 0.0;
+        }
+        int dayOfWeek = date.getDayOfWeek().getValue(); // 1..7
+        String sql = """
+                SELECT COALESCE(SUM(EXTRACT(EPOCH FROM (end_time - start_time)) / 60.0), 0)
+                FROM doctor_schedule
+                WHERE day_of_week = ?
+                """;
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, dayOfWeek);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble(1);
+                }
+            }
+        }
+        return 0.0;
+    }
+
+    public List<ChartPointDTO> getAppointmentsBySpecialization(LocalDate start, LocalDate endExclusive) throws SQLException {
         String sql = """
                 SELECT s.name, COUNT(a.appointment_id) as count
                 FROM appointment a
                 JOIN doctor d ON d.doctor_id = a.doctor_id
                 JOIN specialization s ON s.specialization_id = d.specialization_id
-                WHERE a.status::text NOT IN ('CANCELED', 'CANCELLED')
+                WHERE a.appointment_date >= ?
+                  AND a.appointment_date < ?
+                  AND a.status::text NOT IN ('CANCELED', 'CANCELLED')
                 GROUP BY s.name
                 """;
 
         List<ChartPointDTO> list = new ArrayList<>();
         try (Connection conn = Repository.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            while(rs.next()) {
-                list.add(new ChartPointDTO(
-                        rs.getString("name"),
-                        rs.getDouble("count")
-                ));
+            ps.setDate(1, Date.valueOf(start));
+            ps.setDate(2, Date.valueOf(endExclusive));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new ChartPointDTO(
+                            rs.getString("name"),
+                            rs.getDouble("count")
+                    ));
+                }
             }
         }
         return list;

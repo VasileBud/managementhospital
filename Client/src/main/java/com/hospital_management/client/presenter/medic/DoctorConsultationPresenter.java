@@ -106,8 +106,8 @@ public class DoctorConsultationPresenter {
                     return;
                 }
 
-                PatientDetailsDTO details = response.getPayload() instanceof PatientDetailsDTO
-                        ? (PatientDetailsDTO) response.getPayload()
+                PatientDetailsDTO details = response.getData() instanceof PatientDetailsDTO
+                        ? (PatientDetailsDTO) response.getData()
                         : null;
 
                 view.setPatientDetails(details);

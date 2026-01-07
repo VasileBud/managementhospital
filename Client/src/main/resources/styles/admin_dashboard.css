@@ -1,0 +1,374 @@
+.admin-dashboard {
+    -fx-background-color: #eef2f6;
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.dashboard-topbar {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16;
+    -fx-padding: 12 18;
+    -fx-effect: dropshadow(gaussian, rgba(30, 90, 180, 0.18), 14, 0.2, 0, 4);
+}
+
+.brand-icon {
+    -fx-background-color: #dbeafe;
+    -fx-background-radius: 8;
+    -fx-padding: 4 8;
+    -fx-text-fill: #1d75d8;
+    -fx-font-weight: 700;
+}
+
+.brand-text {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+}
+
+.appointments-header {
+    -fx-padding: 14 14 0 14;
+}
+
+.appointments-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 15px;
+    -fx-font-weight: 800;
+}
+
+.field-date {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-font-size: 12px;
+}
+
+.profile-avatar {
+    -fx-background-color: #e6f0ff;
+    -fx-background-radius: 999;
+    -fx-pref-width: 36;
+    -fx-pref-height: 36;
+}
+
+.profile-initials {
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: 700;
+}
+
+.profile-name {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.ghost-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 6 12;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.main {
+    -fx-background-color: transparent;
+}
+
+.primary-button {
+    -fx-background-color: #1d75d8;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-padding: 8 16;
+    -fx-min-width: 140;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.primary-button:hover {
+    -fx-background-color: #165ca8;
+}
+
+.main-scroll {
+    -fx-background-color: transparent;
+}
+
+.main-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.content-root {
+    -fx-padding: 20 32 40 32;
+    -fx-spacing: 16;
+}
+
+.stats-row {
+    -fx-spacing: 12;
+}
+
+.stat-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 14;
+    -fx-padding: 12 14;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.07), 10, 0.2, 0, 4);
+}
+
+.stat-title {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.stat-value {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 20px;
+    -fx-font-weight: 800;
+}
+
+.stat-icon {
+    -fx-background-radius: 8;
+    -fx-pref-width: 32;
+    -fx-pref-height: 32;
+}
+
+.stat-icon-text {
+    -fx-text-fill: #1f2937;
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+}
+
+.stat-blue { -fx-background-color: #e6f0ff; }
+.stat-purple { -fx-background-color: #ede9fe; }
+.stat-amber { -fx-background-color: #fef3c7; }
+.stat-green { -fx-background-color: #dcfce7; }
+
+.stat-tag {
+    -fx-background-radius: 999;
+    -fx-padding: 2 8;
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+}
+
+.stat-tag-up {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #15803d;
+}
+
+.stat-tag-down {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #b91c1c;
+}
+
+.table-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16;
+    -fx-border-color: #e2ecff;
+    -fx-border-radius: 16;
+    -fx-padding: 0;
+    -fx-effect: dropshadow(gaussian, rgba(30, 90, 180, 0.10), 12, 0.2, 0, 4);
+}
+
+.tab-row {
+    -fx-padding: 12 14 10 14;
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.tab-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 6 12;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.tab-button:hover {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #0f172a;
+    -fx-border-color: #e5e7eb;
+}
+
+.tab-active {
+    -fx-background-color: #e6f0ff;
+    -fx-text-fill: #1d75d8;
+    -fx-border-color: #cfe1ff;
+}
+
+.filter-row {
+    -fx-padding: 10 14 12 14;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.filter-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+}
+
+.filter-field {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-font-size: 12px;
+    -fx-padding: 6 10;
+    -fx-text-fill: #0f172a;
+}
+
+.filter-combo {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-font-size: 12px;
+}
+
+.table-row {
+    -fx-padding: 10 14;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+    -fx-hgap: 6;
+}
+
+.table-row:hover {
+    -fx-background-color: #f8fafc;
+}
+
+.table-row-header {
+    -fx-background-color: #f8fafc;
+}
+
+.table-header-text {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.table-text {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.table-text-muted {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.table-avatar {
+    -fx-background-color: #e2e8f0;
+    -fx-background-radius: 999;
+    -fx-pref-width: 28;
+    -fx-pref-height: 28;
+}
+
+.table-avatar-text {
+    -fx-text-fill: #1f2937;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.status-pill {
+    -fx-background-radius: 999;
+    -fx-padding: 2 8;
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+}
+
+.status-confirmed {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #15803d;
+}
+
+.status-pending {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #92400e;
+}
+
+.status-done {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #334155;
+}
+
+.status-canceled {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #b91c1c;
+}
+
+.status-active {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #15803d;
+}
+
+.status-inactive {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #b91c1c;
+}
+
+.status-leave {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #92400e;
+}
+
+.table-action {
+    -fx-background-color: transparent;
+    -fx-text-fill: #137fec;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 6;
+}
+
+.table-action-danger {
+    -fx-background-color: transparent;
+    -fx-text-fill: #dc2626;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 6;
+}
+
+.table-footer {
+    -fx-padding: 10 14;
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1 0 0 0;
+}
+
+.pagination-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.pagination-button {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-font-size: 11px;
+    -fx-padding: 4 8;
+    -fx-text-fill: #64748b;
+}
+
+.pagination-button:hover {
+    -fx-background-color: #f1f5f9;
+}
+
+.status-message {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}

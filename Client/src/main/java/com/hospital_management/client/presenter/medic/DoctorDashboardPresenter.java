@@ -52,8 +52,8 @@ public class DoctorDashboardPresenter {
                 }
 
                 @SuppressWarnings("unchecked")
-                List<DoctorDTO> doctors = response.getPayload() instanceof List<?>
-                        ? (List<DoctorDTO>) response.getPayload()
+                List<DoctorDTO> doctors = response.getData() instanceof List<?>
+                        ? (List<DoctorDTO>) response.getData()
                         : Collections.emptyList();
 
                 DoctorDTO details = doctors.stream()
@@ -104,8 +104,8 @@ public class DoctorDashboardPresenter {
                 }
 
                 @SuppressWarnings("unchecked")
-                List<AppointmentDTO> appointments = response.getPayload() instanceof List<?>
-                        ? (List<AppointmentDTO>) response.getPayload()
+                List<AppointmentDTO> appointments = response.getData() instanceof List<?>
+                        ? (List<AppointmentDTO>) response.getData()
                         : Collections.emptyList();
 
                 view.updateAppointments(appointments);
@@ -151,5 +151,11 @@ public class DoctorDashboardPresenter {
                 loadAppointments(view.getSelectedDate());
             });
         });
+    }
+
+    public void onClearFilter() {
+        LocalDate today = LocalDate.now();
+        view.setSelectedDate(today);
+        loadAppointments(today);
     }
 }

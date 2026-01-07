@@ -10,10 +10,6 @@ import java.util.List;
 
 public class UserRepository {
 
-    /**
-     * Finds a user by email (table "user").
-     * Returns null if not found.
-     */
     public User findByEmail(String email) throws SQLException {
         String sql = """
                 SELECT user_id, first_name, last_name, email, password_hash, created_at, role_id
@@ -128,6 +124,69 @@ public class UserRepository {
             }
         }
         return users;
+    }
+
+    public User findById(long userId) throws SQLException {
+        String sql = """
+                SELECT user_id, first_name, last_name, email, password_hash, created_at, role_id
+                FROM "user"
+                WHERE user_id = ?
+                """;
+
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+                return new User(
+                        rs.getLong("user_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email"),
+                        rs.getString("password_hash"),
+                        rs.getObject("created_at", OffsetDateTime.class),
+                        rs.getLong("role_id")
+                );
+            }
+        }
+    }
+
+    public boolean updateUser(long userId,
+                              String firstName,
+                              String lastName,
+                              String email,
+                              String roleName) throws SQLException {
+        String sql = """
+                UPDATE "user"
+                SET first_name = ?,
+                    last_name = ?,
+                    email = ?,
+                    role_id = (SELECT role_id FROM role WHERE role_name = ?)
+                WHERE user_id = ?
+                """;
+
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, firstName);
+            ps.setString(2, lastName);
+            ps.setString(3, email);
+            ps.setString(4, roleName);
+            ps.setLong(5, userId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public boolean updatePassword(long userId, String passwordHash) throws SQLException {
+        String sql = "UPDATE \"user\" SET password_hash = ? WHERE user_id = ?";
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, passwordHash);
+            ps.setLong(2, userId);
+            return ps.executeUpdate() > 0;
+        }
     }
 
     public boolean deleteUser(long userId) throws SQLException {

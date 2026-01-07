@@ -25,9 +25,6 @@ public class AuthController {
         this.passwordHasher = new PasswordHasher();
     }
 
-    // =========================
-    // LOGIN
-    // =========================
     public Response login(CommandDTO command) {
 
         String email = command.getString("email");
@@ -84,9 +81,6 @@ public class AuthController {
         }
     }
 
-    // =========================
-    // REGISTER PATIENT
-    // =========================
     public Response registerPatient(CommandDTO command) {
 
         String firstName = command.getString("firstName");

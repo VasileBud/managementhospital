@@ -60,6 +60,9 @@ public class PatientMedicalRecordView {
     @FXML
     public void onLogoutClick() {
         ClientSession.getInstance().setLoggedUser(null);
+        ClientSession.getInstance().clearSelectedAppointment();
+        ClientSession.getInstance().clearEditMode();
+        SceneNavigator.clearCache();
         SceneNavigator.navigateTo(AppScene.LOGIN);
     }
 

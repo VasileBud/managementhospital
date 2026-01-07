@@ -1,13 +1,13 @@
 package com.hospital_management.client.presenter.patient;
 
-import com.hospital_management.client.app.AppScene;
-import com.hospital_management.client.app.SceneNavigator;
 import com.hospital_management.client.network.ClientSession;
 import com.hospital_management.client.view.patient.AppointmentBookingView;
 import javafx.application.Platform;
 import shared.common.Request;
 import shared.common.RequestType;
 import shared.common.Response;
+import shared.dto.AdminUserDTO;
+import shared.dto.AppointmentDTO;
 import shared.dto.CommandDTO;
 import shared.dto.DoctorDTO;
 import shared.dto.MedicalServiceDTO;
@@ -16,232 +16,416 @@ import shared.dto.UserDTO;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class AppointmentBookingPresenter {
 
     private final AppointmentBookingView view;
-    private final SpecializationDTO allSpecializations =
-            new SpecializationDTO(0, "Toate specializarile");
 
-    private List<DoctorDTO> doctors = Collections.emptyList();
-    private List<SpecializationDTO> specializations = Collections.emptyList();
-    private List<MedicalServiceDTO> services = Collections.emptyList();
-    private List<CommandDTO.Action> pendingActions = Collections.emptyList();
-    private CommandDTO.Action currentAction;
+    private static final SpecializationDTO ALL_SPECIALIZATIONS = new SpecializationDTO(-1, "Toate specializarile");
+
+    private UserDTO user;
+    private RoleMode role = RoleMode.PATIENT;
     private boolean initialLoading = false;
 
-    private SpecializationDTO selectedSpecialization;
+    private List<DoctorDTO> doctors = new ArrayList<>();
+    private List<SpecializationDTO> specializations = new ArrayList<>();
+    private List<MedicalServiceDTO> services = new ArrayList<>();
+    private List<AdminUserDTO> patients = new ArrayList<>();
+
+    private SpecializationDTO selectedSpecialization = ALL_SPECIALIZATIONS;
     private DoctorDTO selectedDoctor;
     private MedicalServiceDTO selectedService;
+    private AdminUserDTO selectedPatient;
     private LocalDate selectedDate;
     private LocalTime selectedTime;
+    private AppointmentDTO editingAppointment;
+    private boolean suppressSelectionEvents = false;
+
+    private enum RoleMode {
+        PATIENT,
+        DOCTOR,
+        MANAGER,
+        ADMIN;
+
+        static RoleMode from(UserDTO user) {
+            if (user == null || user.getRole() == null) {
+                return PATIENT;
+            }
+            return switch (user.getRole().toUpperCase(Locale.ROOT)) {
+                case "DOCTOR" -> DOCTOR;
+                case "MANAGER" -> MANAGER;
+                case "ADMIN" -> ADMIN;
+                default -> PATIENT;
+            };
+        }
+    }
 
     public AppointmentBookingPresenter(AppointmentBookingView view) {
         this.view = view;
     }
 
     public void loadInitialData() {
+        user = ClientSession.getInstance().getLoggedUser();
+        role = RoleMode.from(user);
+        view.setRole(role.name());
+        view.setEditMode(false, "");
+        if (ClientSession.getInstance().getAppointmentToEdit() == null) {
+            ClientSession.getInstance().clearSelectedAppointment();
+        }
+
+        if (user == null) {
+            view.setError("Utilizator neautentificat.");
+            return;
+        }
+
         if (!ClientSession.getInstance().ensureConnected()) {
             view.setError("Nu exista conexiune la server!");
             return;
         }
+
         initialLoading = true;
-        pendingActions = List.of(
-                CommandDTO.Action.GET_SPECIALIZATIONS,
-                CommandDTO.Action.GET_DOCTORS,
-                CommandDTO.Action.GET_MEDICAL_SERVICES
-        );
         view.setBusy(true);
         view.setInfo("Se incarca datele...");
-        sendNext();
+        loadDoctors();
+    }
+
+    public void onPatientSelected(AdminUserDTO patient) {
+        selectedPatient = patient;
     }
 
     public void onSpecializationSelected(SpecializationDTO specialization) {
-        selectedSpecialization = specialization;
-        if (initialLoading) {
-            updateSummary();
-            return;
-        }
-        List<DoctorDTO> filtered = filterDoctors(specialization);
-        view.setDoctors(filtered);
-        selectedDoctor = null;
-        selectedTime = null;
-        view.setSelectedTime(null);
-        loadAvailableSlots();
-        updateSummary();
+        selectedSpecialization = specialization == null ? ALL_SPECIALIZATIONS : specialization;
+        applyDoctorFilters();
     }
 
     public void onDoctorSelected(DoctorDTO doctor) {
         selectedDoctor = doctor;
-        if (initialLoading) {
-            updateSummary();
+        if (initialLoading || suppressSelectionEvents) {
             return;
         }
         selectedTime = null;
         view.setSelectedTime(null);
         loadAvailableSlots();
-        updateSummary();
     }
 
     public void onServiceSelected(MedicalServiceDTO service) {
         selectedService = service;
-        if (initialLoading) {
-            updateSummary();
-            return;
-        }
-        updateSummary();
     }
 
     public void onDateSelected(LocalDate date) {
         selectedDate = date;
-        if (initialLoading) {
-            updateSummary();
+        if (initialLoading || suppressSelectionEvents) {
             return;
         }
         selectedTime = null;
         view.setSelectedTime(null);
         loadAvailableSlots();
-        updateSummary();
     }
+
 
     public void onTimeSelected(LocalTime time) {
         selectedTime = time;
         view.setSelectedTime(time);
-        updateSummary();
     }
 
-    public void onBook() {
-        UserDTO user = ClientSession.getInstance().getLoggedUser();
+    public void onSave() {
         if (user == null) {
-            view.setError("Utilizator invalid.");
+            view.setError("Utilizator neautentificat.");
             return;
         }
-        if (user.getPatientId() == null) {
-            view.setError("Profil pacient lipsa.");
-            return;
-        }
-        if (selectedDoctor == null || selectedDate == null || selectedTime == null) {
-            view.setError("Selecteaza medicul, data si ora.");
+        if (!ClientSession.getInstance().ensureConnected()) {
+            view.setError("Nu exista conexiune la server!");
             return;
         }
 
         Long editId = ClientSession.getInstance().getAppointmentToEdit();
+        boolean isEdit = editId != null;
+        if (!isEdit && role != RoleMode.PATIENT && selectedPatient == null) {
+            view.setError("Selecteaza pacientul.");
+            return;
+        }
+        if (!isEdit && role == RoleMode.PATIENT && user != null && user.getPatientId() == null) {
+            view.setError("Profil pacient lipsa.");
+            return;
+        }
+        if (selectedDoctor == null) {
+            view.setError("Selecteaza medicul.");
+            return;
+        }
+        if (selectedDate == null) {
+            view.setError("Selecteaza data.");
+            return;
+        }
+        if (selectedTime == null) {
+            view.setError("Selecteaza ora.");
+            return;
+        }
+
+        Long requesterId = user == null ? null : user.getUserId();
 
         CommandDTO cmd;
-
         if (editId != null) {
-            cmd = new CommandDTO(CommandDTO.Action.UPDATE_APPOINTMENT, user.getUserId())
+            cmd = new CommandDTO(CommandDTO.Action.UPDATE_APPOINTMENT, requesterId)
                     .put("appointmentId", editId)
-                    .put("patientId", user.getPatientId())
                     .put("doctorId", selectedDoctor.getDoctorId())
                     .put("date", selectedDate)
                     .put("time", selectedTime);
-
-            view.setInfo("Se actualizează programarea...");
-            currentAction = CommandDTO.Action.UPDATE_APPOINTMENT;
-
+            view.setInfo("Se actualizeaza programarea...");
         } else {
-            cmd = new CommandDTO(CommandDTO.Action.BOOK_APPOINTMENT, user.getUserId())
-                    .put("patientId", user.getPatientId())
+            cmd = new CommandDTO(CommandDTO.Action.BOOK_APPOINTMENT, requesterId)
                     .put("doctorId", selectedDoctor.getDoctorId())
                     .put("date", selectedDate)
                     .put("time", selectedTime);
-
-            view.setInfo("Se creează programarea...");
-            currentAction = CommandDTO.Action.BOOK_APPOINTMENT;
+            if (role == RoleMode.PATIENT && user != null && user.getPatientId() != null) {
+                cmd.put("patientId", user.getPatientId());
+            } else if (selectedPatient != null) {
+                cmd.put("patientUserId", selectedPatient.getUserId());
+            }
+            view.setInfo("Se creeaza programarea...");
         }
 
         if (selectedService != null) {
             cmd.put("serviceId", selectedService.getServiceId());
         }
 
-        Request req = new Request(cmd);
-        req.setType(RequestType.COMMAND);
-
-        currentAction = CommandDTO.Action.BOOK_APPOINTMENT;
         view.setBusy(true);
-        view.setInfo("Se creeaza programarea...");
-        ClientSession.getInstance().getClient().sendRequest(req, this::handleResponse);
+        sendRequest(cmd, response -> {
+            view.setBusy(false);
+            if (response.getStatus() != Response.Status.OK) {
+                view.setError("Eroare: " + response.getMessage());
+                return;
+            }
+            view.setInfo(editId == null ? "Programarea a fost creata." : "Programarea a fost actualizata.");
+            clearEditMode();
+            resetForm();
+        });
     }
 
-    private void sendNext() {
-        if (pendingActions.isEmpty()) {
-            view.setBusy(false);
-            view.setInfo("");
-            initialLoading = false;
+    public void onReset() {
+        clearEditMode();
+        resetForm();
+    }
+
+    public void onClearEdit() {
+        clearEditMode();
+        resetForm();
+    }
+
+    public void onEditAppointment(AppointmentDTO appt) {
+        if (appt == null) {
+            view.setError("Programarea selectata nu este valida.");
             return;
         }
+        editingAppointment = appt;
+        ClientSession.getInstance().setSelectedAppointment(appt);
+        ClientSession.getInstance().setAppointmentToEdit(appt.getAppointmentId());
 
-        currentAction = pendingActions.get(0);
-        pendingActions = pendingActions.subList(1, pendingActions.size());
+        selectedDoctor = findDoctor(appt.getDoctorId());
+        selectedService = findService(appt.getServiceName());
+        selectedDate = appt.getDate();
+        selectedTime = appt.getTime();
+        selectedSpecialization = selectedDoctor == null
+                ? ALL_SPECIALIZATIONS
+                : Objects.requireNonNullElse(findSpecializationByName(selectedDoctor.getSpecializationName()), ALL_SPECIALIZATIONS);
 
-        CommandDTO cmd = new CommandDTO(currentAction);
-        Request req = new Request(cmd);
-        req.setType(RequestType.COMMAND);
-
-        ClientSession.getInstance().getClient().sendRequest(req, this::handleResponse);
+        suppressSelectionEvents = true;
+        view.setSelectedSpecialization(selectedSpecialization);
+        applyDoctorFilters();
+        view.setSelectedDoctor(selectedDoctor);
+        view.setSelectedService(selectedService);
+        if (selectedDate != null) {
+            view.setSelectedDate(selectedDate);
+        }
+        suppressSelectionEvents = false;
+        view.setSelectedTime(selectedTime);
+        view.setEditMode(true, buildEditHint(appt));
+        loadAvailableSlots();
     }
 
-    private void handleResponse(Response response) {
-        Platform.runLater(() -> {
+    private void loadDoctors() {
+        CommandDTO cmd = new CommandDTO(CommandDTO.Action.GET_DOCTORS);
+        sendRequest(cmd, response -> {
             if (response.getStatus() != Response.Status.OK) {
                 view.setBusy(false);
                 view.setError("Eroare: " + response.getMessage());
                 return;
             }
-
-            switch (currentAction) {
-                case GET_SPECIALIZATIONS -> {
-                    specializations = castList(response.getPayload());
-                    view.setSpecializations(specializations, allSpecializations);
-                    selectedSpecialization = allSpecializations;
-                }
-                case GET_DOCTORS -> {
-                    doctors = castList(response.getPayload());
-                    view.setDoctors(doctors);
-                }
-                case GET_MEDICAL_SERVICES -> {
-                    services = castList(response.getPayload());
-                    view.setServices(services);
-                }
-                case GET_AVAILABLE_SLOTS -> {
-                    List<LocalTime> times = castList(response.getPayload());
-                    view.setAvailableTimes(times);
-                    view.setBusy(false);
-                    view.setInfo("");
-                    return;
-                }
-                case BOOK_APPOINTMENT -> {
-                    view.setBusy(false);
-                    view.setInfo("Programare creata cu succes.");
-                    SceneNavigator.navigateToFresh(AppScene.PATIENT_DASHBOARD);
-                    return;
-                }
-                case UPDATE_APPOINTMENT -> {
-                    view.setBusy(false);
-                    view.setInfo("Programare actualizata cu succes.");
-
-                    ClientSession.getInstance().clearEditMode();
-
-                    SceneNavigator.navigateToFresh(AppScene.PATIENT_DASHBOARD);
-                    return;
-                }
-                default -> view.setInfo("Raspuns primit.");
-            }
-
-            sendNext();
+            doctors = castList(response.getData());
+            view.setDoctors(doctors);
+            loadSpecializations();
         });
     }
 
-    private void loadAvailableSlots() {
-        if (initialLoading) {
+    private void loadSpecializations() {
+        CommandDTO cmd = new CommandDTO(CommandDTO.Action.GET_SPECIALIZATIONS);
+        sendRequest(cmd, response -> {
+            if (response.getStatus() != Response.Status.OK) {
+                view.setBusy(false);
+                view.setError("Eroare: " + response.getMessage());
+                return;
+            }
+            List<SpecializationDTO> received = castList(response.getData());
+            specializations = received.stream()
+                    .sorted(Comparator.comparing(SpecializationDTO::getName, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER)))
+                    .toList();
+
+            List<SpecializationDTO> items = new ArrayList<>();
+            items.add(ALL_SPECIALIZATIONS);
+            items.addAll(specializations);
+
+            selectedSpecialization = ALL_SPECIALIZATIONS;
+            view.setSpecializations(items);
+            view.setSelectedSpecialization(selectedSpecialization);
+            applyDoctorFilters();
+            loadServices();
+        });
+    }
+
+    private void loadServices() {
+        CommandDTO cmd = new CommandDTO(CommandDTO.Action.GET_MEDICAL_SERVICES);
+        sendRequest(cmd, response -> {
+            if (response.getStatus() != Response.Status.OK) {
+                view.setBusy(false);
+                view.setError("Eroare: " + response.getMessage());
+                return;
+            }
+            services = castList(response.getData());
+            view.setServices(services);
+            if (role == RoleMode.PATIENT) {
+                finishInitialLoad();
+            } else {
+                loadPatients();
+            }
+        });
+    }
+
+    private void loadPatients() {
+        CommandDTO cmd = new CommandDTO(CommandDTO.Action.ADMIN_LIST_USERS);
+        sendRequest(cmd, response -> {
+            if (response.getStatus() != Response.Status.OK) {
+                view.setBusy(false);
+                view.setError("Eroare: " + response.getMessage());
+                return;
+            }
+            List<AdminUserDTO> users = castList(response.getData());
+            patients = users.stream()
+                    .filter(user -> "PATIENT".equalsIgnoreCase(user.getRole()))
+                    .sorted(Comparator.comparing(AdminUserDTO::getFullName, String.CASE_INSENSITIVE_ORDER))
+                    .toList();
+            view.setPatients(patients);
+            finishInitialLoad();
+        });
+    }
+
+    private void finishInitialLoad() {
+        initialLoading = false;
+        view.setBusy(false);
+        view.setInfo("");
+        applyDefaults();
+        applyEditFromSession();
+    }
+
+    private void applyDefaults() {
+        suppressSelectionEvents = true;
+        selectedDate = view.getSelectedDate();
+        if (selectedDate == null) {
+            selectedDate = LocalDate.now();
+            view.setSelectedDate(selectedDate);
+        }
+
+        view.setSpecializationFilterVisible(role != RoleMode.DOCTOR);
+        if (role == RoleMode.DOCTOR) {
+            selectedSpecialization = ALL_SPECIALIZATIONS;
+        } else if (selectedSpecialization == null) {
+            selectedSpecialization = ALL_SPECIALIZATIONS;
+        }
+        view.setSelectedSpecialization(selectedSpecialization);
+        applyDoctorFilters();
+
+        if (role == RoleMode.DOCTOR && user != null) {
+            selectedDoctor = findDoctor(user.getDoctorId());
+            if (selectedDoctor == null) {
+                selectedDoctor = findDoctorByName(user.getFullName());
+            }
+            view.lockDoctor(selectedDoctor == null ? user.getFullName() : selectedDoctor.getFullName());
+            view.setSelectedDoctor(selectedDoctor);
+        } else {
+            view.unlockDoctor();
+        }
+
+        if (role == RoleMode.PATIENT && user != null) {
+            view.lockPatient(user.getFullName());
+        } else {
+            view.unlockPatient();
+        }
+
+        suppressSelectionEvents = false;
+        loadAvailableSlots();
+    }
+
+    private void resetForm() {
+        selectedService = null;
+        selectedTime = null;
+        selectedPatient = null;
+        view.clearForm();
+
+        selectedSpecialization = ALL_SPECIALIZATIONS;
+        view.setSelectedSpecialization(selectedSpecialization);
+        applyDoctorFilters();
+
+        suppressSelectionEvents = true;
+        selectedDate = LocalDate.now();
+        view.setSelectedDate(selectedDate);
+
+        if (role == RoleMode.DOCTOR && user != null) {
+            selectedDoctor = findDoctor(user.getDoctorId());
+            if (selectedDoctor == null) {
+                selectedDoctor = findDoctorByName(user.getFullName());
+            }
+            view.setSelectedDoctor(selectedDoctor);
+        } else {
+            selectedDoctor = null;
+            view.setSelectedDoctor(null);
+        }
+        suppressSelectionEvents = false;
+
+        view.setSelectedService(null);
+        view.setSelectedPatient(null);
+        loadAvailableSlots();
+    }
+
+    private void clearEditMode() {
+        editingAppointment = null;
+        ClientSession.getInstance().clearEditMode();
+        ClientSession.getInstance().clearSelectedAppointment();
+        view.setEditMode(false, "");
+    }
+
+    private void applyEditFromSession() {
+        if (editingAppointment != null) {
             return;
         }
+        Long editId = ClientSession.getInstance().getAppointmentToEdit();
+        if (editId == null) {
+            return;
+        }
+        AppointmentDTO selected = ClientSession.getInstance().getSelectedAppointment();
+        if (selected != null && selected.getAppointmentId() == editId) {
+            onEditAppointment(selected);
+            return;
+        }
+        view.setError("Nu pot incarca programarea pentru editare. Reincearca din lista programarilor.");
+        ClientSession.getInstance().clearEditMode();
+    }
+
+    private void loadAvailableSlots() {
         if (selectedDoctor == null || selectedDate == null) {
-            view.setAvailableTimes(Collections.emptyList());
+            view.setAvailableTimes(List.of());
             return;
         }
 
@@ -249,38 +433,108 @@ public class AppointmentBookingPresenter {
                 .put("doctorId", selectedDoctor.getDoctorId())
                 .put("date", selectedDate);
 
-        Request req = new Request(cmd);
-        req.setType(RequestType.COMMAND);
-
-        currentAction = CommandDTO.Action.GET_AVAILABLE_SLOTS;
         view.setBusy(true);
         view.setInfo("Se incarca orele disponibile...");
-        ClientSession.getInstance().getClient().sendRequest(req, this::handleResponse);
+        sendRequest(cmd, response -> {
+            view.setBusy(false);
+            if (response.getStatus() != Response.Status.OK) {
+                view.setError("Eroare: " + response.getMessage());
+                return;
+            }
+            List<LocalTime> times = castList(response.getData());
+            if (editingAppointment != null && selectedTime != null && !times.contains(selectedTime)) {
+                List<LocalTime> merged = new ArrayList<>(times);
+                merged.add(selectedTime);
+                merged.sort(LocalTime::compareTo);
+                times = merged;
+            }
+            view.setAvailableTimes(times);
+            view.setInfo("");
+        });
     }
 
-    private List<DoctorDTO> filterDoctors(SpecializationDTO spec) {
-        if (spec == null || spec.getSpecializationId() == 0) {
-            return doctors;
+    private void applyDoctorFilters() {
+        String selectedSpec = selectedSpecialization == null ? "" : selectedSpecialization.getName();
+        boolean hasSpecFilter = selectedSpec != null && !selectedSpec.isBlank()
+                && !ALL_SPECIALIZATIONS.getName().equalsIgnoreCase(selectedSpec);
+
+        List<DoctorDTO> filtered = hasSpecFilter
+                ? doctors.stream()
+                .filter(doctor -> {
+                    String spec = doctor.getSpecializationName() == null ? "" : doctor.getSpecializationName();
+                    return spec.equalsIgnoreCase(selectedSpec);
+                })
+                .toList()
+                : new ArrayList<>(doctors);
+
+        DoctorDTO previousDoctor = selectedDoctor;
+        boolean previousSuppress = suppressSelectionEvents;
+        suppressSelectionEvents = true;
+        view.setDoctors(filtered);
+
+        if (previousDoctor != null && filtered.contains(previousDoctor)) {
+            view.setSelectedDoctor(previousDoctor);
+        } else {
+            selectedDoctor = null;
+            selectedTime = null;
+            view.setSelectedDoctor(null);
+            view.setSelectedTime(null);
+            view.setAvailableTimes(List.of());
+        }
+        suppressSelectionEvents = previousSuppress;
+    }
+
+    private SpecializationDTO findSpecializationByName(String name) {
+        if (name == null || name.isBlank()) {
+            return null;
+        }
+        return specializations.stream()
+                .filter(spec -> name.equalsIgnoreCase(spec.getName()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private DoctorDTO findDoctor(Long doctorId) {
+        if (doctorId == null) {
+            return null;
         }
         return doctors.stream()
-                .filter(d -> Objects.equals(d.getSpecializationName(), spec.getName()))
-                .toList();
+                .filter(doctor -> Objects.equals(doctor.getDoctorId(), doctorId))
+                .findFirst()
+                .orElse(null);
     }
 
-    private void updateSummary() {
-        String doctorName = selectedDoctor == null ? null : selectedDoctor.getFullName();
-        String specName = null;
-        if (selectedDoctor != null) {
-            specName = selectedDoctor.getSpecializationName();
-        } else if (selectedSpecialization != null && selectedSpecialization.getSpecializationId() != 0) {
-            specName = selectedSpecialization.getName();
+    private DoctorDTO findDoctorByName(String name) {
+        if (name == null || name.isBlank()) {
+            return null;
         }
-        String serviceName = selectedService == null ? null : selectedService.getName();
-        String price = selectedService == null || selectedService.getPrice() == null
-                ? null
-                : selectedService.getPrice().toPlainString() + " RON";
+        return doctors.stream()
+                .filter(doctor -> name.equalsIgnoreCase(doctor.getFullName()))
+                .findFirst()
+                .orElse(null);
+    }
 
-        view.updateSummary(doctorName, specName, selectedDate, selectedTime, serviceName, price);
+    private MedicalServiceDTO findService(String name) {
+        if (name == null) {
+            return null;
+        }
+        return services.stream()
+                .filter(service -> name.equalsIgnoreCase(service.getName()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private String buildEditHint(AppointmentDTO appt) {
+        String patient = appt.getPatientName() == null ? "-" : appt.getPatientName();
+        String doctor = appt.getDoctorName() == null ? "-" : appt.getDoctorName();
+        return "Editare programare #" + appt.getAppointmentId() + " | " + patient + " -> " + doctor;
+    }
+
+    private void sendRequest(CommandDTO cmd, java.util.function.Consumer<Response> handler) {
+        Request req = new Request(cmd);
+        req.setType(RequestType.COMMAND);
+        ClientSession.getInstance().getClient().sendRequest(req, response ->
+                Platform.runLater(() -> handler.accept(response)));
     }
 
     @SuppressWarnings("unchecked")
@@ -288,6 +542,6 @@ public class AppointmentBookingPresenter {
         if (data instanceof List<?>) {
             return (List<T>) data;
         }
-        return Collections.emptyList();
+        return List.of();
     }
 }

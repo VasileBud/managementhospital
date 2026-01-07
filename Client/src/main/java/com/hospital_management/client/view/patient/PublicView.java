@@ -2,42 +2,32 @@ package com.hospital_management.client.view.patient;
 
 import com.hospital_management.client.presenter.patient.PublicPresenter;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.application.Platform;
 import shared.dto.DoctorDTO;
-import shared.dto.MedicalServiceDTO;
+import shared.dto.DoctorScheduleDTO;
 import shared.dto.SpecializationDTO;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+
 import java.time.LocalTime;
 import java.time.format.TextStyle;
-import java.util.Locale;
-import shared.dto.DoctorScheduleDTO;
-
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class PublicView {
 
     private static final String ALL_SPECIALIZATIONS = "Toate specializarile";
 
-    @FXML private ScrollPane scrollPane;
-    @FXML private VBox contentRoot;
-    @FXML private StackPane heroSection;
-    @FXML private VBox specializationsSection;
-    @FXML private VBox doctorsSection;
-    @FXML private FlowPane specializationChips;
     @FXML private VBox doctorsContainer;
     @FXML private TextField searchField;
     @FXML private ComboBox<String> specializationFilter;
@@ -54,7 +44,6 @@ public class PublicView {
         specializationFilter.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue != null && !Objects.equals(oldValue, newValue)) {
                 onSearchClick();
-                updateChipSelection(newValue);
             }
         });
         presenter.loadAll();
@@ -71,21 +60,6 @@ public class PublicView {
     }
 
     @FXML
-    public void onNavHomeClick() {
-        scrollTo(heroSection);
-    }
-
-    @FXML
-    public void onNavDoctorsClick() {
-        scrollTo(doctorsSection);
-    }
-
-    @FXML
-    public void onNavSpecializationsClick() {
-        scrollTo(specializationsSection);
-    }
-
-    @FXML
     public void onSearchClick() {
         presenter.onSearch(searchField.getText(), specializationFilter.getValue());
     }
@@ -93,7 +67,9 @@ public class PublicView {
     public void setBusy(boolean busy) {
         searchField.setDisable(busy);
         specializationFilter.setDisable(busy);
-        if (searchButton != null) searchButton.setDisable(busy);
+        if (searchButton != null) {
+            searchButton.setDisable(busy);
+        }
     }
 
     public void setInfo(String msg) {
@@ -113,13 +89,6 @@ public class PublicView {
             specializationFilter.getItems().add(dto.getName());
         }
         specializationFilter.getSelectionModel().selectFirst();
-
-        specializationChips.getChildren().clear();
-        addChip(ALL_SPECIALIZATIONS);
-        for (SpecializationDTO dto : items) {
-            addChip(dto.getName());
-        }
-        updateChipSelection(ALL_SPECIALIZATIONS);
     }
 
     public void setDoctors(List<DoctorDTO> doctors) {
@@ -136,75 +105,176 @@ public class PublicView {
         }
     }
 
-    public void setServices(List<MedicalServiceDTO> services) {
-        // no-op: services section removed
-    }
-
-    public void selectSpecialization(String name) {
-        if (name == null || name.isEmpty()) {
-            name = ALL_SPECIALIZATIONS;
-        }
-        specializationFilter.getSelectionModel().select(name);
-        updateChipSelection(name);
-    }
-
-    private void addChip(String name) {
-        Button chip = new Button(name);
-        chip.getStyleClass().add("chip");
-        chip.setOnAction(event -> {
-            selectSpecialization(name);
-            onSearchClick();
-        });
-        specializationChips.getChildren().add(chip);
-    }
-
-    private void updateChipSelection(String selected) {
-        for (Node node : specializationChips.getChildren()) {
-            if (node instanceof Button button) {
-                boolean active = Objects.equals(button.getText(), selected);
-                button.getStyleClass().remove("chip-active");
-                if (active) {
-                    button.getStyleClass().add("chip-active");
-                }
-            }
-        }
-    }
-
     private Node createDoctorCard(DoctorDTO doctor) {
-        HBox card = new HBox(16.0);
-        card.getStyleClass().add("doctor-card"); // Asigură-te că ai stilul 'card' sau 'doctor-card' în CSS
+        VBox card = new VBox(12.0);
+        card.getStyleClass().add("doctor-card");
 
-        // Avatar
+        HBox header = new HBox(16.0);
+        header.setAlignment(Pos.CENTER_LEFT);
+
         StackPane avatar = new StackPane();
-        avatar.getStyleClass().add("doctor-avatar"); // Sau 'profile-avatar' conform CSS-ului tau
+        avatar.getStyleClass().add("doctor-avatar");
         Label initials = new Label(getInitials(doctor.getFullName()));
-        initials.getStyleClass().add("doctor-initials"); // Sau 'profile-initials'
+        initials.getStyleClass().add("doctor-initials");
         avatar.getChildren().add(initials);
 
-        // Detalii Text
         VBox details = new VBox(6.0);
-        Label name = new Label(doctor.getFullName());
+        String nameText = doctor.getFullName() == null ? "" : doctor.getFullName();
+        String specText = doctor.getSpecializationName() == null ? "" : doctor.getSpecializationName();
+        Label name = new Label(nameText);
         name.getStyleClass().add("doctor-name");
-        Label spec = new Label(doctor.getSpecializationName());
+        Label spec = new Label(specText);
         spec.getStyleClass().add("doctor-subtitle");
-
-        // Putem scoate "Disponibil pentru programare" daca punem butonul explicit
         details.getChildren().addAll(name, spec);
 
-        // Actiuni (Butoane)
-        VBox actions = new VBox(8.0);
-
-        // --- MODIFICARE AICI ---
         Button scheduleBtn = new Button("Vezi Program & Disponibilitate");
-        scheduleBtn.getStyleClass().add("primary2-button"); // Asigură-te că ai clasa asta în CSS
-        // Aici apelăm metoda nouă pe care o vom scrie mai jos
-        scheduleBtn.setOnAction(e -> showDoctorDetailsDialog(doctor));
+        scheduleBtn.getStyleClass().add("primary2-button");
+        VBox actions = new VBox(scheduleBtn);
+        actions.setAlignment(Pos.CENTER_RIGHT);
 
-        actions.getChildren().addAll(scheduleBtn);
+        header.getChildren().addAll(avatar, details, actions);
+        HBox.setHgrow(details, Priority.ALWAYS);
 
-        card.getChildren().addAll(avatar, details, actions);
-        HBox.setHgrow(details, javafx.scene.layout.Priority.ALWAYS);
+        VBox detailsPane = new VBox(12.0);
+        detailsPane.getStyleClass().add("doctor-details");
+        detailsPane.setVisible(false);
+        detailsPane.setManaged(false);
+        detailsPane.setMaxWidth(Double.MAX_VALUE);
+
+        Label scheduleTitle = new Label("Orar general de lucru");
+        scheduleTitle.getStyleClass().add("details-title");
+        VBox scheduleList = new VBox(4.0);
+        scheduleList.getChildren().add(createMutedLabel("Apasa pentru a incarca orarul."));
+        VBox scheduleBox = new VBox(6.0, scheduleTitle, scheduleList);
+
+        Label availabilityTitle = new Label("Verifica locuri libere");
+        availabilityTitle.getStyleClass().add("details-title");
+
+        HBox dateRow = new HBox(8.0);
+        dateRow.setAlignment(Pos.CENTER_LEFT);
+        Label dateLabel = new Label("Alege data:");
+        dateLabel.getStyleClass().add("details-label");
+        DatePicker datePicker = new DatePicker();
+        datePicker.setPromptText("Selecteaza data...");
+        datePicker.getStyleClass().add("field-date");
+        dateRow.getChildren().addAll(dateLabel, datePicker);
+
+        Label dateError = new Label();
+        dateError.getStyleClass().add("field-error");
+        dateError.setManaged(false);
+        dateError.setVisible(false);
+
+        FlowPane slotsPane = new FlowPane();
+        slotsPane.getStyleClass().add("slots-pane");
+        slotsPane.setHgap(8.0);
+        slotsPane.setVgap(8.0);
+        slotsPane.getChildren().add(createMutedLabel("Selecteaza o data pentru a vedea orele."));
+
+        Label bookingInfo = createMutedLabel("Te poti programa dupa autentificare sau inregistrare.");
+
+        VBox availabilityBox = new VBox(6.0);
+        availabilityBox.getChildren().addAll(availabilityTitle, dateRow, dateError, slotsPane, bookingInfo);
+
+        detailsPane.getChildren().addAll(scheduleBox, availabilityBox);
+
+        final boolean[] scheduleLoaded = { false };
+        final boolean[] scheduleLoading = { false };
+
+        scheduleBtn.setOnAction(event -> {
+            boolean show = !detailsPane.isVisible();
+            detailsPane.setVisible(show);
+            detailsPane.setManaged(show);
+            scheduleBtn.setText(show ? "Ascunde Program & Disponibilitate" : "Vezi Program & Disponibilitate");
+
+            if (!show || scheduleLoaded[0] || scheduleLoading[0]) {
+                return;
+            }
+            scheduleLoading[0] = true;
+            scheduleList.getChildren().setAll(createMutedLabel("Se incarca orarul..."));
+
+            presenter.fetchDoctorSchedule(doctor.getDoctorId(),
+                    schedule -> {
+                        scheduleLoading[0] = false;
+                        scheduleLoaded[0] = true;
+                        scheduleList.getChildren().clear();
+                        if (schedule.isEmpty()) {
+                            scheduleList.getChildren().add(createMutedLabel("Medicul nu are orar configurat."));
+                            return;
+                        }
+                        for (DoctorScheduleDTO s : schedule) {
+                            String dayName = getDayName(s.getDayOfWeek());
+                            String interval = s.getStartTime() + " - " + s.getEndTime();
+                            Label line = new Label(dayName + ": " + interval);
+                            line.getStyleClass().add("doctor-meta");
+                            scheduleList.getChildren().add(line);
+                        }
+                    },
+                    error -> {
+                        scheduleLoading[0] = false;
+                        scheduleLoaded[0] = false;
+                        String message = (error == null || error.isBlank())
+                                ? "Nu pot incarca orarul medicului."
+                                : error;
+                        Label errorLabel = new Label(message);
+                        errorLabel.getStyleClass().add("field-error");
+                        scheduleList.getChildren().setAll(errorLabel);
+                    });
+        });
+
+        datePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+            dateError.setVisible(false);
+            dateError.setManaged(false);
+
+            if (newVal == null) {
+                dateError.setText("Selecteaza o data.");
+                dateError.setVisible(true);
+                dateError.setManaged(true);
+                slotsPane.getChildren().setAll(createMutedLabel("Selecteaza o data pentru a vedea orele."));
+                return;
+            }
+
+            slotsPane.getChildren().setAll(createMutedLabel("Se cauta ore disponibile..."));
+
+            presenter.fetchAvailableSlots(doctor.getDoctorId(), newVal,
+                    slots -> {
+                        slotsPane.getChildren().clear();
+                        if (slots.isEmpty()) {
+                            slotsPane.getChildren().add(createMutedLabel("Nu sunt ore disponibile pentru data aleasa."));
+                            return;
+                        }
+                        for (LocalTime time : slots) {
+                            Button slotButton = new Button(time.toString());
+                            slotButton.getStyleClass().add("slot-button");
+                            slotButton.setOnAction(evt -> {
+                                for (Node node : slotsPane.getChildren()) {
+                                    if (node instanceof Button button) {
+                                        button.getStyleClass().remove("slot-selected");
+                                    }
+                                }
+                                slotButton.getStyleClass().add("slot-selected");
+                            });
+                            slotsPane.getChildren().add(slotButton);
+                        }
+                    },
+                    error -> {
+                        slotsPane.getChildren().clear();
+                        String message = (error == null || error.isBlank())
+                                ? "Nu pot incarca orele disponibile."
+                                : error;
+                        Label errorLabel = new Label(message);
+                        errorLabel.getStyleClass().add("field-error");
+                        slotsPane.getChildren().add(errorLabel);
+                    });
+        });
+
+        card.getChildren().addAll(header, detailsPane);
         return card;
+    }
+
+    private Label createMutedLabel(String text) {
+        Label label = new Label(text);
+        label.getStyleClass().add("muted-text");
+        return label;
     }
 
     private String getInitials(String name) {
@@ -218,118 +288,6 @@ public class PublicView {
         return ("" + parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
     }
 
-    private void scrollTo(Node node) {
-        if (node == null || contentRoot == null || scrollPane == null) {
-            return;
-        }
-        Platform.runLater(() -> {
-            double contentHeight = contentRoot.getBoundsInLocal().getHeight();
-            double viewportHeight = scrollPane.getViewportBounds().getHeight();
-            if (contentHeight <= viewportHeight) {
-                scrollPane.setVvalue(0);
-                return;
-            }
-            double y = node.getBoundsInParent().getMinY();
-            double v = y / (contentHeight - viewportHeight);
-            v = Math.max(0, Math.min(1, v));
-            scrollPane.setVvalue(v);
-        });
-    }
-
-    // --- METODE NOI PENTRU SCHEDULE ---
-
-    private void showDoctorDetailsDialog(DoctorDTO doctor) {
-        Dialog<Void> dialog = new Dialog<>();
-        dialog.setTitle("Detalii " + doctor.getFullName());
-        dialog.setHeaderText("Orar și Disponibilitate - " + doctor.getSpecializationName());
-
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-
-        // Încărcare CSS (opțional, ca să arate bine)
-        var cssUrl = getClass().getResource("/css/patient_dashboard.css");
-        if (cssUrl != null) {
-            dialog.getDialogPane().getStylesheets().add(cssUrl.toExternalForm());
-        }
-
-        VBox content = new VBox(20);
-        content.setPadding(new Insets(20));
-        content.setMinWidth(450);
-
-        // 1. ORAR GENERAL
-        VBox scheduleBox = new VBox(10);
-        Label scheduleTitle = new Label("Orar General de Lucru");
-        scheduleTitle.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-
-        VBox scheduleList = new VBox(5);
-        Label loadingLabel = new Label("Se încarcă orarul...");
-        scheduleList.getChildren().add(loadingLabel);
-
-        scheduleBox.getChildren().addAll(scheduleTitle, scheduleList);
-
-        // 2. DISPONIBILITATE
-        VBox checkBox = new VBox(10);
-        Label checkTitle = new Label("Verifică locuri libere");
-        checkTitle.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-
-        HBox pickerRow = new HBox(10);
-        pickerRow.setAlignment(Pos.CENTER_LEFT);
-        Label pickLabel = new Label("Alege data:");
-        DatePicker datePicker = new DatePicker();
-        datePicker.setPromptText("Selectează data...");
-        pickerRow.getChildren().addAll(pickLabel, datePicker);
-
-        FlowPane slotsPane = new FlowPane();
-        slotsPane.setHgap(10);
-        slotsPane.setVgap(10);
-        Label slotsHint = new Label("Selectează o dată pentru a vedea orele.");
-        slotsPane.getChildren().add(slotsHint);
-
-        checkBox.getChildren().addAll(checkTitle, pickerRow, slotsPane);
-
-        content.getChildren().addAll(scheduleBox, new Separator(), checkBox);
-        dialog.getDialogPane().setContent(content);
-
-        // LOGICA DE INCARCARE
-        // A. Cerem orarul
-        presenter.fetchDoctorSchedule(doctor.getDoctorId(), schedule -> {
-            scheduleList.getChildren().clear();
-            if (schedule.isEmpty()) {
-                scheduleList.getChildren().add(new Label("Medicul nu are orar configurat."));
-            } else {
-                for (DoctorScheduleDTO s : schedule) {
-                    String dayName = getDayName(s.getDayOfWeek());
-                    String interval = s.getStartTime() + " - " + s.getEndTime();
-                    scheduleList.getChildren().add(new Label("• " + dayName + ": " + interval));
-                }
-            }
-        });
-
-        // B. Listener pe DatePicker
-        datePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == null) return;
-
-            slotsPane.getChildren().clear();
-            slotsPane.getChildren().add(new Label("Se caută..."));
-
-            presenter.fetchAvailableSlots(doctor.getDoctorId(), newVal, slots -> {
-                slotsPane.getChildren().clear();
-                if (slots.isEmpty()) {
-                    Label empty = new Label("Nu sunt locuri libere.");
-                    empty.setStyle("-fx-text-fill: red;");
-                    slotsPane.getChildren().add(empty);
-                } else {
-                    for (LocalTime time : slots) {
-                        Label slotLabel = new Label(time.toString());
-                        slotLabel.setStyle("-fx-background-color: #dbeafe; -fx-text-fill: #1e40af; -fx-padding: 4 8; -fx-background-radius: 6;");
-                        slotsPane.getChildren().add(slotLabel);
-                    }
-                }
-            });
-        });
-
-        dialog.showAndWait();
-    }
-
     private String getDayName(int dayOfWeek) {
         try {
             return java.time.DayOfWeek.of(dayOfWeek)
@@ -338,5 +296,4 @@ public class PublicView {
             return "Ziua " + dayOfWeek;
         }
     }
-
 }

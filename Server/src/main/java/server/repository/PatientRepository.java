@@ -81,6 +81,16 @@ public class PatientRepository {
         return null;
     }
 
+    public boolean updateNationalIdByUserId(long userId, String nationalId) throws SQLException {
+        String sql = "UPDATE patient SET national_id = ? WHERE user_id = ?";
+        try (Connection conn = Repository.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nationalId);
+            ps.setLong(2, userId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     public shared.dto.PatientDetailsDTO findDetailsByPatientId(long patientId) throws SQLException {
         String sql = """
                 SELECT p.patient_id,
