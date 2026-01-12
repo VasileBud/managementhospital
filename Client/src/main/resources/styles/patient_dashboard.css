@@ -386,8 +386,8 @@
 }
 
 .status-done {
-    -fx-background-color: #dbeafe;
-    -fx-text-fill: #1d4ed8;
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #334155;
 }
 
 .status-canceled {
@@ -396,8 +396,8 @@
 }
 
 .status-active {
-    -fx-background-color: #e0f2fe;
-    -fx-text-fill: #0369a1;
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #15803d;
 }
 
 .table-action {

@@ -12,7 +12,7 @@
 
 <StackPane prefWidth="1200.0" prefHeight="720.0" alignment="CENTER"
           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.hospital_management.client.view.auth.LoginView"
+          fx:controller="view.auth.LoginView"
           styleClass="page">
 
     <HBox styleClass="card">

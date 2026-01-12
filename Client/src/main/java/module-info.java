@@ -18,16 +18,16 @@ module com.hospital_management.client {
     requires com.almasb.fxgl.all;
 
     // Export: doar ce e "entry point"/public API
-    exports com.hospital_management.client.app;
+    exports app;
 
     // FXML controllers -> trebuie OPEN catre javafx.fxml
-    opens com.hospital_management.client.app to javafx.fxml;
-    opens com.hospital_management.client.view.auth to javafx.fxml;
-    opens com.hospital_management.client.view.admin to javafx.fxml;
-    opens com.hospital_management.client.view.doctor to javafx.fxml;
-    opens com.hospital_management.client.view.manager to javafx.fxml;
-    opens com.hospital_management.client.view.patient to javafx.fxml;
+    opens app to javafx.fxml;
+    opens view.auth to javafx.fxml;
+    opens view.admin to javafx.fxml;
+    opens view.doctor to javafx.fxml;
+    opens view.manager to javafx.fxml;
+    opens view.patient to javafx.fxml;
 
     // DTO-uri folosite via reflectie (ex. TableView PropertyValueFactory)
-    opens shared.dto to javafx.base;
+    opens model.dto to javafx.base;
 }

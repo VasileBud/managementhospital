@@ -4,12 +4,12 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
@@ -19,15 +19,16 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Polyline?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.hospital_management.client.view.manager.ManagerDashboardView"
-            styleClass="manager-dashboard">
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<BorderPane fx:id="root" styleClass="manager-dashboard" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.manager.ManagerDashboardView">
 
     <top>
         <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-topbar">
             <BorderPane.margin>
-                <Insets top="20.0" right="32.0" bottom="0.0" left="32.0" />
+                <Insets bottom="0.0" left="32.0" right="32.0" top="20.0" />
             </BorderPane.margin>
 
             <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -42,7 +43,6 @@
                     <Label fx:id="managerInitialsLabel" styleClass="profile-initials" text="MG" />
                 </StackPane>
                 <Label fx:id="managerNameLabel" styleClass="profile-name" text="Manager" />
-                <Label fx:id="managerRoleLabel" styleClass="profile-role" text="Manager General" visible="false" managed="false" />
                 <Button onAction="#onLogoutClick" styleClass="ghost-button" text="Logout" />
             </HBox>
         </HBox>
@@ -50,159 +50,117 @@
 
     <center>
         <VBox styleClass="main">
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="main-scroll">
-                <VBox styleClass="content-root">
-                    <HBox styleClass="page-header" alignment="CENTER_LEFT" spacing="10.0">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="main-scroll" vbarPolicy="AS_NEEDED">
+                <VBox styleClass="content-root" spacing="20">
+
+                    <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="page-header">
                         <VBox spacing="4.0" HBox.hgrow="ALWAYS">
-                            <Label fx:id="welcomeLabel" text="Bun venit, Dr. Popescu" styleClass="page-title" />
-                            <Label text="Analiza si statistici spitalicesti in timp real" styleClass="page-subtitle" />
+                            <Label fx:id="welcomeLabel" styleClass="page-title" text="Panou de Control Manager" />
+                            <Label styleClass="page-subtitle" text="Administrare programări și flux pacienți" />
                         </VBox>
                     </HBox>
 
-                    <HBox styleClass="stats-row" spacing="12.0">
-                        <VBox styleClass="stat-card" spacing="8.0" HBox.hgrow="ALWAYS">
+                    <HBox spacing="12.0" styleClass="stats-row">
+                        <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="8.0">
-                                <StackPane styleClass="stat-icon stat-blue"><Label text="PT" styleClass="stat-icon-text" /></StackPane>
-                                <Label fx:id="patientsTodayTrendLabel" text="+12%" styleClass="stat-tag stat-tag-up" />
+                                <StackPane styleClass="stat-icon stat-blue"><Label styleClass="stat-icon-text" text="PT" /></StackPane>
+                                <Label text="+12%" styleClass="stat-tag stat-tag-up" />
                             </HBox>
-                            <Label text="Total Pacienti Astazi" styleClass="stat-title" />
-                            <Label fx:id="patientsTodayValueLabel" text="1,240" styleClass="stat-value" />
+                            <Label styleClass="stat-title" text="Total Pacienti Astazi" />
+                            <Label fx:id="patientsTodayLabel" text="-" styleClass="stat-value" />
                         </VBox>
-                        <VBox styleClass="stat-card" spacing="8.0" HBox.hgrow="ALWAYS">
+
+                        <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="8.0">
-                                <StackPane styleClass="stat-icon stat-purple"><Label text="CA" styleClass="stat-icon-text" /></StackPane>
-                                <Label fx:id="activeConsultationsTrendLabel" text="+5%" styleClass="stat-tag stat-tag-up" />
+                                <StackPane styleClass="stat-icon stat-purple"><Label styleClass="stat-icon-text" text="CA" /></StackPane>
+                                <Label text="+5%" styleClass="stat-tag stat-tag-up" />
                             </HBox>
-                            <Label text="Consultatii Active" styleClass="stat-title" />
-                            <Label fx:id="activeConsultationsValueLabel" text="45" styleClass="stat-value" />
+                            <Label styleClass="stat-title" text="Consultatii Active" />
+                            <Label fx:id="activeConsultationsLabel" text="-" styleClass="stat-value" />
                         </VBox>
-                        <VBox styleClass="stat-card" spacing="8.0" HBox.hgrow="ALWAYS">
+
+                        <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="8.0">
-                                <StackPane styleClass="stat-icon stat-orange"><Label text="GM" styleClass="stat-icon-text" /></StackPane>
-                                <Label fx:id="doctorOccupancyTrendLabel" text="-2%" styleClass="stat-tag stat-tag-down" />
+                                <StackPane styleClass="stat-icon stat-orange"><Label styleClass="stat-icon-text" text="GM" /></StackPane>
+                                <Label text="-2%" styleClass="stat-tag stat-tag-down" />
                             </HBox>
-                            <Label text="Grad Ocupare Medici" styleClass="stat-title" />
-                            <Label fx:id="doctorOccupancyValueLabel" text="88%" styleClass="stat-value" />
-                        </VBox>
-                        <VBox styleClass="stat-card" spacing="8.0" HBox.hgrow="ALWAYS">
-                            <HBox alignment="CENTER_LEFT" spacing="8.0">
-                                <StackPane styleClass="stat-icon stat-green"><Label text="RN" styleClass="stat-icon-text" /></StackPane>
-                                <Label fx:id="revenueTrendLabel" text="+8.4%" styleClass="stat-tag stat-tag-up" />
-                            </HBox>
-                            <Label text="Venituri Estimate (RON)" styleClass="stat-title" />
-                            <Label fx:id="revenueValueLabel" text="45,200" styleClass="stat-value" />
+                            <Label styleClass="stat-title" text="Grad Ocupare Medici" />
+                            <Label fx:id="doctorOccupancyLabel" text="-" styleClass="stat-value" />
                         </VBox>
                     </HBox>
 
-                    <HBox styleClass="charts-row" spacing="12.0">
-                        <VBox styleClass="chart-card" spacing="12.0" HBox.hgrow="ALWAYS">
-                            <HBox alignment="CENTER_LEFT" spacing="6.0">
-                                <Label text="Flux Pacienti (Admisii vs. Externari)" styleClass="card-title" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Button text="..." styleClass="icon-button" />
-                            </HBox>
-                            <StackPane styleClass="chart-area">
-                                <Pane fx:id="lineChartPane" prefHeight="220.0" prefWidth="520.0">
-                                    <Line startX="0" startY="40" endX="520" endY="40" styleClass="chart-grid-line" />
-                                    <Line startX="0" startY="80" endX="520" endY="80" styleClass="chart-grid-line" />
-                                    <Line startX="0" startY="120" endX="520" endY="120" styleClass="chart-grid-line" />
-                                    <Line startX="0" startY="160" endX="520" endY="160" styleClass="chart-grid-line" />
-                                    <Polyline fx:id="admissionsLine" points="0,170,60,150,120,110,180,130,240,90,300,100,360,60,420,80,480,50,520,70"
-                                              styleClass="chart-line-primary" />
-                                    <Polyline fx:id="dischargesLine" points="0,190,60,175,120,160,180,165,240,140,300,150,360,120,420,135,480,110,520,120"
-                                              styleClass="chart-line-secondary" />
-                                </Pane>
-                            </StackPane>
-                            <HBox alignment="CENTER" spacing="16.0">
-                                <HBox fx:id="cardioRow" alignment="CENTER_LEFT" spacing="6.0">
-                                    <Region styleClass="legend-dot legend-blue" />
-                                    <Label text="Internari" styleClass="legend-text" />
-                                </HBox>
-                                <HBox fx:id="neuroRow" alignment="CENTER_LEFT" spacing="6.0">
-                                    <Region styleClass="legend-dot legend-green" />
-                                    <Label text="Externari" styleClass="legend-text" />
-                                </HBox>
-                            </HBox>
+                    <HBox spacing="15.0" styleClass="charts-row" prefHeight="300">
+
+                        <VBox spacing="10.0" styleClass="chart-card" HBox.hgrow="ALWAYS">
+                            <Label styleClass="card-title" text="Flux Pacienți (Ultimele 7 zile)" />
+
+                            <AreaChart fx:id="flowChart" legendVisible="false" createSymbols="true" style="-fx-background-color: transparent;">
+                                <xAxis>
+                                    <CategoryAxis label="Zile" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Nr. Pacienți" />
+                                </yAxis>
+                            </AreaChart>
                         </VBox>
 
-                        <VBox styleClass="chart-card" spacing="12.0" prefWidth="320.0">
-                            <Label text="Ocupare pe Sectii" styleClass="card-title" />
-                            <StackPane styleClass="donut-wrapper">
-                                <Group>
-                                    <Arc fx:id="arcCardio" centerX="0" centerY="0" radiusX="70" radiusY="70" startAngle="90" length="-126" styleClass="donut-arc arc-blue" />
-                                    <Arc fx:id="arcNeuro" centerX="0" centerY="0" radiusX="70" radiusY="70" startAngle="-36" length="-90" styleClass="donut-arc arc-green" />
-                                    <Arc fx:id="arcPeds" centerX="0" centerY="0" radiusX="70" radiusY="70" startAngle="-126" length="-90" styleClass="donut-arc arc-amber" />
-                                    <Arc fx:id="arcUrgent" centerX="0" centerY="0" radiusX="70" radiusY="70" startAngle="-216" length="-54" styleClass="donut-arc arc-red" />
-                                </Group>
-                                <VBox alignment="CENTER" spacing="2.0">
-                                    <Label fx:id="donutValueLabel" text="94%" styleClass="donut-value" />
-                                    <Label text="TOTAL" styleClass="donut-label" />
+                        <VBox prefWidth="380.0" spacing="10.0" styleClass="chart-card">
+                            <Label styleClass="card-title" text="Distribuție pe Secții" />
+
+                            <PieChart fx:id="specializationPieChart" labelsVisible="false" legendVisible="true" legendSide="BOTTOM" />
+                        </VBox>
+
+                    </HBox>
+
+                    <VBox styleClass="table-card" VBox.vgrow="ALWAYS" spacing="15">
+
+                        <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="filter-row">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <VBox spacing="2.0">
+                                    <Label styleClass="filter-label" text="Data" />
+                                    <DatePicker fx:id="datePicker" styleClass="modern-input" prefWidth="140"/>
                                 </VBox>
-                            </StackPane>
-                            <VBox spacing="8.0">
-                                <HBox fx:id="pedsRow" alignment="CENTER_LEFT" spacing="6.0">
-                                    <Region styleClass="legend-dot legend-blue" />
-                                    <Label fx:id="cardioLabel" text="Cardiologie" styleClass="legend-text" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="cardioPercentLabel" text="35%" styleClass="legend-value" />
-                                </HBox>
-                                <HBox fx:id="urgentRow" alignment="CENTER_LEFT" spacing="6.0">
-                                    <Region styleClass="legend-dot legend-green" />
-                                    <Label fx:id="neuroLabel" text="Neurologie" styleClass="legend-text" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="neuroPercentLabel" text="25%" styleClass="legend-value" />
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="6.0">
-                                    <Region styleClass="legend-dot legend-amber" />
-                                    <Label fx:id="pedsLabel" text="Pediatrie" styleClass="legend-text" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="pedsPercentLabel" text="25%" styleClass="legend-value" />
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="6.0">
-                                    <Region styleClass="legend-dot legend-red" />
-                                    <Label fx:id="urgentLabel" text="Urgente" styleClass="legend-text" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="urgentPercentLabel" text="15%" styleClass="legend-value" />
-                                </HBox>
-                            </VBox>
-                        </VBox>
-                    </HBox>
 
-                    <VBox styleClass="table-card">
-                        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="filter-row">
-                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
-                                <Label styleClass="filter-label" text="Cauta" />
-                                <TextField fx:id="appointmentsSearchField" promptText="Cauta dupa nume pacient sau medic..." styleClass="filter-field" />
-                            </VBox>
-                            <VBox spacing="4.0">
-                                <Label styleClass="filter-label" text="Status" />
-                                <ComboBox fx:id="appointmentsStatusFilter" styleClass="filter-combo" />
-                            </VBox>
+                                <VBox spacing="2.0">
+                                    <Label styleClass="filter-label" text="Serviciu" />
+                                    <ComboBox fx:id="serviceFilterCombo" styleClass="modern-input" prefWidth="180" promptText="Toate"/>
+                                </VBox>
+                            </HBox>
+
                             <Region HBox.hgrow="ALWAYS" />
-                            <Button text="Programare Noua" onAction="#onNavAppointmentsClick" styleClass="primary-button" />
+
+                            <HBox spacing="10" alignment="CENTER_RIGHT">
+                                <Button text="Vezi Istoric" onAction="#onViewHistoryClick"
+                                        styleClass="action-button, btn-info" textFill="WHITE">
+                                </Button>
+
+                                <Button text="Editează" onAction="#onEditUserClick"
+                                        styleClass="action-button, btn-warning" textFill="WHITE"/>
+
+                                <Button text="Schimbă Status" onAction="#onChangeStatusClick"
+                                        styleClass="action-button, btn-primary" textFill="WHITE"/>
+                            </HBox>
                         </HBox>
 
-                        <GridPane styleClass="table-row table-row-header">
-                            <columnConstraints>
-                                <ColumnConstraints percentWidth="24" />
-                                <ColumnConstraints percentWidth="18" />
-                                <ColumnConstraints percentWidth="14" />
-                                <ColumnConstraints percentWidth="16" />
-                                <ColumnConstraints percentWidth="14" />
-                                <ColumnConstraints percentWidth="14" />
-                            </columnConstraints>
-                            <Label text="PACIENT" styleClass="table-header-text" GridPane.columnIndex="0" />
-                            <Label text="MEDIC" styleClass="table-header-text" GridPane.columnIndex="1" />
-                            <Label text="SECTIE" styleClass="table-header-text" GridPane.columnIndex="2" />
-                            <Label text="DATA/ORA" styleClass="table-header-text" GridPane.columnIndex="3" />
-                            <Label text="STATUS" styleClass="table-header-text" GridPane.columnIndex="4" />
-                            <Label text="ACTIUNI" styleClass="table-header-text" GridPane.columnIndex="5" />
-                        </GridPane>
+                        <TableView fx:id="appointmentsTable" prefHeight="500.0" styleClass="modern-table">
+                            <columns>
+                                <TableColumn fx:id="patientCol" text="PACIENT" prefWidth="200" />
+                                <TableColumn fx:id="doctorCol" text="MEDIC" prefWidth="200" />
+                                <TableColumn fx:id="serviceCol" text="SERVICIU" prefWidth="180" />
+                                <TableColumn fx:id="timeCol" text="ORA" prefWidth="100" style="-fx-alignment: CENTER;" />
+                                <TableColumn fx:id="statusCol" text="STATUS" prefWidth="120" style="-fx-alignment: CENTER;" />
+                            </columns>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                            </columnResizePolicy>
+                            <placeholder>
+                                <Label text="Nu există programări pentru criteriile selectate." style="-fx-text-fill: #999; -fx-font-size: 14px;"/>
+                            </placeholder>
+                        </TableView>
 
-                        <VBox fx:id="recentAppointmentsContainer" spacing="0.0" />
                     </VBox>
 
-                    <Label fx:id="statusLabel" text="" styleClass="status-message" />
+                    <Label fx:id="statusLabel" styleClass="status-message" text="" />
                 </VBox>
             </ScrollPane>
         </VBox>

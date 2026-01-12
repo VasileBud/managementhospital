@@ -141,6 +141,17 @@
     -fx-text-fill: #0f172a;
 }
 
+.field-search {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-font-size: 12px;
+    -fx-padding: 6 10;
+    -fx-text-fill: #0f172a;
+    -fx-pref-width: 180;
+}
+
 .slot-button {
     -fx-background-color: #f8fafc;
     -fx-text-fill: #0f172a;
@@ -268,8 +279,8 @@
 }
 
 .status-done {
-    -fx-background-color: #dbeafe;
-    -fx-text-fill: #1d4ed8;
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #334155;
 }
 
 .status-canceled {
@@ -278,8 +289,8 @@
 }
 
 .status-active {
-    -fx-background-color: #e0f2fe;
-    -fx-text-fill: #0369a1;
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #15803d;
 }
 
 .table-action {

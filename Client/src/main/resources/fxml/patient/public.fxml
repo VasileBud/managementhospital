@@ -10,7 +10,7 @@
 
 <StackPane prefWidth="1200.0" prefHeight="720.0"
           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.hospital_management.client.view.patient.PublicView"
+          fx:controller="view.patient.PublicView"
           styleClass="public-page">
 
     <ScrollPane fx:id="scrollPane" fitToWidth="true" vbarPolicy="AS_NEEDED" hbarPolicy="NEVER" styleClass="public-scroll">

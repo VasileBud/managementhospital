@@ -3,8 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
 
-<BorderPane styleClass="admin-dashboard" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospital_management.client.view.admin.AdminDashboardView">
+<BorderPane styleClass="admin-dashboard" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.admin.AdminDashboardView">
 
     <top>
         <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="dashboard-topbar">
@@ -32,7 +33,7 @@
     <center>
         <VBox styleClass="main">
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="main-scroll" vbarPolicy="AS_NEEDED">
-                <VBox styleClass="content-root">
+                <VBox styleClass="content-root" spacing="20.0">
 
                     <HBox spacing="12.0" styleClass="stats-row">
                         <VBox spacing="8.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
@@ -71,7 +72,7 @@
 
                     <VBox styleClass="table-card">
                         <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="tab-row">
-                            <Button fx:id="staffTabButton" onAction="#onStaffTabClick" styleClass="tab-button tab-active" text="Personal Medical" />
+                            <Button fx:id="staffTabButton" onAction="#onStaffTabClick" styleClass="tab-button" text="Personal Medical" />
                             <Button fx:id="patientsTabButton" onAction="#onPatientsTabClick" styleClass="tab-button" text="Pacienti" />
                             <Region HBox.hgrow="ALWAYS" />
                             <Button onAction="#onAddUserClick" styleClass="primary-button" text="Adauga Utilizator Nou" />
@@ -105,9 +106,9 @@
                             <Label styleClass="table-header-text" text="ULTIMA ACTIVITATE" GridPane.columnIndex="2" />
                             <Label styleClass="table-header-text" text="STATUS" GridPane.columnIndex="3" />
                             <Label styleClass="table-header-text" text="ACTIUNI" GridPane.columnIndex="4" />
-                     <rowConstraints>
-                        <RowConstraints />
-                     </rowConstraints>
+                            <rowConstraints>
+                                <RowConstraints />
+                            </rowConstraints>
                         </GridPane>
 
                         <VBox fx:id="usersContainer" spacing="0.0" />
@@ -118,6 +119,39 @@
                             <Button fx:id="nextPageButton" onAction="#onNextPageClick" styleClass="pagination-button" text="&gt;" />
                         </HBox>
                     </VBox>
+
+                    <Separator />
+                    <Label text="Monitorizare Clinică &amp; Programări" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+                    <HBox spacing="12.0">
+                        <Label text="Pacienți Azi: " style="-fx-font-weight: bold; -fx-text-fill: #555;"/>
+                        <Label fx:id="patientsTodayLabel" text="0" style="-fx-font-weight: bold; -fx-text-fill: #0d6efd;"/>
+
+                        <Region prefWidth="20"/>
+
+                        <Label text="Consultații Active: " style="-fx-font-weight: bold; -fx-text-fill: #555;"/>
+                        <Label fx:id="activeConsultationsLabel" text="0" style="-fx-font-weight: bold; -fx-text-fill: #198754;"/>
+
+                        <Region prefWidth="20"/>
+
+                        <Label text="Grad Ocupare: " style="-fx-font-weight: bold; -fx-text-fill: #555;"/>
+                        <Label fx:id="doctorOccupancyLabel" text="0%" style="-fx-font-weight: bold; -fx-text-fill: #dc3545;"/>
+                    </HBox>
+
+                    <HBox spacing="15.0" styleClass="charts-row" prefHeight="300">
+                        <VBox spacing="10.0" styleClass="chart-card" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2); -fx-background-radius: 8;">
+                            <Label styleClass="card-title" text="Flux Pacienți (7 zile)" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                            <AreaChart fx:id="flowChart" legendVisible="false" createSymbols="true" style="-fx-background-color: transparent;">
+                                <xAxis><CategoryAxis label="Zile" /></xAxis>
+                                <yAxis><NumberAxis label="Nr. Pacienți" /></yAxis>
+                            </AreaChart>
+                        </VBox>
+
+                        <VBox prefWidth="380.0" spacing="10.0" styleClass="chart-card" style="-fx-background-color: white; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2); -fx-background-radius: 8;">
+                            <Label styleClass="card-title" text="Distribuție Secții" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                            <PieChart fx:id="specializationPieChart" labelsVisible="false" legendVisible="true" legendSide="BOTTOM" />
+                        </VBox>
+                    </HBox>
 
                     <VBox styleClass="table-card" spacing="12.0">
                         <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="filter-row">

@@ -209,6 +209,7 @@
     -fx-effect: dropshadow(gaussian, rgba(30, 90, 180, 0.10), 12, 0.2, 0, 4);
 }
 
+
 .tab-row {
     -fx-padding: 12 14 10 14;
     -fx-background-color: #f8fafc;
@@ -244,10 +245,11 @@
 }
 
 .filter-row {
-    -fx-padding: 10 14 12 14;
+    -fx-padding: 12 16 10 16;
     -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+    -fx-alignment: center-left;
 }
 
 .filter-label {
@@ -262,6 +264,8 @@
     -fx-border-color: #e2e8f0;
     -fx-border-radius: 12;
     -fx-font-size: 12px;
+    -fx-pref-height: 32;
+    -fx-min-height: 32;
 }
 
 .filter-combo {
@@ -270,13 +274,17 @@
     -fx-border-color: #e2e8f0;
     -fx-border-radius: 12;
     -fx-font-size: 12px;
+    -fx-pref-height: 32;
+    -fx-min-height: 32;
 }
 
 .table-row {
-    -fx-padding: 10 14;
+    -fx-padding: 10 16;
     -fx-border-color: #e5e7eb;
     -fx-border-width: 0 0 1 0;
-    -fx-hgap: 6;
+    -fx-hgap: 8;
+    -fx-min-height: 44;
+    -fx-alignment: center-left;
 }
 
 .table-row:hover {
@@ -285,6 +293,7 @@
 
 .table-row-header {
     -fx-background-color: #f8fafc;
+    -fx-padding: 8 16;
 }
 
 .table-header-text {
@@ -325,6 +334,14 @@
     -fx-padding: 4 6;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+}
+
+.table-action-danger {
+    -fx-background-color: transparent;
+    -fx-text-fill: #dc2626;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 6;
 }
 
 .status-pill {
@@ -561,8 +578,8 @@
 
 .status-pill {
     -fx-background-radius: 999;
-    -fx-padding: 4 10;
-    -fx-font-size: 10px;
+    -fx-padding: 2 8;
+    -fx-font-size: 9px;
     -fx-font-weight: 700;
 }
 
@@ -602,6 +619,14 @@
     -fx-background-color: #165ca8;
 }
 
+.patient-status {
+    -fx-alignment: center-left;
+}
+
+.patient-actions {
+    -fx-alignment: center-right;
+}
+
 .action-secondary {
     -fx-background-color: #f1f5f9;
     -fx-text-fill: #0f172a;
@@ -617,17 +642,28 @@
 
 .table-footer {
     -fx-background-color: #f8fafc;
-    -fx-padding: 10 16;
+    -fx-padding: 10 14;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1 0 0 0;
 }
 
 .pagination-label {
     -fx-text-fill: #64748b;
-    -fx-font-size: 10px;
+    -fx-font-size: 11px;
 }
 
 .pagination-button {
-    -fx-background-color: transparent;
-    -fx-text-fill: #0f172a;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-font-size: 11px;
+    -fx-padding: 4 8;
+    -fx-text-fill: #64748b;
+}
+
+.pagination-button:hover {
+    -fx-background-color: #f1f5f9;
 }
 
 .quick-row {
